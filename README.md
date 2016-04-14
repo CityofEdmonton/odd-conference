@@ -11,7 +11,9 @@ We've created a series of tutorials at [makeitopen.com](http://makeitopen.com/) 
 ## Requirements
 
 1. [React Native](http://facebook.github.io/react-native/docs/getting-started.html) (follow iOS and Android guides)
-2. [CocoaPods](http://cocoapods.org) 1.0+ (only for iOS)
+  - Xcode 7.3 +
+2. [CocoaPods](http://cocoapods.org) (only for iOS)
+  - Version 1.0+ recommended (`gem install cocoapods --pre`)
 3. [MongoDB](https://www.mongodb.org/downloads) (needed to run Parse Server locally)
 
 ## Setup
@@ -36,7 +38,10 @@ We've created a series of tutorials at [makeitopen.com](http://makeitopen.com/) 
   $ lsof -iTCP:27017 -sTCP:LISTEN
   ```
 
-  or if using external MongoDB server, set `DATABASE_URI`:
+  NOTE: if installed with [Homebrew](http://brew.sh/) run `brew info mongo` and
+  check out the Caveats section.
+
+  If you prefer to use an external MongoDB server, set `DATABASE_URI`:
 
   ```
   $ export DATABASE_URI=mongodb://example-mongo-hosting.com:1337/my-awesome-database
