@@ -48,6 +48,8 @@ class F8MapView extends React.Component {
 
   render() {
     const {map1, map2} = this.props;
+
+	    
     return (
       <View style={styles.container}>
         <ListContainer
@@ -55,11 +57,11 @@ class F8MapView extends React.Component {
           backgroundImage={require('./img/maps-background.png')}
           backgroundColor={'#9176D2'}>
           <PureListView
-            title={map1.name}
+            title='Overview'
             renderEmptyList={() => <MapView map={map1} />}
           />
           <PureListView
-            title={map2.name}
+            title='Developer Garage'
             renderEmptyList={() => <MapView map={map2} />}
           />
         </ListContainer>
