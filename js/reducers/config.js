@@ -45,11 +45,13 @@ const initialState: Config = {
 function config(state: Config = initialState, action: Action): Config {
   if (action.type === 'LOADED_CONFIG') {
     return {
-      wifiNetwork: action.config.get('wifiNetwork'),
-      wifiPassword: action.config.get('wifiPassword'),
-      appLinkURL: action.config.get('appLinkURL'),
-      appInvitePreviewImageURL: action.config.get('appInvitePreviewImageURL'),
-      sessionURLTemplate: action.config.get('sessionURLTemplate'),
+      wifiNetwork: action.config.get('wifiNetwork') || state.wifiNetwork,
+      wifiPassword: action.config.get('wifiPassword') || state.wifiPassword,
+      appLinkURL: action.config.get('appLinkURL') || state.appLinkURL,
+      appInvitePreviewImageURL: action.config.get('appInvitePreviewImageURL') ||
+        state.appInvitePreviewImageURL,
+      sessionURLTemplate: action.config.get('sessionURLTemplate') ||
+        state.sessionURLTemplate,
     };
   }
 
