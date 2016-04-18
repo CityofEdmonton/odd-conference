@@ -28,7 +28,6 @@ const Parse = require('parse/react-native');
 const ActionSheetIOS = require('ActionSheetIOS');
 const Platform = require('Platform');
 const {version} = require('../env');
-const SendIntentAndroid = Platform.OS === 'android' ? require('react-native-send-intent') : undefined;
 
 import type { Action, ThunkAction } from './types';
 
@@ -64,6 +63,7 @@ function testExportAppState(): ThunkAction {
         message: message,
       }, () => {}, () => {});
     } else {
+      const SendIntentAndroid = require('react-native-send-intent');
       SendIntentAndroid.sendText({
         title: subject,
         text: message,

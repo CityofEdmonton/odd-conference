@@ -5812,6 +5812,11 @@
       "from": "git+https://github.com/frantic/react-native-push-notification.git#7142da7",
       "resolved": "git+https://github.com/frantic/react-native-push-notification.git#7142da7ab83f010b6847caf36526044c27a68391"
     },
+    "react-native-send-intent": {
+      "version": "1.0.5",
+      "from": "react-native-send-intent@>=1.0.7 <1.1.0",
+      "resolved": "https://registry.npmjs.org/react-native-send-intent/-/react-native-send-intent-1.0.7.tgz"
+    },
     "react-native-share": {
       "version": "1.0.5",
       "from": "git+https://github.com/frantic/react-native-share.git#674df947b3",
