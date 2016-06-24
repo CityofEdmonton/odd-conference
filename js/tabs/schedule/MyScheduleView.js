@@ -199,4 +199,3 @@ function actions(dispatch) {
 }
 
 module.exports = connect(select, actions)(MyScheduleView);
-window.RRR = require('ReactDefaultPerf');
