@@ -61,6 +61,7 @@ class LoginButton extends React.Component {
         <F8Button
           style={[styles.button, this.props.style]}
           caption="Please wait..."
+          onPress={() => {}}
         />
       );
     }

@@ -36,14 +36,21 @@ var Animated = require('Animated');
 type Props = {
   isAdded: boolean;
   onPress: () => void;
-  addedImageSource?: number;
-  style: any;
+  addedImageSource?: ?number;
+  style?: any;
+};
+
+type State = {
+  anim: Animated.Value;
 };
 
 const SAVED_LABEL = 'Saved to your schedule';
 const ADD_LABEL = 'Add to my schedule';
 
 class AddToScheduleButton extends React.Component {
+  props: Props;
+  state: State;
+
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -186,6 +193,7 @@ var styles = StyleSheet.create({
 });
 
 module.exports = AddToScheduleButton;
+// $FlowFixMe
 module.exports.__cards__ = (define) => {
   let f;
   setInterval(() => f && f(), 1000);
@@ -198,6 +206,6 @@ module.exports.__cards__ = (define) => {
 
   define('Animated', (state = false, update) => {
     f = () => update(!state);
-    return <AddToScheduleButton isAdded={state} />;
+    return <AddToScheduleButton isAdded={state} onPress={() => {}} />;
   });
 };

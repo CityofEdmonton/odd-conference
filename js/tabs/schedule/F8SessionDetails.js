@@ -140,7 +140,7 @@ var F8SessionDetails = React.createClass({
         </ScrollView>
         <View style={styles.actions}>
           <AddToScheduleButton
-            addedImageSource={isReactTalk && require('./img/added-react.png')}
+            addedImageSource={isReactTalk ? require('./img/added-react.png') : null}
             isAdded={this.props.isAddedToSchedule}
             onPress={this.toggleAdded}
           />
@@ -189,8 +189,8 @@ var F8SessionDetails = React.createClass({
 
 class Section extends React.Component {
   props: {
-    title: string;
-    children: any;
+    title?: string;
+    children?: any;
   };
 
   render() {

@@ -43,7 +43,7 @@ type Props = {
   question: Question;
   rating: ?number;
   onChange: (newRating: number) => void;
-  style: any;
+  style?: any;
 };
 
 function RatingQuestion({question, rating, onChange, style}: Props) {

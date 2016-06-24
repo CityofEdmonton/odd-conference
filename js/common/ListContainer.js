@@ -50,10 +50,10 @@ type Props = {
   selectedSectionColor: string;
   backgroundImage: number;
   backgroundColor: string;
-  parallaxContent: ?ReactElement;
+  parallaxContent?: ?ReactElement;
   stickyHeader?: ?ReactElement;
   onSegmentChange?: (segment: number) => void;
-  children: any;
+  children?: any;
 };
 
 type State = {
@@ -110,22 +110,32 @@ class RelayLoading extends React.Component {
 
 class ListContainer extends React.Component {
   props: Props;
+  state: State;
   _refs: Array<any>;
   _pinned: any;
+
+  static defaultProps = {
+    selectedSectionColor: 'white',
+  };
+
+  static contextTypes = {
+    openDrawer: React.PropTypes.func,
+    hasUnreadNotifications: React.PropTypes.number,
+  };
 
   constructor(props: Props) {
     super(props);
 
-    this.state = ({
+    this.state = {
       idx: this.props.selectedSegment || 0,
       anim: new Animated.Value(0),
       stickyHeaderHeight: 0,
-    }: State);
+    };
 
-    this.renderFakeHeader = this.renderFakeHeader.bind(this);
-    this.handleStickyHeaderLayout = this.handleStickyHeaderLayout.bind(this);
-    this.handleShowMenu = this.handleShowMenu.bind(this);
-    this.handleSelectSegment = this.handleSelectSegment.bind(this);
+    (this: any).renderFakeHeader = this.renderFakeHeader.bind(this);
+    (this: any).handleStickyHeaderLayout = this.handleStickyHeaderLayout.bind(this);
+    (this: any).handleShowMenu = this.handleShowMenu.bind(this);
+    (this: any).handleSelectSegment = this.handleSelectSegment.bind(this);
     this._refs = [];
   }
 
@@ -353,15 +363,6 @@ class ListContainer extends React.Component {
     this.context.openDrawer();
   }
 }
-
-ListContainer.defaultProps = {
-  selectedSectionColor: 'white',
-};
-
-ListContainer.contextTypes = {
-  openDrawer: React.PropTypes.func,
-  hasUnreadNotifications: React.PropTypes.number,
-};
 
 var styles = StyleSheet.create({
   container: {
