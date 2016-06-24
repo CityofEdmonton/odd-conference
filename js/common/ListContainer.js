@@ -155,7 +155,7 @@ class ListContainer extends React.Component {
     const content = React.Children.map(this.props.children, (child, idx) => {
       segments.push(child.props.title);
       return <RelayLoading>{React.cloneElement(child, {
-        ref: (ref) => this._refs[idx] = ref,
+        ref: (ref) => { this._refs[idx] = ref; },
         onScroll: (e) => this.handleScroll(idx, e),
         style: styles.listView,
         showsVerticalScrollIndicator: false,
@@ -307,7 +307,7 @@ class ListContainer extends React.Component {
 
     return (
       <Animated.View
-        ref={(ref) => this._pinned = ref}
+        ref={(ref) => { this._pinned = ref; }}
         onLayout={this.handleStickyHeaderLayout}
         style={[styles.stickyHeader, {opacity}, {transform}]}>
         {stickyHeader}

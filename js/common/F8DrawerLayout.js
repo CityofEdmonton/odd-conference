@@ -46,7 +46,7 @@ class F8DrawerLayout extends React.Component {
     const {Right, Left} = DrawerLayoutAndroid.positions;
     return (
       <DrawerLayoutAndroid
-        ref={(drawer) => this._drawer = drawer}
+        ref={(drawer) => { this._drawer = drawer; }}
         {...props}
         drawerPosition={drawerPosition === 'right' ? Right : Left}
         onDrawerOpen={this.onDrawerOpen}

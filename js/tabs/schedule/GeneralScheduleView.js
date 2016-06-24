@@ -113,7 +113,7 @@ class GeneralScheduleView extends React.Component {
     }
     return (
       <F8DrawerLayout
-        ref={(drawer) => this._drawer = drawer}
+        ref={(drawer) => { this._drawer = drawer; }}
         drawerWidth={300}
         drawerPosition="right"
         renderNavigationView={this.renderNavigationView}>
