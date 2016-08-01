@@ -26,7 +26,6 @@
 'use strict';
 
 var F8Colors = require('F8Colors');
-var StatusBarIOS = require('StatusBarIOS');
 var F8InfoView = require('F8InfoView');
 var F8MapView = require('F8MapView');
 var F8NotificationsView = require('F8NotificationsView');
@@ -50,10 +49,6 @@ class F8TabsView extends React.Component {
     onTabSelect: (tab: Tab) => void;
     navigator: Navigator;
   };
-
-  componentDidMount() {
-    StatusBarIOS && StatusBarIOS.setStyle('light-content');
-  }
 
   onTabSelect(tab: Tab) {
     if (this.props.tab !== tab) {

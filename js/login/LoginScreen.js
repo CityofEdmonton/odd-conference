@@ -28,7 +28,7 @@ var Dimensions = require('Dimensions');
 var F8Colors = require('F8Colors');
 var Image = require('Image');
 var React = require('React');
-var StatusBarIOS = require('StatusBarIOS');
+var StatusBar = require('StatusBar');
 var StyleSheet = require('StyleSheet');
 var View = require('View');
 var { Text } = require('F8Text');
@@ -44,7 +44,6 @@ class LoginScreen extends React.Component {
   };
 
   componentDidMount() {
-    StatusBarIOS && StatusBarIOS.setStyle('default');
     Animated.timing(this.state.anim, {toValue: 3000, duration: 3000}).start();
   }
 
@@ -53,6 +52,7 @@ class LoginScreen extends React.Component {
       <Image
         style={styles.container}
         source={require('./img/login-background.png')}>
+        <StatusBar barStyle="default" />
         <TouchableOpacity
           accessibilityLabel="Skip login"
           accessibilityTraits="button"
