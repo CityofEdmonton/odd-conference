@@ -1,10 +1,10 @@
 PODS:
-  - Bolts (1.7.0):
-    - Bolts/AppLinks (= 1.7.0)
-    - Bolts/Tasks (= 1.7.0)
-  - Bolts/AppLinks (1.7.0):
+  - Bolts (1.8.4):
+    - Bolts/AppLinks (= 1.8.4)
+    - Bolts/Tasks (= 1.8.4)
+  - Bolts/AppLinks (1.8.4):
     - Bolts/Tasks
-  - Bolts/Tasks (1.7.0)
+  - Bolts/Tasks (1.8.4)
   - CodePush (1.12.2):
     - CodePush/Core (= 1.12.2)
     - CodePush/SSZipArchive (= 1.12.2)
@@ -13,21 +13,21 @@ PODS:
     - React
   - CodePush/SSZipArchive (1.12.2):
     - React
-  - FBSDKCoreKit (4.10.1):
-    - Bolts (~> 1.5)
-  - FBSDKLoginKit (4.10.1):
+  - FBSDKCoreKit (4.14.0):
+    - Bolts (~> 1.7)
+  - FBSDKLoginKit (4.14.0):
     - FBSDKCoreKit
-  - FBSDKShareKit (4.10.1):
+  - FBSDKShareKit (4.14.0):
     - FBSDKCoreKit
   - React (0.28.0):
     - React/Core (= 0.28.0)
-  - react-native-fbsdk/Core (0.2.1):
+  - react-native-fbsdk/Core (0.3.0):
     - FBSDKCoreKit
     - React
-  - react-native-fbsdk/Login (0.2.1):
+  - react-native-fbsdk/Login (0.3.0):
     - FBSDKLoginKit
     - React
-  - react-native-fbsdk/Share (0.2.1):
+  - react-native-fbsdk/Share (0.3.0):
     - FBSDKShareKit
     - React
   - React/Core (0.28.0)
@@ -73,13 +73,13 @@ EXTERNAL SOURCES:
     :path: ../node_modules/react-native-fbsdk/iOS
 
 SPEC CHECKSUMS:
-  Bolts: a0058fa3b331c5a1e4402d534f2dae36dbff31e4
+  Bolts: 8a7995239dbe724f9cba2248b766d48b7ebdd322
   CodePush: 96e1b7358f2305daf4fdf8436c0d23a172599de9
-  FBSDKCoreKit: d2aaed5e9ab7d8d6301c533376a1fbff1cf3deb5
-  FBSDKLoginKit: 699ff169080e3072de4b9b0faca90bf23dc36deb
-  FBSDKShareKit: 2fd887cce0056bdda91f99b2021d724a4fed8e88
+  FBSDKCoreKit: 6e020b5db0b5bd1e01f5fb0902131befd129a502
+  FBSDKLoginKit: da563567a108050ef83739c8c8c001ee9e25fa13
+  FBSDKShareKit: e8e5d4ccef69b41132fe33acda26db1e33143e33
   React: 43544faed4af6a0e8fbc4b3abd26141ed654fa49
-  react-native-fbsdk: f809332ec877fe61466883f6cd775a0accfdf948
+  react-native-fbsdk: 999c4eec5c84ed4096cc75596a70cf82f8303329
 
 PODFILE CHECKSUM: cb0411936cfdb2ef6ccae2a3fc8261c741029580
 
