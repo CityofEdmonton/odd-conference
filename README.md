@@ -81,3 +81,13 @@ We've created a series of tutorials at [makeitopen.com](http://makeitopen.com/) 
   ```
   $ react-native run-ios
   ```
+
+## Troubleshooting
+
+> Could not connect to development server
+
+In a separate terminal window run:
+
+  ```
+  $ react-native start
+  ```
