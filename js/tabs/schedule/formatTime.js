@@ -21,19 +21,13 @@
  *
  * @flow
  */
-'use strict';
+"use strict";
 
-function formatTime(unix: number): string {
-  var date = new Date(unix);
-  var hours = date.getUTCHours();
-  var minutes = date.getUTCMinutes();
-  var ampm = hours >= 12 ? 'PM' : 'AM';
-  hours = hours % 12;
-  hours = hours ? hours : 12;
-  minutes = minutes < 10 ? '0' + minutes : minutes;
-  var strTime = hours + ':' + minutes;
+import moment from "moment-timezone";
+import { timezone } from "../../env.js";
 
-  return strTime + ' ' + ampm;
+function formatTime(unix: number, hideAMPM: boolean): string {
+  return moment.tz(unix, timezone).format(hideAMPM ? "h:mm" : "h:mma");
 }
 
 module.exports = formatTime;

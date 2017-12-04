@@ -22,18 +22,19 @@
  * @flow
  */
 
-'use strict';
+"use strict";
 
-const parseActions = require('./parse');
-const navigationActions = require('./navigation');
-const loginActions = require('./login');
-const scheduleActions = require('./schedule');
-const filterActions = require('./filter');
-const notificationActions = require('./notifications');
-const configActions = require('./config');
-const surveyActions = require('./surveys');
-const testActions = require('./test');
-const installationActions = require('./installation');
+import * as parseActions from "./parse";
+import * as navigationActions from "./navigation";
+import * as loginActions from "./login";
+import * as scheduleActions from "./schedule";
+import * as filterActions from "./filter";
+import * as notificationActions from "./notifications";
+import * as configActions from "./config";
+import * as surveyActions from "./surveys";
+import * as testActions from "./test";
+import * as installationActions from "./installation";
+import * as videoActions from "./video";
 
 module.exports = {
   ...loginActions,
@@ -46,4 +47,5 @@ module.exports = {
   ...parseActions,
   ...navigationActions,
   ...installationActions,
+  ...videoActions
 };

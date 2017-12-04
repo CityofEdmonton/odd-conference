@@ -22,30 +22,25 @@
  * @flow
  */
 
-'use strict';
+"use strict";
 
-var Image = require('Image');
-import LinearGradient from 'react-native-linear-gradient';
-var React = require('React');
-var StyleSheet = require('StyleSheet');
-var { Text } = require('F8Text');
-var TouchableOpacity = require('TouchableOpacity');
-var View = require('View');
-var Animated = require('Animated');
+import React from "react";
+import { Animated } from "react-native";
+import F8Button from "../../common/F8Button";
 
 type Props = {
-  isAdded: boolean;
-  onPress: () => void;
-  addedImageSource?: ?number;
-  style?: any;
+  isAdded: boolean,
+  onPress: () => void,
+  addedImageSource?: ?string,
+  style?: any
 };
 
 type State = {
-  anim: Animated.Value;
+  anim: Animated.Value
 };
 
-const SAVED_LABEL = 'Saved to your schedule';
-const ADD_LABEL = 'Add to my schedule';
+const SAVED_LABEL = "Added to my F8";
+const ADD_LABEL = "Add to my F8";
 
 class AddToScheduleButton extends React.Component {
   props: Props;
@@ -54,157 +49,53 @@ class AddToScheduleButton extends React.Component {
   constructor(props: Props) {
     super(props);
     this.state = {
-      anim: new Animated.Value(props.isAdded ? 1 : 0),
+      anim: new Animated.Value(props.isAdded ? 1 : 0)
     };
   }
 
   render() {
-    const colors = this.props.isAdded ? ['#4DC7A4', '#66D37A'] : ['#6A6AD5', '#6F86D9'];
-
-    const addOpacity = {
-      opacity: this.state.anim.interpolate({
-        inputRange: [0, 1],
-        outputRange: [1, 0],
-      }),
-      transform: [{
-        translateY: this.state.anim.interpolate({
-          inputRange: [0, 1],
-          outputRange: [0, 40],
-        }),
-      }],
-    };
-
-    const addOpacityImage = {
-      opacity: this.state.anim.interpolate({
-        inputRange: [0, 1],
-        outputRange: [1, 0],
-      }),
-      transform: [{
-        translateY: this.state.anim.interpolate({
-          inputRange: [0, 1],
-          outputRange: [0, 80],
-        }),
-      }],
-    };
-
-    const addedOpacity = {
-      opacity: this.state.anim.interpolate({
-        inputRange: [0, 1],
-        outputRange: [0, 1],
-      }),
-      transform: [{
-        translateY: this.state.anim.interpolate({
-          inputRange: [0, 1],
-          outputRange: [-40, 0],
-        }),
-      }],
-    };
-
-    const addedOpacityImage = {
-      opacity: this.state.anim.interpolate({
-        inputRange: [0.7, 1],
-        outputRange: [0, 1],
-      }),
-      transform: [{
-        translateY: this.state.anim.interpolate({
-          inputRange: [0, 1],
-          outputRange: [-80, 0],
-        }),
-      }],
-    };
+    const { isAdded, addedImageSource, style } = this.props;
+    const buttonTheme = isAdded ? "yellow" : "pink";
+    const caption = isAdded ? SAVED_LABEL : ADD_LABEL;
+    const icon =
+      isAdded && addedImageSource
+        ? addedImageSource
+        : require("./img/added.png");
 
     return (
-      <TouchableOpacity
-        accessibilityLabel={this.props.isAdded ? SAVED_LABEL : ADD_LABEL}
-        accessibilityTraits="button"
+      <F8Button
+        style={style}
+        icon={icon}
+        caption={caption}
+        theme={buttonTheme}
         onPress={this.props.onPress}
-        activeOpacity={0.9}
-        style={[styles.container, this.props.style]}>
-        <LinearGradient
-          start={[0.5, 1]} end={[1, 1]}
-          colors={colors}
-          collapsable={false}
-          style={styles.button}>
-          <View style={{flex: 1}}>
-            <View style={styles.content} collapsable={false}>
-              <Animated.Image
-                source={this.props.addedImageSource || require('./img/added.png')}
-                style={[styles.icon, addedOpacityImage]}
-              />
-              <Animated.Text style={[styles.caption, addedOpacity]}>
-                <Text>{SAVED_LABEL.toUpperCase()}</Text>
-              </Animated.Text>
-            </View>
-            <View style={styles.content}>
-              <Animated.Image
-                source={require('./img/add.png')}
-                style={[styles.icon, addOpacityImage]}
-              />
-              <Animated.Text style={[styles.caption, addOpacity]}>
-                <Text>{ADD_LABEL.toUpperCase()}</Text>
-              </Animated.Text>
-            </View>
-          </View>
-        </LinearGradient>
-      </TouchableOpacity>
+      />
     );
   }
 
   componentWillReceiveProps(nextProps: Props) {
     if (this.props.isAdded !== nextProps.isAdded) {
       const toValue = nextProps.isAdded ? 1 : 0;
-      Animated.spring(this.state.anim, {toValue}).start();
+      Animated.spring(this.state.anim, { toValue }).start();
     }
   }
 }
 
-const HEIGHT = 50;
-
-var styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    height: HEIGHT,
-    overflow: 'hidden',
-  },
-  button: {
-    flex: 1,
-    borderRadius: HEIGHT / 2,
-    backgroundColor: 'transparent',
-    paddingHorizontal: 40,
-  },
-  content: {
-    position: 'absolute',
-    left: 0,
-    top: 0,
-    right: 0,
-    bottom: 0,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  icon: {
-    marginRight: 12,
-  },
-  caption: {
-    letterSpacing: 1,
-    fontSize: 12,
-    color: 'white',
-  },
-});
-
 module.exports = AddToScheduleButton;
 // $FlowFixMe
-module.exports.__cards__ = (define) => {
+module.exports.__cards__ = define => {
   let f;
   setInterval(() => f && f(), 1000);
 
-  define('Inactive', (state = true, update) =>
-    <AddToScheduleButton isAdded={state} onPress={() => update(!state)} />);
+  define("Inactive", (state, update) => (
+    <AddToScheduleButton isAdded={false} onPress={() => update(!state)} />
+  ));
 
-  define('Active', (state = false, update) =>
-    <AddToScheduleButton isAdded={state} onPress={() => update(!state)} />);
+  define("Active", (state, update) => (
+    <AddToScheduleButton isAdded={true} onPress={() => update(!state)} />
+  ));
 
-  define('Animated', (state = false, update) => {
+  define("Animated", (state = false, update) => {
     f = () => update(!state);
     return <AddToScheduleButton isAdded={state} onPress={() => {}} />;
   });

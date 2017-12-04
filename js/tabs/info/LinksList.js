@@ -18,117 +18,155 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE
- *
- * @flow
  */
-'use strict';
+"use strict";
 
-var F8Colors = require('F8Colors');
-var Image = require('Image');
-var ItemsWithSeparator = require('../../common/ItemsWithSeparator');
-var Linking = require('Linking');
-var React = require('React');
-var Section = require('./Section');
-var StyleSheet = require('StyleSheet');
-var F8Touchable = require('F8Touchable');
-var { Text } = require('F8Text');
-var View = require('View');
+import React from "react";
+import F8Colors from "../../common/F8Colors";
+import F8Touchable from "../../common/F8Touchable";
+import F8Linking from "../../common/F8Linking";
+import { View, Image, StyleSheet } from "react-native";
+import { Text, Heading4 } from "../../common/F8Text";
+
+/* constants
+============================================================================= */
+const ICON_SIZE = 45;
+
+/* <LinksList />
+============================================================================= */
 
 class LinksList extends React.Component {
   props: {
-    title: string;
+    title: string,
     links: Array<{
-      logo?: ?string;
-      title: string;
-      url?: string;
-      onPress?: () => void;
-    }>;
+      logo?: ?string,
+      title: string,
+      url?: string,
+      onPress?: () => void
+    }>
   };
 
+  constructor() {
+    super();
+
+    this.onSelectRow = this.onSelectRow.bind(this);
+  }
+
+  onSelectRow(url, title) {
+    this.props.onSelect && this.props.onSelect(url, title);
+  }
+
   render() {
-    let content = this.props.links.map(
-      (link) => <Row link={link} key={link.title} />
-    );
+    let content = this.props.links.map(link => (
+      <Row onSelect={this.onSelectRow} link={link} key={link.title} />
+    ));
     return (
-      <Section title={this.props.title}>
-        <ItemsWithSeparator separatorStyle={styles.separator}>
-          {content}
-        </ItemsWithSeparator>
-      </Section>
+      <View style={this.props.style}>
+        {this.renderTitle()}
+        {content}
+      </View>
     );
+  }
+
+  renderTitle() {
+    if (this.props.title) {
+      return (
+        <Heading4 style={styles.heading}>
+          {this.props.title.toUpperCase()}
+        </Heading4>
+      );
+    } else {
+      return null;
+    }
   }
 }
 
 class Row extends React.Component {
   props: {
     link: {
-      logo: ?string;
-      title: string;
-      url?: string;
-      onPress?: () => void;
-    };
+      logo: ?string,
+      title: string,
+      url?: string,
+      onPress?: () => void
+    }
   };
 
   render() {
-    var {logo, title} = this.props.link;
-    var image = logo && <Image style={styles.picture} source={{uri: logo}} />;
+    var { logo, title } = this.props.link;
+    var image = logo && (
+      <Image
+        resizeMode="contain"
+        style={styles.rowIcon}
+        source={{ uri: logo }}
+      />
+    );
+    const rowHeight = image ? styles.tallRow : undefined;
+
     return (
       <F8Touchable onPress={this.handlePress.bind(this)}>
-        <View style={styles.row}>
+        <View style={[styles.row, rowHeight]}>
           {image}
-          <Text style={styles.title} numberOfLines={2}>
+          <Text style={styles.rowTitle} numberOfLines={2}>
             {title}
           </Text>
-          <Image source={require('../../common/img/disclosure.png')} />
+          <Image source={require("../../common/img/pointer-right.png")} />
         </View>
       </F8Touchable>
     );
   }
 
   handlePress() {
-    var {url, onPress} = this.props.link;
-    if (onPress) {
-      onPress();
-    }
-    if (url) {
-      Linking.openURL(url);
+    const { onSelect, link } = this.props;
+    const { url, title } = link;
+    // open in embedded web view
+    if (onSelect) {
+      onSelect(url, title);
+    } else if (url) {
+      F8Linking.openURL(url);
     }
   }
 }
 
-const IMAGE_SIZE = 44;
+/* StyleSheet
+============================================================================= */
 
-var styles = StyleSheet.create({
-  separator: {
-    marginHorizontal: 20,
+const styles = StyleSheet.create({
+  heading: {
+    paddingHorizontal: 18,
+    marginBottom: 20
   },
   row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    backgroundColor: 'white',
-    height: 60,
+    flexDirection: "row",
+    alignItems: "center",
+    // paddingVertical: 8,
+    paddingRight: 16,
+    marginLeft: 12,
+    height: 54
   },
-  picture: {
-    width: IMAGE_SIZE,
-    height: IMAGE_SIZE,
-    borderRadius: IMAGE_SIZE / 2,
-    marginRight: 16,
+  tallRow: {
+    height: 62 // could be 63
   },
-  title: {
+  rowIcon: {
+    width: ICON_SIZE,
+    height: ICON_SIZE,
+    marginRight: 15
+  },
+  rowTitle: {
+    paddingLeft: 6,
+    color: F8Colors.tangaroa,
     fontSize: 17,
-    color: F8Colors.darkText,
-    flex: 1,
+    flex: 1
   },
   button: {
-    padding: 10,
+    padding: 10
   },
   like: {
-    letterSpacing: 1,
-    color: F8Colors.actionText,
-    fontSize: 12,
-  },
+    // letterSpacing: 1,
+    // color: F8Colors.actionText,
+    // fontSize: 12,
+  }
 });
 
+/* Exports
+============================================================================= */
 module.exports = LinksList;

@@ -18,36 +18,38 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE
- *
- * @flow
  */
 
-'use strict';
+"use strict";
 
-import {applyMiddleware, createStore} from 'redux';
-import thunk from 'redux-thunk';
-var promise = require('./promise');
-var array = require('./array');
-var analytics = require('./analytics');
-var reducers = require('../reducers');
-var createLogger = require('redux-logger');
-import {persistStore, autoRehydrate} from 'redux-persist';
-var {AsyncStorage} = require('react-native');
+import { applyMiddleware, createStore } from "redux";
+import thunk from "redux-thunk";
+import promise from "./promise";
+import array from "./array";
+import analytics from "./analytics";
+import reducers from "../reducers";
+import createLogger from "redux-logger";
+import { persistStore, autoRehydrate } from "redux-persist";
+import { AsyncStorage } from "react-native";
+import { ensureCompatibility } from "./compatibility";
 
-var isDebuggingInChrome = __DEV__ && !!window.navigator.userAgent;
+var isDebuggingInChrome = false;
 
 var logger = createLogger({
   predicate: (getState, action) => isDebuggingInChrome,
   collapsed: true,
-  duration: true,
+  duration: true
 });
 
-var createF8Store = applyMiddleware(thunk, promise, array, analytics, logger)(createStore);
+var createF8Store = applyMiddleware(thunk, promise, array, analytics, logger)(
+  createStore
+);
 
-function configureStore(onComplete: ?() => void) {
-  // TODO(frantic): reconsider usage of redux-persist, maybe add cache breaker
+async function configureStore(onComplete: ?() => void) {
+  const didReset = await ensureCompatibility();
   const store = autoRehydrate()(createF8Store)(reducers);
-  persistStore(store, {storage: AsyncStorage}, onComplete);
+  persistStore(store, { storage: AsyncStorage }, _ => onComplete(didReset));
+
   if (isDebuggingInChrome) {
     window.store = store;
   }

@@ -18,31 +18,29 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE
- *
- * @flow
  */
-'use strict';
+"use strict";
 
-var Image = require('Image');
-var React = require('React');
-var ScrollView = require('ScrollView');
-var StyleSheet = require('StyleSheet');
-var TouchableWithoutFeedback = require('TouchableWithoutFeedback');
+import Image from "Image";
+import React from "react";
+import ScrollView from "ScrollView";
+import { StyleSheet } from "react-native";
+import TouchableWithoutFeedback from "TouchableWithoutFeedback";
 
 class ZoomableImage extends React.Component {
   props: {
-    url: string;
+    url: string
   };
   state: {
-    lastTapTimestamp: number;
-    isZoomed: boolean;
+    lastTapTimestamp: number,
+    isZoomed: boolean
   };
 
   constructor() {
     super();
     this.state = {
       lastTapTimestamp: 0,
-      isZoomed: false,
+      isZoomed: false
     };
 
     (this: any).onZoomChanged = this.onZoomChanged.bind(this);
@@ -52,7 +50,7 @@ class ZoomableImage extends React.Component {
   render() {
     return (
       <ScrollView
-        ref="zoomable_scroll"
+        ref={c => (this._zoomableScroll = c)}
         onScroll={this.onZoomChanged}
         scrollEventThrottle={100}
         scrollsToTop={false}
@@ -63,12 +61,10 @@ class ZoomableImage extends React.Component {
         showsVerticalScrollIndicator={false}
         maximumZoomScale={4}
         centerContent={true}
-        contentContainerStyle={{flex: 1}}>
+        contentContainerStyle={{ flex: 1 }}
+      >
         <TouchableWithoutFeedback onPress={this.toggleZoom}>
-          <Image
-            style={styles.image}
-            source={{uri: this.props.url}}
-          />
+          <Image style={styles.image} source={{ uri: this.props.url }} />
         </TouchableWithoutFeedback>
       </ScrollView>
     );
@@ -77,23 +73,29 @@ class ZoomableImage extends React.Component {
   toggleZoom(e: any) {
     var timestamp = new Date().getTime();
     if (timestamp - this.state.lastTapTimestamp <= 500) {
-      var {locationX, locationY} = e.nativeEvent;
-      var size = this.state.isZoomed ? {width: 10000, height: 10000} : {width: 0, height: 0};
-      this.refs.zoomable_scroll.scrollResponderZoomTo({x: locationX, y: locationY, ...size});
+      var { locationX, locationY } = e.nativeEvent;
+      var size = this.state.isZoomed
+        ? { width: 10000, height: 10000 }
+        : { width: 0, height: 0 };
+      this._zoomableScroll.scrollResponderZoomTo({
+        x: locationX,
+        y: locationY,
+        ...size
+      });
     }
-    this.setState({lastTapTimestamp: timestamp});
+    this.setState({ lastTapTimestamp: timestamp });
   }
 
   onZoomChanged(e: any) {
-    this.setState({isZoomed: e.nativeEvent.zoomScale > 1});
+    this.setState({ isZoomed: e.nativeEvent.zoomScale > 1 });
   }
 }
 
 var styles = StyleSheet.create({
   image: {
     flex: 1,
-    resizeMode: Image.resizeMode.contain,
-  },
+    resizeMode: Image.resizeMode.contain
+  }
 });
 
 module.exports = ZoomableImage;

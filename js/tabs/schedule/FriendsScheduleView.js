@@ -21,27 +21,32 @@
  *
  * @flow
  */
-'use strict';
+"use strict";
 
-var Navigator = require('Navigator');
-var ProfilePicture = require('../../common/ProfilePicture');
-var React = require('React');
-var EmptySchedule = require('./EmptySchedule');
-var FilterSessions = require('./filterSessions');
-var ListContainer = require('ListContainer');
-var ScheduleListView = require('./ScheduleListView');
+import React from "react";
+import EmptySchedule from "./EmptySchedule";
+import FilterSessions from "./filterSessions";
+import ListContainer from "../../common/ListContainer";
+import ScheduleListView from "./ScheduleListView";
 
-var { connect } = require('react-redux');
+import { View, StatusBar } from "react-native";
+import { Navigator } from "react-native-deprecated-custom-components";
+import MessengerChatHead from "../../common/MessengerChatHead";
 
-import type {Session} from '../../reducers/sessions';
-import type {FriendsSchedule} from '../../reducers/friendsSchedules';
+import { connect } from "react-redux";
 
-var { createSelector } = require('reselect');
+import type { Session } from "../../reducers/sessions";
+import type { FriendsSchedule } from "../../reducers/friendsSchedules";
+
+import F8TimelineBackground from "../../common/F8TimelineBackground";
+import F8Colors from "../../common/F8Colors";
+
+import { createSelector } from "reselect";
 
 type Props = {
-  sessions: Array<Session>;
-  friend: FriendsSchedule;
-  navigator: Navigator;
+  sessions: Array<Session>,
+  friend: FriendsSchedule,
+  navigator: Navigator
 };
 
 class FriendsScheduleView extends React.Component {
@@ -54,55 +59,74 @@ class FriendsScheduleView extends React.Component {
 
   render() {
     const backItem = {
-      icon: require('../../common/img/back_white.png'),
-      onPress: () => this.props.navigator.pop(),
+      title: "Back",
+      layout: "icon",
+      icon: require("../../common/img/header/back-blue.png"),
+      onPress: () => this.props.navigator.pop()
     };
-    const firstName = this.props.friend.name.split(' ')[0];
+    const firstName = this.props.friend.name.split(" ")[0];
     return (
-      <ListContainer
-        title={`${firstName}'s Schedule`}
-        parallaxContent={<ProfilePicture userID={this.props.friend.id} size={100} />}
-        backgroundImage={require('./img/schedule-background.png')}
-        backgroundColor={'#5597B8'}
-        selectedSectionColor="#51CDDA"
-        leftItem={backItem}>
-        <ScheduleListView
-          title="Day 1"
-          day={1}
-          sessions={this.props.sessions}
-          renderEmptyList={this.renderEmptyList}
-          navigator={this.props.navigator}
+      <View style={{ flex: 1 }}>
+        <StatusBar barStyle="dark-content" animated={true} />
+        <ListContainer
+          title={`${firstName}'s Schedule`}
+          headerBackgroundColor={F8Colors.bianca}
+          headerTitleColor={F8Colors.blue}
+          headerItemsColor={F8Colors.blue}
+          segmentedBorderColor={F8Colors.blue}
+          segmentedTextColor={F8Colors.sapphire2}
+          navItem={backItem}
+        >
+          <ScheduleListView
+            title="Day 1"
+            day={1}
+            sessions={this.props.sessions}
+            renderEmptyList={this.renderEmptyList}
+            renderFooter={_ => <F8TimelineBackground />}
+            navigator={this.props.navigator}
+          />
+          <ScheduleListView
+            title="Day 2"
+            day={2}
+            sessions={this.props.sessions}
+            renderEmptyList={this.renderEmptyList}
+            renderFooter={_ => <F8TimelineBackground />}
+            navigator={this.props.navigator}
+          />
+        </ListContainer>
+        <MessengerChatHead
+          user={this.props.friend}
+          style={{
+            position: "absolute",
+            right: 12,
+            bottom: 18
+          }}
         />
-        <ScheduleListView
-          title="Day 2"
-          day={2}
-          sessions={this.props.sessions}
-          renderEmptyList={this.renderEmptyList}
-          navigator={this.props.navigator}
-        />
-      </ListContainer>
+      </View>
     );
   }
 
-  renderEmptyList(day) {
+  renderEmptyList(day, containerHeight) {
     return (
       <EmptySchedule
+        style={{ height: containerHeight }}
         title="Nothing to show."
-        text={`${this.props.friend.name} has not added any sessions for day ${day}`}
+        text={`${this.props.friend
+          .name} has not added any sessions for day ${day}`}
       />
     );
   }
 }
 
 const data = createSelector(
-  (store) => store.sessions,
+  store => store.sessions,
   (store, props) => props.friend.schedule,
-  (sessions, schedule) => FilterSessions.bySchedule(sessions, schedule),
+  (sessions, schedule) => FilterSessions.bySchedule(sessions, schedule)
 );
 
 function select(store, props) {
   return {
-    sessions: data(store, props),
+    sessions: data(store, props)
   };
 }
 

@@ -21,39 +21,44 @@
  *
  * @flow
  */
-'use strict';
+"use strict";
 
-var F8Colors = require('F8Colors');
-import LinearGradient from 'react-native-linear-gradient';
-var React = require('React');
-var StyleSheet = require('StyleSheet');
-var { Text } = require('F8Text');
+import F8Colors from "../../common/F8Colors";
+import F8Fonts from "../../common/F8Fonts";
+import React from "react";
+import { View, StyleSheet } from "react-native";
+import { Text } from "../../common/F8Text";
 
 class SessionsSectionHeader extends React.Component {
   props: {
-    title: string;
+    title: string
   };
 
   render() {
     return (
-      <LinearGradient colors={['#F4F6F7', '#EBEEF1']} style={styles.header}>
-        <Text style={styles.label}>
-          {this.props.title}
-        </Text>
-      </LinearGradient>
+      <View style={styles.header}>
+        <Text style={styles.label}>{this.props.title}</Text>
+      </View>
     );
   }
 }
 
 var styles = StyleSheet.create({
   header: {
-    height: 32,
-    justifyContent: 'center',
-    paddingLeft: 17,
+    // position:'relative',
+    left: 0,
+    width: 56,
+    marginBottom: -30,
+    justifyContent: "center",
+    height: 30
   },
   label: {
-    color: F8Colors.lightText,
-  },
+    paddingTop: 6,
+    textAlign: "right",
+    fontFamily: F8Fonts.helvetica,
+    fontSize: 13,
+    color: F8Colors.tangaroa
+  }
 });
 
 module.exports = SessionsSectionHeader;

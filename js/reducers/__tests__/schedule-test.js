@@ -18,68 +18,73 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE
- *
- * @flow
  */
 
-'use strict';
+"use strict";
 
-jest.dontMock('../schedule');
-const schedule = require('../schedule');
+jest.dontMock("../schedule");
+import schedule from "../schedule";
 
-describe('schedule reducer', () => {
-
-  it('is empty by default', () => {
+describe("schedule reducer", () => {
+  it("is empty by default", () => {
     expect(schedule(undefined, ({}: any))).toEqual({});
   });
 
-  it('adds sessions to schedule', () => {
-    expect(
-      schedule({}, {type: 'SESSION_ADDED', id: 'one'})
-    ).toEqual({one: true});
+  it("adds sessions to schedule", () => {
+    expect(schedule({}, { type: "SESSION_ADDED", id: "one" })).toEqual({
+      one: true
+    });
 
     expect(
-      schedule({one: true}, {type: 'SESSION_ADDED', id: 'two'})
-    ).toEqual({one: true, two: true});
+      schedule({ one: true }, { type: "SESSION_ADDED", id: "two" })
+    ).toEqual({ one: true, two: true });
   });
 
-  it('removes sessions from schedule', () => {
+  it("removes sessions from schedule", () => {
     expect(
-      schedule({
-        one: true,
-        two: true,
-      }, {
-        type: 'SESSION_REMOVED',
-        id: 'two',
-      })
+      schedule(
+        {
+          one: true,
+          two: true
+        },
+        {
+          type: "SESSION_REMOVED",
+          id: "two"
+        }
+      )
     ).toEqual({
-      one: true,
+      one: true
     });
   });
 
-  it('restores schedule when logging in', () => {
+  it("restores schedule when logging in", () => {
     expect(
-      schedule({
-        one: true,
-      }, {
-        type: 'RESTORED_SCHEDULE',
-        list: [{id: 'two'}, {id: 'three'}],
-      })
+      schedule(
+        {
+          one: true
+        },
+        {
+          type: "RESTORED_SCHEDULE",
+          list: [{ id: "two" }, { id: "three" }]
+        }
+      )
     ).toEqual({
       two: true,
-      three: true,
+      three: true
     });
   });
 
-  it('clears schedule when logging out', () => {
+  it("clears schedule when logging out", () => {
     expect(
-      schedule({
-        one: true,
-        two: true,
-      }, {
-        type: 'LOGGED_OUT',
-      })
+      schedule(
+        {
+          one: true,
+          two: true
+        },
+        {
+          type: "LOGGED_OUT"
+        }
+      )
     ).toEqual({});
   });
-
 });

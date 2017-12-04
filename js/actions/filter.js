@@ -18,27 +18,44 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE
- *
- * @flow
  */
 
-'use strict';
+"use strict";
 
-import type { Action } from './types';
+import type { Action } from "./types";
 
-type Schedule = {[key: string]: boolean};
+type Schedule = { [key: string]: boolean };
+type Video = { [key: string]: boolean };
 
-function applyTopicsFilter(topics: Schedule): Action {
+function applyScheduleFilter(scheduleTopics: Schedule): Action {
   return {
-    type: 'APPLY_TOPICS_FILTER',
-    topics,
+    type: "APPLY_SCHEDULE_TOPICS_FILTER",
+    scheduleTopics
   };
 }
 
-function clearFilter(): Action {
+function clearScheduleFilter(): Action {
   return {
-    type: 'CLEAR_FILTER',
+    type: "CLEAR_SCHEDULE_FILTER"
   };
 }
 
-module.exports = {applyTopicsFilter, clearFilter};
+function applyVideoFilter(videoTopics: Video): Action {
+  return {
+    type: "APPLY_VIDEO_TOPICS_FILTER",
+    videoTopics
+  };
+}
+
+function clearVideoFilter(): Action {
+  return {
+    type: "CLEAR_VIDEO_FILTER"
+  };
+}
+
+module.exports = {
+  applyScheduleFilter,
+  clearScheduleFilter,
+  applyVideoFilter,
+  clearVideoFilter
+};

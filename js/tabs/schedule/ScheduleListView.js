@@ -18,31 +18,29 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE
- *
- * @flow
  */
-'use strict';
+"use strict";
 
-var F8SessionCell = require('F8SessionCell');
-var FilterSessions = require('./filterSessions');
-var Navigator = require('Navigator');
-var React = require('React');
-var SessionsSectionHeader = require('./SessionsSectionHeader');
-var PureListView = require('../../common/PureListView');
-var groupSessions = require('./groupSessions');
+import F8SessionCell from "./F8SessionCell";
+import FilterSessions from "./filterSessions";
+import { Navigator } from "react-native-deprecated-custom-components";
+import React from "react";
+import SessionsSectionHeader from "./SessionsSectionHeader";
+import PureListView from "../../common/PureListView";
+import groupSessions from "./groupSessions";
 
-import type {Session} from '../../reducers/sessions';
-import type {SessionsListData} from './groupSessions';
+import type { Session } from "../../reducers/sessions";
+import type { SessionsListData } from "./groupSessions";
 
 type Props = {
-  day: number;
-  sessions: Array<Session>;
-  navigator: Navigator;
-  renderEmptyList?: (day: number) => ReactElement;
+  day: number,
+  sessions: Array<Session>,
+  navigator: Navigator,
+  renderEmptyList?: (day: number) => ReactElement
 };
 
 type State = {
-  todaySessions: SessionsListData;
+  todaySessions: SessionsListData
 };
 
 class ScheduleListView extends React.Component {
@@ -53,7 +51,9 @@ class ScheduleListView extends React.Component {
   constructor(props: Props) {
     super(props);
     this.state = {
-      todaySessions: groupSessions(FilterSessions.byDay(props.sessions, props.day)),
+      todaySessions: groupSessions(
+        FilterSessions.byDay(props.sessions, props.day)
+      )
     };
 
     this._innerRef = null;
@@ -65,10 +65,14 @@ class ScheduleListView extends React.Component {
   }
 
   componentWillReceiveProps(nextProps: Props) {
-    if (nextProps.sessions !== this.props.sessions ||
-        nextProps.day !== this.props.day) {
+    if (
+      nextProps.sessions !== this.props.sessions ||
+      nextProps.day !== this.props.day
+    ) {
       this.setState({
-        todaySessions: groupSessions(FilterSessions.byDay(nextProps.sessions, nextProps.day)),
+        todaySessions: groupSessions(
+          FilterSessions.byDay(nextProps.sessions, nextProps.day)
+        )
       });
     }
   }
@@ -80,35 +84,47 @@ class ScheduleListView extends React.Component {
         data={this.state.todaySessions}
         renderRow={this.renderRow}
         renderSectionHeader={this.renderSectionHeader}
-        {...(this.props: any /* flow can't guarantee the shape of props */)}
+        {...(this.props: any) /* flow can't guarantee the shape of props */}
         renderEmptyList={this.renderEmptyList}
       />
     );
   }
 
   renderSectionHeader(sectionData: any, sectionID: string) {
-    return <SessionsSectionHeader title={sectionID} />;
+    let formatted =
+      sectionID
+        .toLowerCase()
+        .replace("am", "")
+        .replace("pm", "") || sectionID;
+    return <SessionsSectionHeader title={formatted} />;
   }
 
   renderRow(session: Session, day: number) {
     return (
       <F8SessionCell
-        onPress={() => this.openSession(session, day)}
+        onPress={_ => this.openSession(session, day)}
         session={session}
+        firstRow={this.isFirstSessionCell(session.id)}
       />
     );
   }
 
-  renderEmptyList(): ?ReactElement {
-    const {renderEmptyList} = this.props;
-    return renderEmptyList && renderEmptyList(this.props.day);
+  renderEmptyList(containerHeight: number): ?ReactElement {
+    // if listview onLayout hasn't updated container height, don't bother
+    if (containerHeight === 0) {
+      return null;
+    } // TODO: different fix
+    // otherwise render fallback cta with a valid and centerable height
+    const { renderEmptyList } = this.props;
+    return renderEmptyList && renderEmptyList(this.props.day, containerHeight);
   }
 
   openSession(session: Session, day: number) {
+    let allSessions = { ...this.state.todaySessions };
     this.props.navigator.push({
       day,
       session,
-      allSessions: this.state.todaySessions,
+      allSessions
     });
   }
 
@@ -122,6 +138,12 @@ class ScheduleListView extends React.Component {
 
   getScrollResponder(): any {
     return this._innerRef && this._innerRef.getScrollResponder();
+  }
+
+  isFirstSessionCell(id) {
+    const keys = Object.keys(this.state.todaySessions);
+    const innerKeys = Object.keys(this.state.todaySessions[keys[0]]);
+    return id === innerKeys[0];
   }
 }
 

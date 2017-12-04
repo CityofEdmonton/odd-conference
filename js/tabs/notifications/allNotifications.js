@@ -21,18 +21,21 @@
  *
  * @flow
  */
-'use strict';
+"use strict";
 
-var { createSelector } = require('reselect');
+import { createSelector } from "reselect";
 
-import type {Notification} from '../../reducers/notifications';
+import type { Notification } from "../../reducers/notifications";
 
 // Merges lists of notifications from server and notifications
 // received via push and makes sure there is no duplicates.
-function mergeAndSortByTime(server: Array<Notification>, push: Array<Notification>): Array<Notification> {
-  var uniquePush = push.filter((pushNotification) => {
+function mergeAndSortByTime(
+  server: Array<Notification>,
+  push: Array<Notification>
+): Array<Notification> {
+  var uniquePush = push.filter(pushNotification => {
     var existsOnServer = server.find(
-      (serverNotification) => serverNotification.text === pushNotification.text
+      serverNotification => serverNotification.text === pushNotification.text
     );
     return !existsOnServer;
   });
@@ -42,7 +45,7 @@ function mergeAndSortByTime(server: Array<Notification>, push: Array<Notificatio
 }
 
 module.exports = createSelector(
-  (store) => store.notifications.server,
-  (store) => store.notifications.push,
+  store => store.notifications.server,
+  store => store.notifications.push,
   mergeAndSortByTime
 );

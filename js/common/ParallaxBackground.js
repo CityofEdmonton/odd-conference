@@ -18,39 +18,32 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE
- *
- * @flow
- * @providesModule ParallaxBackground
  */
 
-'use strict';
+"use strict";
 
-var Animated = require('Animated');
-var resolveAssetSource = require('resolveAssetSource');
-var React = require('React');
-var StyleSheet = require('StyleSheet');
-var View = require('View');
-var Image = require('Image');
-var Dimensions = require('Dimensions');
+import Animated from "Animated";
+import resolveAssetSource from "resolveAssetSource";
+import React from "react";
+import StyleSheet from "StyleSheet";
+import Dimensions from "Dimensions";
 
 // TODO: Remove this magic numbers
-const HEIGHT = Dimensions.get('window').height > 600
-  ? 200
-  : 150;
-const SCREEN_WIDTH = Dimensions.get('window').width;
+const HEIGHT = Dimensions.get("window").height > 600 ? 200 : 150;
+const SCREEN_WIDTH = Dimensions.get("window").width;
 
 type Props = {
-  maxHeight: number;
-  minHeight: number;
-  offset: Animated.Value;
-  backgroundImage: number;
-  backgroundShift: number; // 0..1
-  backgroundColor: string; // TODO: This makes it seems like image loads faster. Remove
-  children?: any;
-}
+  maxHeight: number,
+  minHeight: number,
+  offset: Animated.Value,
+  backgroundImage: number,
+  backgroundShift: number, // 0..1
+  backgroundColor: string, // TODO: This makes it seems like image loads faster. Remove
+  children?: any
+};
 
 type State = {
-  shift: Animated.Value;
+  shift: Animated.Value
 };
 
 class ParallaxBackground extends React.Component {
@@ -62,7 +55,7 @@ class ParallaxBackground extends React.Component {
   constructor(props: Props) {
     super(props);
     this.state = {
-      shift: new Animated.Value(props.backgroundShift || 0),
+      shift: new Animated.Value(props.backgroundShift || 0)
     };
   }
 
@@ -70,22 +63,22 @@ class ParallaxBackground extends React.Component {
     if (prevProps.backgroundShift !== this.props.backgroundShift) {
       Animated.timing(this.state.shift, {
         toValue: this.props.backgroundShift,
-        duration: 300,
+        duration: 300
       }).start();
     }
   }
 
   render(): ReactElement {
-    const {minHeight, maxHeight, offset, backgroundColor} = this.props;
+    const { minHeight, maxHeight, offset, backgroundColor } = this.props;
     const buffer = 10; // To reduce visual lag when scrolling
     const height = offset.interpolate({
       inputRange: [0, maxHeight - minHeight],
       outputRange: [maxHeight + buffer, minHeight + buffer],
-      extrapolateRight: 'clamp',
+      extrapolateRight: "clamp"
     });
 
     return (
-      <Animated.View style={[styles.container, {height, backgroundColor}]}>
+      <Animated.View style={[styles.container, { height, backgroundColor }]}>
         {this.renderBackgroundImage()}
         {this.renderContent()}
       </Animated.View>
@@ -93,7 +86,7 @@ class ParallaxBackground extends React.Component {
   }
 
   renderBackgroundImage(): ?ReactElement {
-    const {backgroundImage, minHeight, maxHeight, offset} = this.props;
+    const { backgroundImage, minHeight, maxHeight, offset } = this.props;
     if (!backgroundImage) {
       return null;
     }
@@ -102,33 +95,30 @@ class ParallaxBackground extends React.Component {
     if (!source) {
       return null;
     }
-    const {width} = source;
+    const { width } = source;
     const translateX = this.state.shift.interpolate({
       inputRange: [0, 1],
       outputRange: [0, SCREEN_WIDTH - width],
-      extrapolate: 'clamp',
+      extrapolate: "clamp"
     });
 
     const length = maxHeight - minHeight;
     const translateY = offset.interpolate({
       inputRange: [0, length / 2, length],
       outputRange: [0, -length / 2, -length / 1.5],
-      extrapolate: 'clamp',
+      extrapolate: "clamp"
     });
     // Sometimes image width is smaller than device's width
     const initialScale = Math.max(SCREEN_WIDTH / width * 2 - 1, 1);
     const scale = offset.interpolate({
       inputRange: [-length, 0],
       outputRange: [2, initialScale],
-      extrapolateRight: 'clamp',
+      extrapolateRight: "clamp"
     });
-    const transforms = { transform: [{translateX}, {translateY}, {scale}] };
-    return (
-      <Animated.Image
-        source={backgroundImage}
-        style={transforms}
-      />
-    );
+    const transforms = {
+      transform: [{ translateX }, { translateY }, { scale }]
+    };
+    return <Animated.Image source={backgroundImage} style={transforms} />;
   }
 
   renderContent(): ?ReactElement {
@@ -137,19 +127,19 @@ class ParallaxBackground extends React.Component {
     }
     const content = React.Children.only(this.props.children);
 
-    const {minHeight, maxHeight, offset} = this.props;
+    const { minHeight, maxHeight, offset } = this.props;
     const length = maxHeight - minHeight;
     const opacity = offset.interpolate({
       inputRange: [0, length - 40],
       outputRange: [1, 0],
-      extrapolate: 'clamp',
+      extrapolate: "clamp"
     });
     const translateY = offset.interpolate({
       inputRange: [0, length],
       outputRange: [-32, -(length / 2) - 32],
-      extrapolate: 'clamp',
+      extrapolate: "clamp"
     });
-    const transforms = { opacity, transform: [{translateY}] };
+    const transforms = { opacity, transform: [{ translateY }] };
     return (
       <Animated.View style={[styles.contentContainer, transforms]}>
         {content}
@@ -162,23 +152,22 @@ var HEADER_HEIGHT = HEIGHT + 156;
 
 var styles = StyleSheet.create({
   container: {
-    position: 'absolute',
+    position: "absolute",
     left: 0,
     top: 0,
     right: 0,
-    overflow: 'hidden',
+    overflow: "hidden"
   },
   contentContainer: {
-    position: 'absolute',
+    position: "absolute",
     left: 0,
     top: 0,
     right: 0,
     height: HEADER_HEIGHT,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'transparent',
-  },
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "transparent"
+  }
 });
-
 
 module.exports = ParallaxBackground;

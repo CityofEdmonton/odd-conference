@@ -18,21 +18,19 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE
- *
- * @flow
  */
 
-'use strict';
+"use strict";
 
 jest.autoMockOff();
-const formatDuration = require('../formatDuration');
+import formatDuration from "../formatDuration";
 
-describe('formatDuration', () => {
-  it('formats duration', () => {
-    expect(formatDuration(0, 3600000)).toEqual('1 hour');
-    expect(formatDuration(0, 7200000)).toEqual('2 hours');
-    expect(formatDuration(0, 1800000)).toEqual('30 min');
-    expect(formatDuration(0, 3601000)).toEqual('1 hour 1 min');
-    expect(formatDuration(0, 1427371200000)).toEqual('Until 12:00 pm');
+describe("formatDuration", () => {
+  it("formats duration", () => {
+    expect(formatDuration(0, 3600000)).toEqual("1 hour");
+    expect(formatDuration(0, 7200000)).toEqual("2 hours");
+    expect(formatDuration(0, 1800000)).toEqual("30 min");
+    expect(formatDuration(0, 3601000)).toEqual("1 hour 1 min");
+    expect(formatDuration(0, 1427371200000)).toEqual("Until 5:00am");
   });
 });

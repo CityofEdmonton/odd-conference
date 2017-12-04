@@ -1,4 +1,3 @@
-
 /**
  * Copyright 2016 Facebook, Inc.
  *
@@ -21,12 +20,11 @@
  * DEALINGS IN THE SOFTWARE
  *
  * @flow
- * @providesModule F8DrawerLayout
  */
-'use strict';
+"use strict";
 
-var React = require('React');
-var DrawerLayoutAndroid = require('DrawerLayoutAndroid');
+import React from "react";
+import { DrawerLayoutAndroid } from "react-native";
 
 class F8DrawerLayout extends React.Component {
   _drawer: ?DrawerLayoutAndroid;
@@ -42,13 +40,15 @@ class F8DrawerLayout extends React.Component {
   }
 
   render() {
-    const {drawerPosition, ...props} = this.props;
-    const {Right, Left} = DrawerLayoutAndroid.positions;
+    const { drawerPosition, ...props } = this.props;
+    const { Right, Left } = DrawerLayoutAndroid.positions;
     return (
       <DrawerLayoutAndroid
-        ref={(drawer) => { this._drawer = drawer; }}
+        ref={drawer => {
+          this._drawer = drawer;
+        }}
         {...props}
-        drawerPosition={drawerPosition === 'right' ? Right : Left}
+        drawerPosition={drawerPosition === "right" ? Right : Left}
         onDrawerOpen={this.onDrawerOpen}
         onDrawerClose={this.onDrawerClose}
       />
@@ -86,7 +86,7 @@ class F8DrawerLayout extends React.Component {
 
 F8DrawerLayout.contextTypes = {
   addBackButtonListener: React.PropTypes.func,
-  removeBackButtonListener: React.PropTypes.func,
+  removeBackButtonListener: React.PropTypes.func
 };
 
 module.exports = F8DrawerLayout;

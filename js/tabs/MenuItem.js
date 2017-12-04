@@ -18,29 +18,26 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE
- *
- * @flow
  */
 
-'use strict';
+"use strict";
 
-var F8Colors = require('F8Colors');
-var React = require('React');
-var View = require('View');
-var { Text } = require('F8Text');
-var F8Touchable = require('F8Touchable');
-var Image = require('Image');
-var StyleSheet = require('StyleSheet');
-
+import F8Colors from "../../common/F8Colors";
+import React from "react";
+import View from "View";
+import { Text } from "../common/F8Text";
+import F8Touchable from "../../common/F8Touchable";
+import Image from "Image";
+import StyleSheet from "StyleSheet";
 
 class MenuItem extends React.Component {
   props: {
-    icon: number;
-    selectedIcon: number;
-    selected: boolean;
-    title: string;
-    badge: ?string;
-    onPress: () => void;
+    icon: number,
+    selectedIcon: number,
+    selected: boolean,
+    title: string,
+    badge: ?string,
+    onPress: () => void
   };
 
   render() {
@@ -50,9 +47,7 @@ class MenuItem extends React.Component {
     if (this.props.badge) {
       badge = (
         <View style={styles.badge}>
-          <Text style={styles.badgeText}>
-            {this.props.badge}
-          </Text>
+          <Text style={styles.badgeText}>{this.props.badge}</Text>
         </View>
       );
     }
@@ -72,32 +67,32 @@ class MenuItem extends React.Component {
 
 var styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
+    flexDirection: "row",
     height: 50,
-    alignItems: 'center',
-    paddingHorizontal: 20,
+    alignItems: "center",
+    paddingHorizontal: 20
   },
   icon: {
-    marginRight: 20,
+    marginRight: 20
   },
   title: {
     flex: 1,
     fontSize: 17,
-    color: F8Colors.lightText,
+    color: F8Colors.lightText
   },
   selectedTitle: {
-    color: F8Colors.darkText,
+    color: F8Colors.darkText
   },
   badge: {
-    backgroundColor: '#DC3883',
+    backgroundColor: "#DC3883",
     paddingHorizontal: 10,
     paddingVertical: 2,
-    borderRadius: 10,
+    borderRadius: 10
   },
   badgeText: {
     fontSize: 12,
-    color: 'white',
-  },
+    color: "white"
+  }
 });
 
 module.exports = MenuItem;

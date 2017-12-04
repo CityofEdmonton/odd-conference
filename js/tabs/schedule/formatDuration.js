@@ -18,16 +18,14 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE
- *
- * @flow
  */
-'use strict';
+"use strict";
 
-const formatTime = require('./formatTime');
+import formatTime from "./formatTime";
 
 function naivePlural(text: string, count: number): string {
   if (count > 1) {
-    return text + 's';
+    return text + "s";
   }
   return text;
 }
@@ -38,17 +36,17 @@ function formatDuration(startMs: number, endMs: number): string {
   let hours = Math.floor(minutes / 60);
 
   if (hours > 2) {
-    return 'Until ' + formatTime(endMs).toLowerCase();
+    return "Until " + formatTime(endMs).toLowerCase();
   }
 
-  let durationText = '';
+  let durationText = "";
   if (hours > 0) {
-    durationText = `${hours} ${naivePlural('hour', hours)} `;
+    durationText = hours + " " + naivePlural("hour", hours) + " ";
     minutes = minutes - hours * 60;
   }
 
   if (minutes > 0) {
-    durationText = `${durationText}${Math.ceil(minutes)} min`;
+    durationText = durationText + Math.ceil(minutes) + " min";
   }
 
   return durationText.trim();

@@ -21,148 +21,215 @@
  *
  * @flow
  */
-'use strict';
+"use strict";
 
-var Animated = require('Animated');
-var Dimensions = require('Dimensions');
-var F8Colors = require('F8Colors');
-var Image = require('Image');
-var React = require('React');
-var StatusBar = require('StatusBar');
-var StyleSheet = require('StyleSheet');
-var View = require('View');
-var { Text } = require('F8Text');
-var LoginButton = require('../common/LoginButton');
-var TouchableOpacity = require('TouchableOpacity');
+import React from "react";
+import { connect } from "react-redux";
+import { skipLogin } from "../actions";
+import F8Colors from "../common/F8Colors";
+import F8Fonts from "../common/F8Fonts";
+import { Text, Heading1 } from "../common/F8Text";
+import {
+  Animated,
+  Dimensions,
+  Image,
+  StatusBar,
+  View,
+  TouchableOpacity,
+  StyleSheet
+} from "react-native";
+import LoginButton from "../common/LoginButton";
 
-var { skipLogin } = require('../actions');
-var { connect } = require('react-redux');
+/* Config/Constants
+============================================================================= */
+
+const SKIP_BTN_HEIGHT = 24,
+  WINDOW_WIDTH = Dimensions.get("window").width,
+  WINDOW_HEIGHT = Dimensions.get("window").height,
+  VERTICAL_BREAKPOINT = WINDOW_HEIGHT <= 600,
+  HEADER_HEIGHT = VERTICAL_BREAKPOINT ? 220 : 285,
+  SKIP_BTN_MARGIN_TOP = VERTICAL_BREAKPOINT ? 15 : 23,
+  WHENWHERE_PADDING_TOP = VERTICAL_BREAKPOINT ? 12 : 18,
+  RENDER_ARROW_SECTION = VERTICAL_BREAKPOINT ? false : true,
+  LOGIN_PADDING_BOTTOM = VERTICAL_BREAKPOINT ? 20 : 33,
+  CONTENT_PADDING_H = VERTICAL_BREAKPOINT ? 15 : 20;
+
+/* =============================================================================
+<LoginScreen />
+--------------------------------------------------------------------------------
+
+Props:
+  ?
+
+============================================================================= */
 
 class LoginScreen extends React.Component {
   state = {
-    anim: new Animated.Value(0),
+    anim: new Animated.Value(0)
   };
 
   componentDidMount() {
-    Animated.timing(this.state.anim, {toValue: 3000, duration: 3000}).start();
+    Animated.timing(this.state.anim, { toValue: 3000, duration: 3000 }).start();
   }
 
   render() {
     return (
-      <Image
-        style={styles.container}
-        source={require('./img/login-background.png')}>
+      <View style={styles.container}>
         <StatusBar barStyle="default" />
-        <TouchableOpacity
-          accessibilityLabel="Skip login"
-          accessibilityTraits="button"
-          style={styles.skip}
-          onPress={() => this.props.dispatch(skipLogin())}>
-          <Animated.Image
-            style={this.fadeIn(2800)}
-            source={require('./img/x.png')}
+        <View style={styles.header}>
+          <Image
+            source={require("../common/img/pattern-dots.png")}
+            style={styles.headerPattern}
           />
-        </TouchableOpacity>
-        <View style={styles.section}>
-          <Animated.Image
-            style={this.fadeIn(0)}
-            source={require('./img/devconf-logo.png')}
+          <Image
+            resizeMode="cover"
+            source={require("./img/illustration.png")}
+            style={styles.headerIllustration}
           />
+          <Image source={require("./img/logo.png")} />
         </View>
-        <View style={styles.section}>
-          <Animated.Text style={[styles.h1, this.fadeIn(700, -20)]}>
-            code to
-          </Animated.Text>
-          <Animated.Text style={[styles.h1, {marginTop: -30}, this.fadeIn(700, 20)]}>
-            connect
-          </Animated.Text>
-          <Animated.Text style={[styles.h2, this.fadeIn(1000, 10)]}>
-            April 12 + 13 / Fort Mason Center
-          </Animated.Text>
-          <Animated.Text style={[styles.h3, this.fadeIn(1200, 10)]}>
-            SAN FRANCISCO, CALIFORNIA
-          </Animated.Text>
+        <View style={styles.content}>
+          <View style={styles.mainHeadingSection}>
+            <Animated.View style={this.fadeIn(500, 5)}>
+              <Heading1 style={styles.h1}>
+                Facebook Developer Conference
+              </Heading1>
+            </Animated.View>
+            <Animated.Text
+              style={[styles.whenWhereText, this.fadeIn(1200, 10)]}
+            >
+              APRIL 18 + 19 / SAN JOSE, CALIFORNIA
+            </Animated.Text>
+          </View>
+
+          {this.renderArrowSection()}
+
+          <Animated.View style={[styles.loginSection, this.fadeIn(1900, 20)]}>
+            <Text style={styles.loginComment}>
+              Use Facebook to find your friends at F8.
+            </Text>
+            <LoginButton source="First screen" />
+            <TouchableOpacity
+              onPress={_ => this.props.dispatch(skipLogin())}
+              style={styles.skipButton}
+            >
+              <Text style={styles.skipText}>SKIP FOR NOW</Text>
+            </TouchableOpacity>
+          </Animated.View>
         </View>
-        <Animated.View style={[styles.section, styles.last, this.fadeIn(2500, 20)]}>
-          <Text style={styles.loginComment}>
-            Use Facebook to find your friends at F8.
-          </Text>
-          <LoginButton source="First screen" />
-        </Animated.View>
-      </Image>
+      </View>
     );
   }
 
+  renderArrowSection() {
+    if (RENDER_ARROW_SECTION) {
+      return (
+        <Animated.View style={[styles.arrowSection, this.fadeIn(1500, 15)]}>
+          <Image source={require("./img/arrow.png")} />
+        </Animated.View>
+      );
+    } else {
+      return null;
+    }
+  }
+
   fadeIn(delay, from = 0) {
-    const {anim} = this.state;
+    const { anim } = this.state;
     return {
       opacity: anim.interpolate({
         inputRange: [delay, Math.min(delay + 500, 3000)],
         outputRange: [0, 1],
-        extrapolate: 'clamp',
+        extrapolate: "clamp"
       }),
-      transform: [{
-        translateY: anim.interpolate({
-          inputRange: [delay, Math.min(delay + 500, 3000)],
-          outputRange: [from, 0],
-          extrapolate: 'clamp',
-        }),
-      }],
+      transform: [
+        {
+          translateY: anim.interpolate({
+            inputRange: [delay, Math.min(delay + 500, 3000)],
+            outputRange: [from, 0],
+            extrapolate: "clamp"
+          })
+        }
+      ]
     };
   }
 }
 
-const scale = Dimensions.get('window').width / 375;
+/* StyleSheet
+============================================================================= */
 
 var styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'transparent',
-    padding: 26,
-    // Image's source contains explicit size, but we want
-    // it to prefer flex: 1
-    width: undefined,
-    height: undefined,
+    backgroundColor: F8Colors.bianca
   },
-  section: {
+
+  //header styles
+  header: {
+    height: HEADER_HEIGHT,
+    alignItems: "center",
+    justifyContent: "flex-end"
+  },
+  headerPattern: {
+    position: "absolute",
+    left: 0,
+    top: 0,
+    right: 0,
+    height: HEADER_HEIGHT - 30
+  },
+  headerIllustration: {
+    position: "absolute",
+    left: 0,
+    width: WINDOW_WIDTH,
+    bottom: 80
+  },
+
+  content: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: "space-around",
+    paddingHorizontal: CONTENT_PADDING_H
   },
-  last: {
-    justifyContent: 'flex-end',
-  },
+
   h1: {
-    fontWeight: 'bold',
-    textAlign: 'center',
-    fontSize: Math.round(74 * scale),
-    color: F8Colors.darkText,
-    backgroundColor: 'transparent',
+    marginTop: 16,
+    textAlign: "center"
   },
-  h2: {
-    textAlign: 'center',
-    fontSize: 17,
-    color: F8Colors.darkText,
-    marginVertical: 20,
+  whenWhereText: {
+    marginTop: WHENWHERE_PADDING_TOP,
+    textAlign: "center",
+    color: F8Colors.tangaroa,
+    fontFamily: F8Fonts.helvetica
   },
-  h3: {
-    fontSize: 12,
-    textAlign: 'center',
-    color: F8Colors.lightText,
-    letterSpacing: 1,
+
+  arrowSection: {
+    alignItems: "center",
+    justifyContent: "center"
+  },
+
+  loginSection: {
+    paddingBottom: LOGIN_PADDING_BOTTOM,
+    alignItems: "center",
+    paddingHorizontal: 20
   },
   loginComment: {
-    marginBottom: 14,
-    fontSize: 12,
-    color: F8Colors.darkText,
-    textAlign: 'center',
+    textAlign: "center",
+    fontSize: 15,
+    color: F8Colors.pink,
+    fontFamily: F8Fonts.fontWithWeight("helvetica", "semibold"),
+    marginBottom: 23
   },
-  skip: {
-    position: 'absolute',
-    right: 0,
-    top: 20,
-    padding: 15,
+  skipButton: {
+    marginTop: SKIP_BTN_MARGIN_TOP,
+    height: SKIP_BTN_HEIGHT,
+    alignSelf: "stretch",
+    alignItems: "center",
+    justifyContent: "center"
   },
+  skipText: {
+    color: F8Colors.colorWithAlpha("tangaroa", 0.5),
+    fontFamily: F8Fonts.helvetica
+  }
 });
 
+/* Export
+============================================================================= */
 module.exports = connect()(LoginScreen);

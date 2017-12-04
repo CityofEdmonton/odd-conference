@@ -21,37 +21,45 @@
  *
  * @flow
  */
-'use strict';
+"use strict";
 
-var Image = require('Image');
-var React = require('React');
-var StyleSheet = require('StyleSheet');
-var { Paragraph, Heading1 } = require('F8Text');
-var View = require('View');
+import React from "react";
+import { Paragraph, Heading3 } from "../../common/F8Text";
+import StyleSheet from "../../common/F8StyleSheet";
+import { View, Image } from "react-native";
+import F8Colors from "../../common/F8Colors";
 
 class EmptySchedule extends React.Component {
   props: {
-    style?: any;
-    title?: string;
-    image?: number;
-    text: string;
-    children?: any;
+    style?: any,
+    title?: string,
+    titleStyles?: any,
+    image?: number,
+    text: string,
+    textStyles?: any,
+    children?: any
   };
 
   render() {
-    const image = this.props.image &&
-      <Image style={styles.image} source={this.props.image} />;
-    const title = this.props.title &&
-      <Heading1 style={styles.title}>{this.props.title}</Heading1>;
+    const image = this.props.image && (
+      <Image style={styles.image} source={this.props.image} />
+    );
+    const title = this.props.title && (
+      <Heading3 style={[styles.title, this.props.titleStyles]}>
+        {this.props.title}
+      </Heading3>
+    );
 
     return (
       <View style={[styles.container, this.props.style]}>
-        {image}
-        {title}
-        <Paragraph style={styles.text}>
-          {this.props.text}
-        </Paragraph>
-        {this.props.children}
+        <View style={styles.content}>
+          {image}
+          {title}
+          <Paragraph style={[styles.text, this.props.textStyles]}>
+            {this.props.text}
+          </Paragraph>
+          {this.props.children}
+        </View>
       </View>
     );
   }
@@ -59,23 +67,24 @@ class EmptySchedule extends React.Component {
 
 var styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: 'white',
-    padding: 30,
-    paddingTop: 75,
-    alignItems: 'center',
+    justifyContent: "center"
   },
-  title: {
-    textAlign: 'center',
-    marginBottom: 10,
+  content: {
+    padding: 30,
+    alignItems: "center"
   },
   image: {
-    marginBottom: 10,
+    marginBottom: 20
+  },
+  title: {
+    color: F8Colors.blue,
+    textAlign: "center",
+    marginBottom: 10
   },
   text: {
-    textAlign: 'center',
-    marginBottom: 35,
-  },
+    textAlign: "center",
+    marginBottom: 35
+  }
 });
 
 module.exports = EmptySchedule;

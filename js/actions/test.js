@@ -18,68 +18,83 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE
- *
- * @flow
  */
 
-'use strict';
+"use strict";
 
-const Parse = require('parse/react-native');
-const ActionSheetIOS = require('ActionSheetIOS');
-const Platform = require('Platform');
-const {version} = require('../env');
+import Parse from "parse/react-native";
+import { Alert, ActionSheetIOS, Platform } from "react-native";
+import { version } from "../env";
 
-import type { Action, ThunkAction } from './types';
+import type { Action, ThunkAction } from "./types";
 
 function testPlainPush(): ThunkAction {
-  return () => Parse.Cloud.run('test_push');
+  return () => Parse.Cloud.run("test_push");
 }
 
 function testLinkPush(): ThunkAction {
-  return () => Parse.Cloud.run('test_push', {url: 'link'});
+  return () => Parse.Cloud.run("test_push", { url: "link" });
 }
 
 function testSessionPush(): ThunkAction {
-  return () => Parse.Cloud.run('test_push', {url: 'session'});
+  return () => Parse.Cloud.run("test_push", { url: "session" });
+}
+
+function testImagePush(): ThunkAction {
+  return () => Parse.Cloud.run("test_push", { url: "image" });
+}
+function testVideoPush(): ThunkAction {
+  return () => Parse.Cloud.run("test_push", { url: "video" });
 }
 
 function testSurveyPush(): ThunkAction {
-  return () => Parse.Cloud.run('test_survey');
+  return () => Parse.Cloud.run("test_survey");
 }
 
 function testResetNuxes(): Action {
   return {
-    type: 'RESET_NUXES',
+    type: "RESET_NUXES"
   };
 }
 
-function testExportAppState(): ThunkAction {
+function getAppInfo(): ThunkAction {
   return (dispatch, getState) => {
     const subject = `App v${version} state`;
     const message = JSON.stringify(getState(), undefined, 2);
-    if (Platform.OS === 'ios') {
-      ActionSheetIOS.showShareActionSheetWithOptions({
-        subject: subject,
-        message: message,
-      }, () => {}, () => {});
+    if (Platform.OS === "ios") {
+      ActionSheetIOS.showShareActionSheetWithOptions(
+        {
+          subject: subject,
+          message: message
+        },
+        () => {},
+        () => {}
+      );
     } else {
-      const SendIntentAndroid = require('react-native-send-intent');
-      SendIntentAndroid.sendText({
-        title: subject,
-        text: message,
-        type: SendIntentAndroid.TEXT_PLAIN
-      });
+      Alert.alert(subject);
     }
   };
 }
 
+function testSetCurrentDate(value: ?number): Action {
+  return {
+    type: "SET_TIMED_TESTING",
+    value
+  };
+}
+
 const TEST_MENU = {
-  'Request a push notification': testPlainPush,
-  'Push with link': testLinkPush,
-  'Push with session': testSessionPush,
-  'Request a survey': testSurveyPush,
-  'Reset NUXes': testResetNuxes,
-  'Get app state': testExportAppState,
+  "Request a push notification": testPlainPush,
+  "Push with link": testLinkPush,
+  "Push with session": testSessionPush,
+  "Push with image": testImagePush,
+  "Push with video": testVideoPush,
+  "Request a survey": testSurveyPush,
+  "Reset NUXes": testResetNuxes,
+  "Get app info": getAppInfo,
+  "Set current date: Day 1": _ => testSetCurrentDate(1),
+  "Set current date: Day 2": _ => testSetCurrentDate(2),
+  "Reset current date": _ => testSetCurrentDate(null)
 };
 
-module.exports = {TEST_MENU};
+module.exports = { TEST_MENU };

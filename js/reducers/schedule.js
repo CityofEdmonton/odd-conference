@@ -22,32 +22,32 @@
  * @flow
  */
 
-'use strict';
+"use strict";
 
-import type {Action} from '../actions/types';
+import type { Action } from "../actions/types";
 
 export type State = {
-  [id: string]: boolean;
+  [id: string]: boolean
 };
 
 function schedule(state: State = {}, action: Action): State {
   switch (action.type) {
-    case 'SESSION_ADDED':
+    case "SESSION_ADDED":
       let added = {};
       added[action.id] = true;
-      return {...state, ...added};
+      return { ...state, ...added };
 
-    case 'SESSION_REMOVED':
-      let rest = {...state};
+    case "SESSION_REMOVED":
+      let rest = { ...state };
       delete rest[action.id];
       return rest;
 
-    case 'LOGGED_OUT':
+    case "LOGGED_OUT":
       return {};
 
-    case 'RESTORED_SCHEDULE':
+    case "RESTORED_SCHEDULE":
       let all = {};
-      action.list.forEach((session) => {
+      action.list.forEach(session => {
         all[session.id] = true;
       });
       return all;

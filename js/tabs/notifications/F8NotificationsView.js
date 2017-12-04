@@ -19,49 +19,29 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE
  *
- * @providesModule F8NotificationsView
  * @flow
  */
-'use strict';
+"use strict";
 
-var EmptySchedule = require('../schedule/EmptySchedule');
-var Linking = require('Linking');
-var PushNUXModal = require('./PushNUXModal');
-var PureListView = require('../../common/PureListView');
-var React = require('React');
-var Platform = require('Platform');
-var ActionSheetIOS = require('ActionSheetIOS');
-var ListContainer = require('ListContainer');
-var NotificationCell = require('./NotificationCell');
-var RateSessionsCell = require('./RateSessionsCell');
-var allNotifications = require('./allNotifications');
-var View = require('View');
-var findSessionByURI = require('findSessionByURI');
-var { connect } = require('react-redux');
-var {
-  turnOnPushNotifications,
-  skipPushNotifications,
-  TEST_MENU,
-} = require('../../actions');
-var {testMenuEnabled, version} = require('../../env');
+import EmptySchedule from "../schedule/EmptySchedule";
+import PushNUXModal from "./PushNUXModal";
+import PureListView from "../../common/PureListView";
+import React from "react";
+import NotificationCell from "./NotificationCell";
+import allNotifications from "./allNotifications";
+import findSessionByURI from "./findSessionByURI";
+import { connect } from "react-redux";
+import { turnOnPushNotifications, skipPushNotifications } from "../../actions";
+import { createSelector } from "reselect";
 
-var { createSelector } = require('reselect');
+import { View } from "react-native";
+import F8TimelineBackground from "../../common/F8TimelineBackground";
+import F8Linking from "../../common/F8Linking";
 
-const data = createSelector(
-  allNotifications,
-  (store) => store.surveys,
-  (store) => store.notifications.enabled,
-  (notifications, surveys, enabled) => {
-    const extra: Array<any> = [];
-    if (surveys.length > 0) {
-      extra.push({surveysCount: surveys.length});
-    }
-    return [...extra, ...notifications];
-  }
-);
+/* <F8NotificationsView />
+============================================================================= */
 
 class F8NotificationsView extends React.Component {
-
   constructor(props) {
     super(props);
 
@@ -72,56 +52,45 @@ class F8NotificationsView extends React.Component {
   }
 
   render() {
-    var modal;
-    if (this.props.nux) {
-      modal = (
+    return (
+      <View style={{ flex: 1 }}>
+        <PureListView
+          data={this.props.notifications}
+          renderEmptyList={this.renderEmptyList}
+          renderRow={this.renderRow}
+          renderFooter={_ => <F8TimelineBackground height={80} left={24} />}
+          showsVerticalScrollIndicator={false}
+        />
         <PushNUXModal
+          visible={this.props.nux}
+          animationType="fade"
+          transparent={true}
           onTurnOnNotifications={this.props.onTurnOnNotifications}
           onSkipNotifications={this.props.onSkipNotifications}
         />
-      );
-    }
-
-    return (
-      <View style={{flex: 1}}>
-        <ListContainer
-          title="Notifications"
-          backgroundImage={require('./img/notifications-background.png')}
-          backgroundColor={'#E78196'}
-          {...this.renderTestItems()}>
-          <PureListView
-            data={this.props.notifications}
-            renderEmptyList={this.renderEmptyList}
-            renderRow={this.renderRow}
-          />
-        </ListContainer>
-        {modal}
       </View>
     );
   }
 
-  renderRow(notification) {
-    if (notification.surveysCount) {
-      return (
-        <RateSessionsCell
-          numberOfSessions={notification.surveysCount}
-          onPress={this.openReview}
-        />
-      );
-    }
+  renderRow(notification, sid, rid) {
     return (
       <NotificationCell
         key={notification.id}
         notification={notification}
         onPress={() => this.openNotification(notification)}
+        firstRow={rid === 0 || rid === "0"}
       />
     );
   }
 
-  renderEmptyList() {
+  renderEmptyList(containerHeight) {
+    if (containerHeight === 0) {
+      return null;
+    }
     return (
       <EmptySchedule
-        title="No Notifications Yet"
+        style={{ height: containerHeight }}
+        title="Stay tuned!"
         text="Important updates and announcements will appear here"
       />
     );
@@ -129,70 +98,56 @@ class F8NotificationsView extends React.Component {
 
   openNotification(notification) {
     if (notification.url) {
-      var session = findSessionByURI(this.props.sessions, notification.url);
+      const session = findSessionByURI(this.props.sessions, notification.url);
       if (session) {
-        this.props.navigator.push({session});
+        this.props.navigator.push({ session });
       } else {
-        Linking.openURL(notification.url);
+        F8Linking.openURL(notification.url);
+        // this.props.navigator.push({ webview: notification.url }); // uses default theme
       }
+    } else if (notification.survey) {
+      this.props.navigator.push({
+        rate: 1,
+        survey: notification.survey
+      });
     }
   }
 
   openReview() {
     this.props.navigator.push({
       rate: 1,
-      surveys: this.props.surveys,
+      surveys: this.props.surveys
     });
   }
-
-  renderTestItems() {
-    if (!testMenuEnabled) {
-      return {};
-    }
-
-    if (Platform.OS === 'ios') {
-      return {
-        rightItem: {
-          title: 'Test',
-          onPress: () => this.showTestMenu(),
-        },
-      };
-    }
-
-    if (Platform.OS === 'android') {
-      return {
-        extraItems: Object.keys(TEST_MENU).map((title) => ({
-          title,
-          onPress: () => this.props.dispatch(TEST_MENU[title]()),
-        })),
-      };
-    }
-  }
-
-  showTestMenu() {
-    const itemTitles = Object.keys(TEST_MENU);
-    ActionSheetIOS.showActionSheetWithOptions({
-      title: 'Testing F8 app v' + version,
-      options: ['Cancel', ...itemTitles],
-      cancelButtonIndex: 0,
-    }, (idx) => {
-        if (idx === 0) {
-          return;
-        }
-
-        const action: any = TEST_MENU[itemTitles[idx - 1]];
-        this.props.dispatch(action());
-      }
-    );
-  }
 }
+
+/* redux ==================================================================== */
+
+const data = createSelector(
+  allNotifications,
+  store => store.surveys,
+  store => store.notifications.enabled,
+  store => store.sessions,
+  (notifications, surveys, enabled, sessions) => {
+    const updatedSurveys = surveys.map(survey => {
+      const surveySession = sessions.find(s => s.id === survey.sessionId);
+      return {
+        text: `How was "${surveySession.title}"?`,
+        time: survey.time,
+        survey
+      };
+    });
+    return [...updatedSurveys, ...notifications].sort(function(a, b) {
+      return b.time - a.time;
+    });
+  }
+);
 
 function select(state) {
   return {
     nux: state.notifications.enabled === null,
     notifications: data(state),
-    sessions: state.sessions,
-    surveys: state.surveys,
+    sessions: state.sessions
   };
 }
 
@@ -200,8 +155,9 @@ function actions(dispatch) {
   return {
     onTurnOnNotifications: () => dispatch(turnOnPushNotifications()),
     onSkipNotifications: () => dispatch(skipPushNotifications()),
-    dispatch,
+    dispatch
   };
 }
 
+/* exports ================================================================== */
 module.exports = connect(select, actions)(F8NotificationsView);

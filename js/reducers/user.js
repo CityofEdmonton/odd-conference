@@ -22,16 +22,16 @@
  * @flow
  */
 
-'use strict';
+"use strict";
 
-import type {Action} from '../actions/types';
+import type { Action } from "../actions/types";
 
 export type State = {
-  isLoggedIn: boolean;
-  hasSkippedLogin: boolean;
-  sharedSchedule: ?boolean;
-  id: ?string;
-  name: ?string;
+  isLoggedIn: boolean,
+  hasSkippedLogin: boolean,
+  sharedSchedule: ?boolean,
+  id: ?string,
+  name: ?string
 };
 
 const initialState = {
@@ -39,12 +39,12 @@ const initialState = {
   hasSkippedLogin: false,
   sharedSchedule: null,
   id: null,
-  name: null,
+  name: null
 };
 
 function user(state: State = initialState, action: Action): State {
-  if (action.type === 'LOGGED_IN') {
-    let {id, name, sharedSchedule} = action.data;
+  if (action.type === "LOGGED_IN") {
+    let { id, name, sharedSchedule } = action.data;
     if (sharedSchedule === undefined) {
       sharedSchedule = null;
     }
@@ -53,29 +53,26 @@ function user(state: State = initialState, action: Action): State {
       hasSkippedLogin: false,
       sharedSchedule,
       id,
-      name,
+      name
     };
   }
-  if (action.type === 'SKIPPED_LOGIN') {
+  if (action.type === "SKIPPED_LOGIN") {
     return {
-      isLoggedIn: false,
-      hasSkippedLogin: true,
-      sharedSchedule: null,
-      id: null,
-      name: null,
+      ...initialState,
+      hasSkippedLogin: true
     };
   }
-  if (action.type === 'LOGGED_OUT') {
+  if (action.type === "LOGGED_OUT") {
     return initialState;
   }
-  if (action.type === 'SET_SHARING') {
+  if (action.type === "SET_SHARING") {
     return {
       ...state,
-      sharedSchedule: action.enabled,
+      sharedSchedule: action.enabled
     };
   }
-  if (action.type === 'RESET_NUXES') {
-    return {...state, sharedSchedule: null};
+  if (action.type === "RESET_NUXES") {
+    return { ...state, sharedSchedule: null };
   }
   return state;
 }

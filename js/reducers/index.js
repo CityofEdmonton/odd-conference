@@ -22,20 +22,28 @@
  * @flow
  */
 
-'use strict';
+"use strict";
 
-var { combineReducers } = require('redux');
+import { combineReducers } from "redux";
 
 module.exports = combineReducers({
-  config: require('./config'),
-  notifications: require('./notifications'),
-  maps: require('./maps'),
-  sessions: require('./sessions'),
-  user: require('./user'),
-  schedule: require('./schedule'),
-  topics: require('./topics'),
-  filter: require('./filter'),
-  navigation: require('./navigation'),
-  friendsSchedules: require('./friendsSchedules'),
-  surveys: require('./surveys'),
+  config: require("./config"),
+  notifications: require("./notifications"),
+  maps: require("./maps"),
+  sessions: require("./sessions"),
+  user: require("./user"),
+  schedule: require("./schedule"),
+  scheduleTopics: require("./scheduleTopics"),
+  scheduleFilter: require("./scheduleFilter"),
+  faqs: require("./faqs"),
+  pages: require("./pages"),
+  navigation: require("./navigation"),
+  friendsSchedules: require("./friendsSchedules"),
+  surveys: require("./surveys"),
+  videos: require("./videos"),
+  videoTopics: require("./videoTopics"),
+  videoFilter: require("./videoFilter"),
+  policies: require("./policies"),
+
+  testEventDates: require("./testEventDates")
 });

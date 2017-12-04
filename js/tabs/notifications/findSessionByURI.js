@@ -19,18 +19,17 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE
  *
- * @providesModule findSessionByURI
  * @flow
  */
-'use strict';
+"use strict";
 
-import type { Session } from '../../reducers/sessions';
+import type { Session } from "../../reducers/sessions";
 
 function findSessionByURI(sessions: Array<Session>, uri: ?string): ?Session {
   if (!uri) {
     return null;
   }
-  var slug = uri.replace('f8://', '');
+  var slug = uri.replace("f8://", "");
   for (var i = 0; i < sessions.length; i++) {
     var session = sessions[i];
     if (session.slug === slug || session.id === slug) {

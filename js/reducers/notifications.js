@@ -22,72 +22,74 @@
  * @flow
  */
 
-'use strict';
+"use strict";
 
-var Platform = require('Platform');
-var crc32 = require('crc32');
+import { Platform } from "react-native";
+import crc32 from "crc32";
 
 export type Notification = {
-  id: string;
-  url: ?string;
-  text: string;
-  time: number;
+  id: string,
+  url: ?string,
+  urlTitle: ?string,
+  text: string,
+  time: number,
+  image: ?string
 };
 
 export type SeenNotifications = {
-  [id: string]: boolean;
+  [id: string]: boolean
 };
 
 type State = {
-  enabled: ?boolean; // null = no answer
-  registered: boolean;
+  enabled: ?boolean, // null = no answer
+  registered: boolean,
 
   // Most notifications will be stored on Parse Core, so that
   // people who installed the app after the conference started can
   // get access. But some notifications will be delivered
   // via push and only to subset of attendees.
-  server: Array<Notification>;
-  push: Array<Notification>;
+  server: Array<Notification>,
+  push: Array<Notification>,
 
-  seen: SeenNotifications;
+  seen: SeenNotifications
 };
 
 const initialState = {
   server: [],
   push: [],
-  enabled: Platform.OS === 'ios' ? null : true,
+  enabled: Platform.OS === "ios" ? null : true,
   registered: false,
-  seen: {},
+  seen: {}
 };
 
-import type {Action} from '../actions/types';
+import type { Action } from "../actions/types";
 
 function notifications(state: State = initialState, action: Action): State {
   switch (action.type) {
-    case 'LOADED_NOTIFICATIONS':
+    case "LOADED_NOTIFICATIONS":
       let list = action.list.map(fromParseObject);
-      return {...state, server: list};
+      return { ...state, server: list };
 
-    case 'RECEIVED_PUSH_NOTIFICATION':
-      return {...state, push: append(action.notification, state.push)};
+    case "RECEIVED_PUSH_NOTIFICATION":
+      return { ...state, push: append(action.notification, state.push) };
 
-    case 'LOGGED_OUT':
-      return {...state, push: []};
+    case "LOGGED_OUT":
+      return { ...state, push: [] };
 
-    case 'TURNED_ON_PUSH_NOTIFICATIONS':
-      return {...state, enabled: true};
+    case "TURNED_ON_PUSH_NOTIFICATIONS":
+      return { ...state, enabled: true };
 
-    case 'SKIPPED_PUSH_NOTIFICATIONS':
-      return {...state, enabled: false};
+    case "SKIPPED_PUSH_NOTIFICATIONS":
+      return { ...state, enabled: false };
 
-    case 'REGISTERED_PUSH_NOTIFICATIONS':
-      return {...state, registered: true};
+    case "REGISTERED_PUSH_NOTIFICATIONS":
+      return { ...state, registered: true };
 
-    case 'RESET_NUXES':
-      return {...state, enabled: initialState.enabled};
+    case "RESET_NUXES":
+      return { ...state, enabled: initialState.enabled };
 
-    case 'SEEN_ALL_NOTIFICATIONS':
-      return {...state, seen: fetchAllIds([...state.server, ...state.push])};
+    case "SEEN_ALL_NOTIFICATIONS":
+      return { ...state, seen: fetchAllIds([...state.server, ...state.push]) };
 
     default:
       return state;
@@ -95,16 +97,17 @@ function notifications(state: State = initialState, action: Action): State {
 }
 
 function append(notification, list) {
-  const id = notification.id || crc32(notification.text + notification.url).toString(36);
-  if (list.find((n) => n.id === id)) {
+  const id =
+    notification.id || crc32(notification.text + notification.url).toString(36);
+  if (list.find(n => n.id === id)) {
     return list;
   }
-  return [{id, ...notification}, ...list];
+  return [{ id, ...notification }, ...list];
 }
 
 function fetchAllIds(notifs: Array<Notification>): SeenNotifications {
   const seen = {};
-  notifs.forEach((notification) => {
+  notifs.forEach(notification => {
     seen[notification.id] = true;
   });
   return seen;
@@ -113,9 +116,11 @@ function fetchAllIds(notifs: Array<Notification>): SeenNotifications {
 function fromParseObject(object: Object): Notification {
   return {
     id: object.id,
-    text: object.get('text'),
-    url: object.get('url'),
+    text: object.get("text"),
+    url: object.get("url"),
+    urlTitle: object.get("urlTitle"),
     time: object.createdAt.getTime(),
+    image: object.get("image")
   };
 }
 

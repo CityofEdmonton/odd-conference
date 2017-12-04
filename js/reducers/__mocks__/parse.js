@@ -22,7 +22,7 @@
  * @flow
  */
 
-'use strict';
+"use strict";
 
 class ParseObjectMock {
   id: string;
@@ -31,7 +31,7 @@ class ParseObjectMock {
 
   constructor(fields: Object) {
     this._fields = fields;
-    this.id = Math.ceil(Math.random() * 0xFFFFFF).toString(16);
+    this.id = Math.ceil(Math.random() * 0xffffff).toString(16);
     this.createdAt = new Date();
   }
 
@@ -54,5 +54,5 @@ class ParseFileMock {
 
 module.exports = {
   Object: ParseObjectMock,
-  File: ParseFileMock,
+  File: ParseFileMock
 };

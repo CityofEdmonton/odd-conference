@@ -18,74 +18,170 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE
- *
- * @flow
  */
-'use strict';
+"use strict";
 
-var F8Button = require('F8Button');
-var React = require('React');
-var StyleSheet = require('StyleSheet');
-var View = require('View');
-var Navigator = require('Navigator');
-var FriendsUsingApp = require('./FriendsUsingApp');
-var SharingSettingsCommon = require('./SharingSettingsCommon');
+import React from "react";
+import { Dimensions, StyleSheet, View, Image } from "react-native";
+import { Navigator } from "react-native-deprecated-custom-components";
+import F8Colors from "../../common/F8Colors";
+import F8Button from "../../common/F8Button";
+import { Heading2, Paragraph } from "../../common/F8Text";
+import F8BackgroundRepeat from "../../common/F8BackgroundRepeat";
+import ProfilePicture from "../../common/ProfilePicture";
+import FriendsUsingApp from "./FriendsUsingApp";
+import { setSharingEnabled } from "../../actions";
+import { connect } from "react-redux";
+import F8Modal from "../../common/F8Modal";
 
-var { setSharingEnabled } = require('../../actions');
-var { connect } = require('react-redux');
+/* constants ================================================================ */
+
+const WINDOW_WIDTH = Dimensions.get("window").width,
+  WINDOW_HEIGHT = Dimensions.get("window").height,
+  VERTICAL_BREAKPOINT = WINDOW_HEIGHT <= 600,
+  CONTENT_SPACING_SCALE = VERTICAL_BREAKPOINT ? 0.5 : 1,
+  MODAL_PADDING_H = 10,
+  MODAL_WIDTH = WINDOW_WIDTH - MODAL_PADDING_H * 2,
+  HEADER_HEIGHT = 177,
+  PROFILE_PICTURE_SIZE = 70;
+
+/* <SharingSettingsModal />
+============================================================================= */
 
 class SharingSettingsModal extends React.Component {
   props: {
-    navigator: Navigator;
-    dispatch: () => void;
+    navigator: Navigator,
+    dispatch: () => void
   };
 
   render() {
     return (
-      <View style={styles.container}>
+      <F8Modal
+        renderContent={this.renderContent}
+        renderFooter={this.renderFooter}
+        bottomGradient={[
+          F8Colors.colorWithAlpha("tangaroa", 0),
+          F8Colors.colorWithAlpha("tangaroa", 1)
+        ]}
+        {...this.props}
+      />
+    );
+  }
+
+  renderContent = _ => {
+    return (
+      <View>
+        <View style={styles.header}>
+          <F8BackgroundRepeat
+            width={MODAL_WIDTH}
+            height={HEADER_HEIGHT - 33}
+            source={require("../../common/img/pattern-dots.png")}
+            style={styles.headerBackground}
+          />
+          <View style={styles.headerIllustration}>
+            <Image source={require("./img/sharing-nux.png")} />
+            <View style={styles.profilePicture}>
+              <ProfilePicture
+                userID={this.props.user.id}
+                size={PROFILE_PICTURE_SIZE}
+              />
+            </View>
+          </View>
+        </View>
+
         <View style={styles.content}>
-          <SharingSettingsCommon style={{marginTop: -50}} />
-          <FriendsUsingApp />
+          <Heading2 style={styles.h2}>
+            {"Let friends view your\nschedule in the F8 app?"}
+          </Heading2>
+          <Paragraph style={styles.p}>
+            Friends using the F8 app will be able to view your custom schedule.
+          </Paragraph>
           <F8Button
             style={styles.button}
-            caption="OK!"
+            caption="OK"
             onPress={() => this.handleSetSharing(true)}
           />
           <F8Button
-            type="secondary"
-            caption="Not now"
+            theme="transparent"
+            opacity={0.5}
+            caption="Maybe later"
             onPress={() => this.handleSetSharing(false)}
           />
         </View>
       </View>
     );
-  }
+  };
+
+  renderFooter = _ => {
+    return (
+      <FriendsUsingApp
+        style={{ marginBottom: 20 }}
+        photoBorderColor={F8Colors.colorWithAlpha("tangaroa", 0.8)}
+        textColor={F8Colors.colorWithAlpha("white", 0.5)}
+      />
+    );
+  };
 
   handleSetSharing(enabled: boolean) {
     this.props.dispatch(setSharingEnabled(enabled));
-    this.props.navigator.pop();
+    this.props.onSetSharing && this.props.onSetSharing(enabled);
+    // this.props.navigator.pop();
   }
 }
 
-var styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.2)',
-    justifyContent: 'center',
-    padding: 20,
+/* StyleSheet =============================================================== */
+
+const styles = StyleSheet.create({
+  header: {
+    alignSelf: "stretch"
   },
+  headerBackground: {
+    position: "absolute",
+    left: 0,
+    top: 0
+  },
+  headerIllustration: {
+    alignSelf: "center",
+    width: 275,
+    height: HEADER_HEIGHT
+  },
+  profilePicture: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    bottom: 0,
+    alignItems: "center"
+  },
+
   content: {
-    backgroundColor: 'white',
-    borderRadius: 3,
-    alignItems: 'center',
-    overflow: 'hidden',
+    paddingVertical: 26 * CONTENT_SPACING_SCALE,
+    paddingHorizontal: 30
   },
+
+  h2: {
+    color: F8Colors.blue,
+    textAlign: "center",
+    marginBottom: 10
+  },
+  p: {
+    textAlign: "center",
+    marginBottom: 15
+  },
+
   button: {
-    marginTop: 20,
-    marginBottom: 10,
-    marginHorizontal: 20,
-    alignSelf: 'stretch',
-  },
+    marginTop: 20 * CONTENT_SPACING_SCALE,
+    marginBottom: 10 * CONTENT_SPACING_SCALE,
+    alignSelf: "stretch"
+  }
 });
 
-module.exports = connect()(SharingSettingsModal);
+/* redux select ============================================================= */
+
+function select(store) {
+  return {
+    user: store.user
+  };
+}
+
+/* exports ================================================================== */
+module.exports = connect(select)(SharingSettingsModal);

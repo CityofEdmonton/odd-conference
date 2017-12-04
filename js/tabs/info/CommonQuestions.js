@@ -21,107 +21,73 @@
  *
  * @flow
  */
-'use strict';
+"use strict";
 
-var ItemsWithSeparator = require('../../common/ItemsWithSeparator');
-var LayoutAnimation = require('LayoutAnimation');
-var React = require('React');
-var Section = require('./Section');
-var StyleSheet = require('StyleSheet');
-var { Text } = require('F8Text');
-var F8Touchable = require('F8Touchable');
-var View = require('View');
+import React from "react";
+import F8Fonts from "../../common/F8Fonts";
+import F8Linking from "../../common/F8Linking";
+import { StyleSheet, View, Text } from "react-native";
+import { Heading4, Paragraph } from "../../common/F8Text";
+import Hyperlink from "react-native-hyperlink";
+import F8Colors from "../../common/F8Colors";
 
 class CommonQuestions extends React.Component {
   render() {
-    let content = this.props.faqs.map(({question, answer}) =>
-      (<Row question={question} answer={answer} key={question} />)
-    );
+    let content = this.props.faqs.map(({ question, answer }) => (
+      <Row question={question} answer={answer} key={question} />
+    ));
     return (
-      <Section title="Common questions">
-        <ItemsWithSeparator separatorStyle={styles.separator}>
-          {content}
-        </ItemsWithSeparator>
-      </Section>
-    );
-  }
-}
-
-class Row extends React.Component {
-  props: {
-    question: string;
-    answer: string;
-  };
-
-  state: {
-    expanded: boolean;
-  };
-
-  constructor() {
-    super();
-    this.state = { expanded: false };
-  }
-
-  render() {
-    var answer;
-    if (this.state.expanded) {
-      answer = (
-        <View style={styles.answer}>
-          <Text style={styles.text}>
-            {this.props.answer}
-          </Text>
-        </View>
-      );
-    }
-    return (
-      <View style={styles.row}>
-        <F8Touchable onPress={() => this.toggle()}>
-          <View style={styles.question} >
-            <Text style={styles.symbol}>
-              {this.state.expanded ? '\u2212' : '+'}
-            </Text>
-            <Text style={styles.text}>
-              {this.props.question}
-            </Text>
-          </View>
-        </F8Touchable>
-        {answer}
+      <View style={this.props.style}>
+        {this.renderTitle()}
+        {content}
       </View>
     );
   }
 
-  toggle() {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-    this.setState({expanded: !this.state.expanded});
+  renderTitle() {
+    if (this.props.title) {
+      return <Heading4>{this.props.title.toUpperCase()}</Heading4>;
+    } else {
+      return null;
+    }
+  }
+}
+
+class Row extends React.Component {
+  render() {
+    return (
+      <View style={styles.row}>
+        <Hyperlink
+          linkStyle={styles.hyperlink}
+          onPress={url =>
+            F8Linking.canOpenURL(url).then(supported => {
+              if (supported) {
+                F8Linking.openURL(url);
+              }
+            })}
+        >
+          <Paragraph>
+            <Text style={styles.question}>{this.props.question} </Text>
+            <Text>{this.props.answer}</Text>
+          </Paragraph>
+        </Hyperlink>
+      </View>
+    );
   }
 }
 
 var styles = StyleSheet.create({
-  separator: {
-    marginHorizontal: 20,
+  row: {
+    marginVertical: 15
   },
   question: {
-    paddingVertical: 14,
-    paddingHorizontal: 20,
-    flexDirection: 'row',
-    backgroundColor: 'white',
+    fontFamily: F8Fonts.fontWithWeight("helvetica", "semibold")
   },
-  symbol: {
-    fontSize: 15,
-    lineHeight: 21,
-    width: 22,
-    color: '#99A7B9',
-  },
-  answer: {
-    padding: 14,
-    paddingLeft: 20 + 22,
-  },
-  text: {
-    fontSize: 15,
-    lineHeight: 21,
-    color: '#002350',
-    flex: 1,
-  },
+  hyperlink: {
+    color: F8Colors.blue,
+    textDecorationLine: "underline",
+    textDecorationColor: F8Colors.blue
+  }
 });
 
 module.exports = CommonQuestions;

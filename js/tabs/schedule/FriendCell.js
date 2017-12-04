@@ -22,70 +22,72 @@
  * @flow
  */
 
-'use strict';
+"use strict";
 
-var F8Colors = require('F8Colors');
-var React = require('React');
-var Image = require('Image');
-var StyleSheet = require('StyleSheet');
-var { Text } = require('F8Text');
-var TouchableHighlight = require('TouchableHighlight');
-var View = require('View');
-var ProfilePicture = require('../../common/ProfilePicture');
+import React from "react";
+import F8Colors from "../../common/F8Colors";
+import { View, Image, StyleSheet, TouchableHighlight } from "react-native";
+import { Text } from "../../common/F8Text";
+import ProfilePicture from "../../common/ProfilePicture";
 
-import type {FriendsSchedule} from '../../reducers/friendsSchedules';
+import type { FriendsSchedule } from "../../reducers/friendsSchedules";
 
 class FriendCell extends React.Component {
   props: {
-    friend: FriendsSchedule;
-    onPress: ?() => void;
+    friend: FriendsSchedule,
+    onPress: ?() => void
   };
 
   render() {
-    const {friend} = this.props;
-    const hasSchedule = friend.schedule && Object.keys(friend.schedule).length > 0;
-    const auxView = hasSchedule
-      ? <Image source={require('../../common/img/disclosure.png')} />
-      : <Text style={styles.private}>PRIVATE</Text>;
+    const { friend } = this.props;
+    const hasSchedule =
+      friend.schedule && Object.keys(friend.schedule).length > 0;
+    const auxView = hasSchedule ? (
+      <Image source={require("../../common/img/pointer-right.png")} />
+    ) : (
+      <Image
+        style={{ tintColor: F8Colors.blueBayoux, width: 12, height: 15 }}
+        source={require("../../common/img/privacy.png")}
+      />
+    );
 
     const cell = (
       <View style={styles.cell}>
-        <ProfilePicture userID={friend.id} size={42} />
-        <Text style={styles.name}>
-          {friend.name}
-        </Text>
+        <ProfilePicture userID={friend.id} size={48} />
+        <Text style={styles.name}>{friend.name}</Text>
         {auxView}
       </View>
     );
 
     if (!hasSchedule) {
       return cell;
+    } else {
+      return (
+        <TouchableHighlight underlayColor="white" onPress={this.props.onPress}>
+          {cell}
+        </TouchableHighlight>
+      );
     }
-    return (
-      <TouchableHighlight underlayColor="#3C5EAE" onPress={this.props.onPress}>
-        {cell}
-      </TouchableHighlight>
-    );
   }
 }
 
-
 var styles = StyleSheet.create({
   cell: {
-    height: 60,
-    paddingHorizontal: 10,
-    flexDirection: 'row',
-    backgroundColor: 'white',
-    alignItems: 'center',
+    height: 68,
+    paddingLeft: 11,
+    paddingRight: 15,
+    flexDirection: "row",
+    backgroundColor: F8Colors.bianca,
+    alignItems: "center"
   },
   name: {
     flex: 1,
     fontSize: 17,
-    marginHorizontal: 10,
-    color: F8Colors.darkText,
+    marginHorizontal: 13,
+    color: F8Colors.tangaroa
   },
   private: {
-    color: F8Colors.lightText,
+    color: F8Colors.lightText
   }
 });
 

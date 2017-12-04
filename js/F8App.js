@@ -19,91 +19,102 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE
  *
- * @providesModule F8App
  * @flow
  */
 
-'use strict';
+"use strict";
 
-var React = require('React');
-var AppState = require('AppState');
-var LoginScreen = require('./login/LoginScreen');
-var PushNotificationsController = require('./PushNotificationsController');
-var StyleSheet = require('StyleSheet');
-var F8Navigator = require('F8Navigator');
-var CodePush = require('react-native-code-push');
-var View = require('View');
-var StatusBar = require('StatusBar');
-var {
+import React from "react";
+import { AppState, StyleSheet, StatusBar, View } from "react-native";
+import LoginScreen from "./login/LoginScreen";
+import PushNotificationsController from "./PushNotificationsController";
+import F8Navigator from "./F8Navigator";
+import {
   loadConfig,
   loadMaps,
   loadNotifications,
   loadSessions,
+  loadFAQs,
+  loadPages,
   loadFriendsSchedules,
   loadSurveys,
-} = require('./actions');
-var { updateInstallation } = require('./actions/installation');
-var { connect } = require('react-redux');
+  loadVideos,
+  loadPolicies,
+  restoreSchedule
+} from "./actions";
+import { updateInstallation } from "./actions/installation";
+import { connect } from "react-redux";
+import { version } from "./env.js";
 
-var { version } = require('./env.js');
-
-var F8App = React.createClass({
-  componentDidMount: function() {
-    AppState.addEventListener('change', this.handleAppStateChange);
+class F8App extends React.Component {
+  componentDidMount() {
+    AppState.addEventListener("change", this.handleAppStateChange);
 
     // TODO: Make this list smaller, we basically download the whole internet
-    this.props.dispatch(loadNotifications());
-    this.props.dispatch(loadMaps());
-    this.props.dispatch(loadConfig());
     this.props.dispatch(loadSessions());
-    this.props.dispatch(loadFriendsSchedules());
-    this.props.dispatch(loadSurveys());
+    this.props.dispatch(loadConfig());
+    this.props.dispatch(loadNotifications());
+    this.props.dispatch(loadVideos());
+    this.props.dispatch(loadMaps());
+    this.props.dispatch(loadFAQs());
+    this.props.dispatch(loadPages());
+    this.props.dispatch(loadPolicies());
 
-    updateInstallation({version});
-    CodePush.sync({installMode: CodePush.InstallMode.ON_NEXT_RESUME});
-  },
-
-  componentWillUnmount: function() {
-    AppState.removeEventListener('change', this.handleAppStateChange);
-  },
-
-  handleAppStateChange: function(appState) {
-    if (appState === 'active') {
-      this.props.dispatch(loadSessions());
-      this.props.dispatch(loadNotifications());
+    if (this.props.isLoggedIn) {
+      this.props.dispatch(restoreSchedule());
       this.props.dispatch(loadSurveys());
-      CodePush.sync({installMode: CodePush.InstallMode.ON_NEXT_RESUME});
+      this.props.dispatch(loadFriendsSchedules());
     }
-  },
 
-  render: function() {
-    if (!this.props.isLoggedIn) {
+    updateInstallation({ version });
+  }
+
+  componentWillUnmount() {
+    AppState.removeEventListener("change", this.handleAppStateChange);
+  }
+
+  handleAppStateChange = appState => {
+    if (appState === "active") {
+      this.props.dispatch(loadSessions());
+      this.props.dispatch(loadVideos());
+      this.props.dispatch(loadNotifications());
+
+      if (this.props.isLoggedIn) {
+        this.props.dispatch(restoreSchedule());
+        this.props.dispatch(loadSurveys());
+      }
+    }
+  };
+
+  render() {
+    if (!this.props.skipWelcomeScreen) {
       return <LoginScreen />;
     }
     return (
       <View style={styles.container}>
         <StatusBar
+          hidden={false}
           translucent={true}
-          backgroundColor="rgba(0, 0, 0, 0.2)"
+          backgroundColor="rgba(0, 0, 0, 0)"
           barStyle="light-content"
-         />
+        />
         <F8Navigator />
         <PushNotificationsController />
       </View>
     );
-  },
-
-});
+  }
+}
 
 var styles = StyleSheet.create({
   container: {
-    flex: 1,
-  },
+    flex: 1
+  }
 });
 
 function select(store) {
   return {
-    isLoggedIn: store.user.isLoggedIn || store.user.hasSkippedLogin,
+    isLoggedIn: store.user.isLoggedIn,
+    skipWelcomeScreen: store.user.isLoggedIn || store.user.hasSkippedLogin
   };
 }
 

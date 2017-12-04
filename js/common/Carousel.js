@@ -18,29 +18,31 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE
- *
- * @flow
  */
-'use strict';
+"use strict";
 
-const React = require('react');
-const ViewPager = require('./ViewPager');
-const StyleSheet = require('F8StyleSheet');
+import React from "react";
+import ViewPager from "./ViewPager";
+import { Dimensions } from "react-native";
 
 type Props = {
-  count: number;
-  selectedIndex: number;
-  onSelectedIndexChange?: (index: number) => void;
-  renderCard: (index: number) => ReactElement;
-  style?: any;
+  count: number,
+  selectedIndex: number,
+  onSelectedIndexChange?: (index: number) => void,
+  renderCard: (index: number) => ReactElement,
+  style?: any
 };
+
+const WINDOW_WIDTH = Dimensions.get("window").width;
 
 class Carousel extends React.Component {
   props: Props;
 
+  static CardWidth = WINDOW_WIDTH;
+
   render() {
     let cards = [];
-    const {count, selectedIndex, renderCard} = this.props;
+    const { count, selectedIndex, renderCard } = this.props;
 
     for (let i = 0; i < count; i++) {
       let content = null;
@@ -50,21 +52,11 @@ class Carousel extends React.Component {
       cards.push(content);
     }
     return (
-      <ViewPager style={styles.carousel} {...this.props} bounces={true}>
+      <ViewPager {...this.props} bounces={true}>
         {cards}
       </ViewPager>
     );
   }
 }
-
-var styles = StyleSheet.create({
-  carousel: {
-    ios: {
-      margin: 10,
-      overflow: 'visible',
-      backgroundColor: 'black',
-    },
-  }
-});
 
 module.exports = Carousel;

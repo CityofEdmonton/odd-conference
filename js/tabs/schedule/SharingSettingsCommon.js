@@ -18,50 +18,46 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE
- *
- * @flow
  */
-'use strict';
+"use strict";
 
-var Image = require('Image');
-var React = require('React');
-var StyleSheet = require('StyleSheet');
-var { Text, Heading1, Paragraph } = require('F8Text');
-var ProfilePicture = require('../../common/ProfilePicture');
-var View = require('View');
-
-var { connect } = require('react-redux');
-
-import type {State as User} from '../../reducers/user';
+import React from "react";
+import { View, StyleSheet } from "react-native";
+import F8Colors from "../../common/F8Colors";
+import PrivacyIcon from "./PrivacyIcon";
+import { Heading2, Paragraph } from "../../common/F8Text";
+import ProfilePicture from "../../common/ProfilePicture";
+import { connect } from "react-redux";
+import type { State as User } from "../../reducers/user";
 
 class SharingSettingsCommon extends React.Component {
   props: {
-    user: User;
-    style: any;
+    user: User,
+    style: any
+  };
+
+  static defaultProps = {
+    pictureSize: 158
   };
 
   render() {
-    const {user} = this.props;
-    const title = user.name && user.id && (
-      <View style={styles.title}>
-        <ProfilePicture userID={user.id} size={24} />
-        <Text style={styles.name}>
-          {user.name.split(' ')[0] + "'"}s Schedule
-        </Text>
-      </View>
-    );
+    const { user, pictureSize } = this.props;
+    const isPrivate = user && !user.sharedSchedule;
+
     return (
       <View style={[styles.container, this.props.style]}>
-        <Image style={styles.image} source={require('./img/sharing-nux.png')}>
-          {title}
-        </Image>
+        <View style={{ paddingBottom: 6 }}>
+          <ProfilePicture userID={user.id} size={pictureSize} />
+          {isPrivate ? <PrivacyIcon style={styles.privacy} /> : null}
+        </View>
+
         <View style={styles.content}>
-          <Heading1 style={styles.h1}>
-            Let friends view your schedule in the F8 app?
-          </Heading1>
+          <Heading2 style={styles.h2}>
+            {"Let friends view your\nschedule in the F8 app?"}
+          </Heading2>
           <Paragraph style={styles.p}>
-            This will not post to Facebook. Only friends using the F8 app will
-            be able to see your schedule in their My F8 tab.
+            Friends using the F8 app will be able to view your schedule. This
+            won’t post to Facebook.
           </Paragraph>
         </View>
       </View>
@@ -71,42 +67,45 @@ class SharingSettingsCommon extends React.Component {
 
 var styles = StyleSheet.create({
   container: {
-    alignItems: 'center',
+    alignItems: "center"
   },
   image: {
-    height: 250,
-    alignSelf: 'center',
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignSelf: "center"
+  },
+  privacy: {
+    position: "absolute",
+    right: 0,
+    bottom: 0
   },
   content: {
     padding: 18,
-    alignItems: 'center',
+    alignItems: "center"
   },
-  h1: {
-    textAlign: 'center',
+  h2: {
+    color: F8Colors.blue,
+    textAlign: "center"
   },
   p: {
     marginTop: 10,
-    textAlign: 'center',
+    textAlign: "center"
   },
   title: {
     marginTop: 40,
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: 'transparent',
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "transparent"
   },
   name: {
     fontSize: 12,
-    color: 'white',
+    color: "white",
     marginLeft: 10,
-    fontWeight: 'bold',
-  },
+    fontWeight: "bold"
+  }
 });
 
 function select(store) {
   return {
-    user: store.user,
+    user: store.user
   };
 }
 

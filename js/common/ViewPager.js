@@ -18,36 +18,33 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE
- *
- * @flow
  */
-'use strict';
+"use strict";
 
-const React = require('react');
-
-const {
+import React from "react";
+import {
   View,
   StyleSheet,
   ScrollView,
   ViewPagerAndroid,
-  Platform,
-} = require('react-native');
+  Platform
+} from "react-native";
 
 type Props = {
-  count: number;
-  selectedIndex: number;
-  onSelectedIndexChange?: (index: number) => void;
-  bounces?: boolean;
-  children?: any;
-  style?: any;
+  count: number,
+  selectedIndex: number,
+  onSelectedIndexChange?: (index: number) => void,
+  bounces?: boolean,
+  children?: any,
+  style?: any
 };
 
 type State = {
-  width: number;
-  height: number;
-  selectedIndex: number;
-  initialSelectedIndex: number;
-  scrollingTo: ?number;
+  width: number,
+  height: number,
+  selectedIndex: number,
+  initialSelectedIndex: number,
+  scrollingTo: ?number
 };
 
 class ViewPager extends React.Component {
@@ -61,14 +58,14 @@ class ViewPager extends React.Component {
       height: 0,
       selectedIndex: this.props.selectedIndex,
       initialSelectedIndex: this.props.selectedIndex,
-      scrollingTo: null,
+      scrollingTo: null
     };
     (this: any).handleHorizontalScroll = this.handleHorizontalScroll.bind(this);
     (this: any).adjustCardSize = this.adjustCardSize.bind(this);
   }
 
   render() {
-    if (Platform.OS === 'ios') {
+    if (Platform.OS === "ios") {
       return this.renderIOS();
     } else {
       return this.renderAndroid();
@@ -78,10 +75,10 @@ class ViewPager extends React.Component {
   renderIOS() {
     return (
       <ScrollView
-        ref="scrollview"
+        ref={c => (this._scrollview = c)}
         contentOffset={{
           x: this.state.width * this.state.initialSelectedIndex,
-          y: 0,
+          y: 0
         }}
         style={[styles.scrollview, this.props.style]}
         horizontal={true}
@@ -90,12 +87,13 @@ class ViewPager extends React.Component {
         scrollsToTop={false}
         onScroll={this.handleHorizontalScroll}
         scrollEventThrottle={100}
-        removeClippedSubviews={true}
+        removeClippedSubviews={false}
         automaticallyAdjustContentInsets={false}
         directionalLockEnabled={true}
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
-        onLayout={this.adjustCardSize}>
+        onLayout={this.adjustCardSize}
+      >
         {this.renderContent()}
       </ScrollView>
     );
@@ -104,10 +102,11 @@ class ViewPager extends React.Component {
   renderAndroid() {
     return (
       <ViewPagerAndroid
-        ref="scrollview"
+        ref={c => (this._scrollview = c)}
         initialPage={this.state.initialSelectedIndex}
         onPageSelected={this.handleHorizontalScroll}
-        style={styles.container}>
+        style={styles.container}
+      >
         {this.renderContent()}
       </ViewPagerAndroid>
     );
@@ -116,30 +115,30 @@ class ViewPager extends React.Component {
   adjustCardSize(e: any) {
     this.setState({
       width: e.nativeEvent.layout.width,
-      height: e.nativeEvent.layout.height,
+      height: e.nativeEvent.layout.height
     });
   }
 
   componentWillReceiveProps(nextProps: Props) {
     if (nextProps.selectedIndex !== this.state.selectedIndex) {
-      if (Platform.OS === 'ios') {
-        this.refs.scrollview.scrollTo({
+      if (Platform.OS === "ios") {
+        this._scrollview.scrollTo({
           x: nextProps.selectedIndex * this.state.width,
-          animated: true,
+          animated: true
         });
-        this.setState({scrollingTo: nextProps.selectedIndex});
+        this.setState({ scrollingTo: nextProps.selectedIndex });
       } else {
-        this.refs.scrollview.setPage(nextProps.selectedIndex);
-        this.setState({selectedIndex: nextProps.selectedIndex});
+        this._scrollview.setPage(nextProps.selectedIndex);
+        this.setState({ selectedIndex: nextProps.selectedIndex });
       }
     }
   }
 
   renderContent(): Array<ReactElement> {
-    var {width, height} = this.state;
-    var style = Platform.OS === 'ios' && styles.card;
+    var { width, height } = this.state;
+    var style = Platform.OS === "ios" && styles.card;
     return React.Children.map(this.props.children, (child, i) => (
-      <View style={[style, {width, height}]} key={'r_' + i}>
+      <View style={[style, { width, height }]} key={"r_" + i}>
         {child}
       </View>
     ));
@@ -149,33 +148,43 @@ class ViewPager extends React.Component {
     var selectedIndex = e.nativeEvent.position;
     if (selectedIndex === undefined) {
       selectedIndex = Math.round(
-        e.nativeEvent.contentOffset.x / this.state.width,
+        e.nativeEvent.contentOffset.x / this.state.width
       );
     }
     if (selectedIndex < 0 || selectedIndex >= this.props.count) {
       return;
     }
-    if (this.state.scrollingTo !== null && this.state.scrollingTo !== selectedIndex) {
+    if (
+      this.state.scrollingTo !== null &&
+      this.state.scrollingTo !== selectedIndex
+    ) {
       return;
     }
-    if (this.props.selectedIndex !== selectedIndex || this.state.scrollingTo !== null) {
-      this.setState({selectedIndex, scrollingTo: null});
-      const {onSelectedIndexChange} = this.props;
-      onSelectedIndexChange && onSelectedIndexChange(selectedIndex);
+    if (
+      this.props.selectedIndex !== selectedIndex ||
+      this.state.scrollingTo !== null
+    ) {
+      this.setState({ selectedIndex, scrollingTo: null }, () => {
+        // the onSelectedIndexChange handler can change props.selectedIndex, so we want
+        // to call it after the state has actually changed to avoid extra scrollTo call
+        // (see componentWillReceiveProps)
+        const { onSelectedIndexChange } = this.props;
+        onSelectedIndexChange && onSelectedIndexChange(selectedIndex);
+      });
     }
   }
 }
 
 var styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 1
   },
   scrollview: {
     flex: 1,
-    backgroundColor: 'transparent',
+    backgroundColor: "transparent"
   },
   card: {
-    backgroundColor: 'transparent',
+    backgroundColor: "transparent"
   }
 });
 

@@ -20,61 +20,41 @@
  * DEALINGS IN THE SOFTWARE
  *
  * @flow
- * @providesModule F8SpeakerProfile
  */
 
-'use strict';
+"use strict";
 
-var F8Colors = require('F8Colors');
-var Image = require('Image');
-var React = require('React');
-var StyleSheet = require('StyleSheet');
-var { Text } = require('F8Text');
-var View = require('View');
+import F8Colors from "../../common/F8Colors";
+import React from "react";
+import { Heading3, Text } from "../../common/F8Text";
+import { StyleSheet, View } from "react-native";
 
 var F8SpeakerProfile = React.createClass({
   render: function() {
     var speaker = this.props.speaker;
     return (
-      <View style={styles.row}>
-        <Image style={styles.picture} source={{uri: speaker.pic}} />
-        <View style={styles.info}>
-          <Text style={styles.name}>{speaker.name}</Text>
+      <View style={[styles.row, this.props.style]}>
+        <Heading3 style={styles.name}>{speaker.name}</Heading3>
+        {speaker.title ? (
           <Text style={styles.title}>{speaker.title}</Text>
-        </View>
+        ) : null}
       </View>
     );
   }
 });
 
-const SIZE = 76;
-
 var styles = StyleSheet.create({
   row: {
-    flexDirection: 'row',
-    paddingBottom: 14,
-    alignItems: 'center',
-  },
-  picture: {
-    width: SIZE,
-    height: SIZE,
-    borderRadius: SIZE / 2,
-  },
-  info: {
-    paddingLeft: 20,
-    flex: 1,
+    paddingBottom: 14
   },
   name: {
-    fontSize: 15,
-    marginBottom: 2,
-    color: F8Colors.darkText,
-    fontWeight: 'bold',
+    color: F8Colors.blue
   },
   title: {
-    fontSize: 12,
+    fontSize: 13,
     lineHeight: 16,
-    color: F8Colors.darkText,
-  },
+    color: F8Colors.tangaroa
+  }
 });
 
 module.exports = F8SpeakerProfile;

@@ -18,53 +18,64 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE
- *
- * @flow
  */
+"use strict";
 
-'use strict';
+// Depdencies
+import React from "react";
+import FacebookSDK from "./FacebookSDK";
+import Parse from "parse/react-native";
+import configureStore from "./store/configureStore";
+import { Provider } from "react-redux";
 
-var F8App = require('F8App');
-var FacebookSDK = require('FacebookSDK');
-var Parse = require('parse/react-native');
-var React = require('React');
-var Relay = require('react-relay');
+// Components
+import { Text } from "react-native";
+import F8App from "./F8App";
+import LaunchScreen from "./common/LaunchScreen";
 
-var { Provider } = require('react-redux');
-var configureStore = require('./store/configureStore');
-
-var {serverURL} = require('./env');
+// Config
+import { serverURL, parseAppID } from "./env";
 
 function setup(): ReactClass<{}> {
   console.disableYellowBox = true;
-  Parse.initialize('oss-f8-app-2016');
+  Parse.initialize(parseAppID);
   Parse.serverURL = `${serverURL}/parse`;
+  console.log("DEBUG!!! " + serverURL);
 
   FacebookSDK.init();
   Parse.FacebookUtils.init();
-  Relay.injectNetworkLayer(
-    new Relay.DefaultNetworkLayer(`${serverURL}/graphql`, {
-      fetchTimeout: 30000,
-      retryDelays: [5000, 10000],
-    })
-  );
+
+  // TODO: Don't prevent fontScaling on iOS (currently breaks UI)
+  Text.defaultProps.allowFontScaling = false;
 
   class Root extends React.Component {
     state: {
-      isLoading: boolean;
-      store: any;
+      isLoading: boolean,
+      store: any
     };
 
     constructor() {
       super();
       this.state = {
-        isLoading: true,
-        store: configureStore(() => this.setState({isLoading: false})),
+        storeCreated: false,
+        storeRehydrated: false,
+        store: null
       };
     }
+
+    componentDidMount() {
+      configureStore(
+        // rehydration callback (after async compatibility and persistStore)
+        _ => this.setState({ storeRehydrated: true })
+      ).then(
+        // creation callback (after async compatibility)
+        store => this.setState({ store, storeCreated: true })
+      );
+    }
+
     render() {
-      if (this.state.isLoading) {
-        return null;
+      if (!this.state.storeCreated || !this.state.storeRehydrated) {
+        return <LaunchScreen />;
       }
       return (
         <Provider store={this.state.store}>
@@ -76,12 +87,5 @@ function setup(): ReactClass<{}> {
 
   return Root;
 }
-
-global.LOG = (...args) => {
-  console.log('/------------------------------\\');
-  console.log(...args);
-  console.log('\\------------------------------/');
-  return args[args.length - 1];
-};
 
 module.exports = setup;

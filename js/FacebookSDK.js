@@ -23,48 +23,52 @@
  * https://developers.facebook.com/docs/javascript/reference/v2.2
  *
  * @flow
- * @providesModule FacebookSDK
  */
-'use strict';
+"use strict";
 
-var {
+import {
   LoginManager,
   AccessToken,
   GraphRequest,
-  GraphRequestManager,
-} = require('react-native-fbsdk');
+  GraphRequestManager
+} from "react-native-fbsdk";
 
 const emptyFunction = () => {};
-const mapObject = require('fbjs/lib/mapObject');
+import mapObject from "fbjs/lib/mapObject";
 
 type AuthResponse = {
-  userID: string;
-  accessToken: string;
-  expiresIn: number;
+  userID: string,
+  accessToken: string,
+  expiresIn: number
 };
 type LoginOptions = { scope: string };
-type LoginCallback = (result: {authResponse?: AuthResponse, error?: Error}) => void;
+type LoginCallback = (result: {
+  authResponse?: AuthResponse,
+  error?: Error
+}) => void;
 
 let _authResponse: ?AuthResponse = null;
 
-async function loginWithFacebookSDK(options: LoginOptions): Promise<AuthResponse> {
-  const scope = options.scope || 'public_profile';
-  const permissions = scope.split(',');
+async function loginWithFacebookSDK(
+  options: LoginOptions
+): Promise<AuthResponse> {
+  const scope = options.scope || "public_profile";
+  const permissions = scope.split(",");
 
   const loginResult = await LoginManager.logInWithReadPermissions(permissions);
   if (loginResult.isCancelled) {
-    throw new Error('Canceled by user');
+    throw new Error("Canceled by user");
   }
 
   const accessToken = await AccessToken.getCurrentAccessToken();
   if (!accessToken) {
-    throw new Error('No access token');
+    throw new Error("No access token");
   }
 
   _authResponse = {
     userID: accessToken.userID, // FIXME: RNFBSDK bug: userId -> userID
     accessToken: accessToken.accessToken,
-    expiresIn: Math.round((accessToken.expirationTime - Date.now()) / 1000),
+    expiresIn: Math.round((accessToken.expirationTime - Date.now()) / 1000)
   };
   return _authResponse;
 }
@@ -77,8 +81,8 @@ var FacebookSDK = {
 
   login(callback: LoginCallback, options: LoginOptions) {
     loginWithFacebookSDK(options).then(
-      (authResponse) => callback({authResponse}),
-      (error) => callback({error})
+      authResponse => callback({ authResponse }),
+      error => callback({ error })
     );
   },
 
@@ -115,20 +119,22 @@ var FacebookSDK = {
    */
   api: function(path: string, ...args: Array<mixed>) {
     const argByType = {};
-    args.forEach((arg) => { argByType[typeof arg] = arg; });
+    args.forEach(arg => {
+      argByType[typeof arg] = arg;
+    });
 
-    const httpMethod = (argByType['string'] || 'get').toUpperCase();
-    const params = argByType['object'] || {};
-    const callback = argByType['function'] || emptyFunction;
+    const httpMethod = (argByType.string || "get").toUpperCase();
+    const params = argByType.object || {};
+    const callback = argByType.function || emptyFunction;
 
     // FIXME: Move this into RNFBSDK
     // GraphRequest requires all parameters to be in {string: 'abc'}
     // or {uri: 'xyz'} format
-    const parameters = mapObject(params, (value) => ({string: value}));
+    const parameters = mapObject(params, value => ({ string: value }));
 
     function processResponse(error, result) {
       // FIXME: RNFBSDK bug: result is Object on iOS and string on Android
-      if (!error && typeof result === 'string') {
+      if (!error && typeof result === "string") {
         try {
           result = JSON.parse(result);
         } catch (e) {
@@ -136,11 +142,15 @@ var FacebookSDK = {
         }
       }
 
-      const data = error ? {error} : result;
+      const data = error ? { error } : result;
       callback(data);
     }
 
-    const request = new GraphRequest(path, {parameters, httpMethod}, processResponse);
+    const request = new GraphRequest(
+      path,
+      { parameters, httpMethod },
+      processResponse
+    );
     new GraphRequestManager().addRequest(request).start();
   }
 };

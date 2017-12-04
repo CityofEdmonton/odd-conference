@@ -19,25 +19,26 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE
  *
- * @providesModule F8StyleSheet
  * @flow
  */
 
-'use strict';
+"use strict";
 
-import {StyleSheet, Platform} from 'react-native';
+import { StyleSheet, Platform } from "react-native";
 
-export function create(styles: Object): {[name: string]: number} {
-  const platformStyles = {};
-  Object.keys(styles).forEach((name) => {
-    let {ios, android, ...style} = {...styles[name]};
-    if (ios && Platform.OS === 'ios') {
-      style = {...style, ...ios};
-    }
-    if (android && Platform.OS === 'android') {
-      style = {...style, ...android};
-    }
-    platformStyles[name] = style;
-  });
-  return StyleSheet.create(platformStyles);
-}
+export default {
+  create(styles: Object): { [name: string]: number } {
+    const platformStyles = {};
+    Object.keys(styles).forEach(name => {
+      let { ios, android, ...style } = { ...styles[name] };
+      if (ios && Platform.OS === "ios") {
+        style = { ...style, ...ios };
+      }
+      if (android && Platform.OS === "android") {
+        style = { ...style, ...android };
+      }
+      platformStyles[name] = style;
+    });
+    return StyleSheet.create(platformStyles);
+  }
+};

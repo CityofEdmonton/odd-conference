@@ -18,18 +18,16 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE
- *
- * @flow
  */
 
-'use strict';
+"use strict";
 
-jest.dontMock('../formatTime');
-const formatTime = require('../formatTime');
+jest.dontMock("../formatTime");
+import formatTime from "../formatTime";
 
-describe('formatTime', () => {
-  it('formats time', () => {
-    expect(formatTime(1427371200000)).toEqual('12:00 PM');
-    expect(formatTime(1427373900000)).toEqual('12:45 PM');
+describe("formatTime", () => {
+  it("formats time", () => {
+    expect(formatTime(1427371200000)).toEqual("5:00am");
+    expect(formatTime(1427373900000)).toEqual("5:45am");
   });
 });

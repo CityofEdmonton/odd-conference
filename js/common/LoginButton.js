@@ -18,27 +18,24 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE
- *
- * @flow
  */
-'use strict';
+"use strict";
 
-const React = require('react');
-const {StyleSheet} = require('react-native');
-const F8Button = require('F8Button');
-
-const { logInWithFacebook } = require('../actions');
-const {connect} = require('react-redux');
+import React from "react";
+import { StyleSheet, Alert } from "react-native";
+import F8Button from "./F8Button";
+import { logInWithFacebook } from "../actions";
+import { connect } from "react-redux";
 
 class LoginButton extends React.Component {
   props: {
-    style: any;
-    source?: string; // For Analytics
-    dispatch: (action: any) => Promise;
-    onLoggedIn: ?() => void;
+    style: any,
+    source?: string, // For Analytics
+    dispatch: (action: any) => Promise,
+    onLoggedIn: ?() => void
   };
   state: {
-    isLoading: boolean;
+    isLoading: boolean
   };
   _isMounted: boolean;
 
@@ -59,6 +56,7 @@ class LoginButton extends React.Component {
     if (this.state.isLoading) {
       return (
         <F8Button
+          theme="fb"
           style={[styles.button, this.props.style]}
           caption="Please wait..."
           onPress={() => {}}
@@ -68,49 +66,41 @@ class LoginButton extends React.Component {
 
     return (
       <F8Button
+        theme="fb"
         style={[styles.button, this.props.style]}
-        icon={require('../login/img/f-logo.png')}
-        caption="Log in with Facebook"
+        icon={require("./img/buttons/logo-fb.png")}
+        caption="Continue with Facebook"
+        fontSize={13}
         onPress={() => this.logIn()}
       />
     );
   }
 
   async logIn() {
-    const {dispatch, onLoggedIn} = this.props;
+    const { dispatch, onLoggedIn } = this.props;
 
-    this.setState({isLoading: true});
+    this.setState({ isLoading: true });
     try {
-      await Promise.race([
-        dispatch(logInWithFacebook(this.props.source)),
-        timeout(15000),
-      ]);
+      await Promise.all([dispatch(logInWithFacebook(this.props.source))]);
     } catch (e) {
       const message = e.message || e;
-      if (message !== 'Timed out' && message !== 'Canceled by user') {
-        alert(message);
-        console.warn(e);
+      if (message !== "Timed out" && message !== "Canceled by user") {
+        Alert.alert(message);
       }
       return;
     } finally {
-      this._isMounted && this.setState({isLoading: false});
+      this._isMounted && this.setState({ isLoading: false });
     }
 
     onLoggedIn && onLoggedIn();
   }
 }
 
-async function timeout(ms: number): Promise {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => reject(new Error('Timed out')), ms);
-  });
-}
-
 var styles = StyleSheet.create({
   button: {
-    alignSelf: 'center',
-    width: 270,
-  },
+    alignSelf: "center",
+    width: 284
+  }
 });
 
 module.exports = connect()(LoginButton);

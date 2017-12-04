@@ -22,79 +22,82 @@
  * @flow
  */
 
-'use strict';
+"use strict";
 
-var React = require('React');
-var StyleSheet = require('StyleSheet');
-const Text = require('Text');
-const TouchableOpacity = require('TouchableOpacity');
-const View = require('View');
-const Image = require('Image');
+import React from "react";
+import { View, Image, TouchableOpacity } from "react-native";
+import { Text } from "../../common/F8Text";
+import StyleSheet from "../../common/F8StyleSheet";
+import F8Colors from "../../common/F8Colors";
 
-// TODO: Pull redux connection up
-const {connect} = require('react-redux');
-const {clearFilter} = require('../../actions');
+/* constants ================================================================ */
+
+const CONTAINER_HEIGHT = 39;
+
+/* <FilterHeader />
+============================================================================= */
 
 class FilterHeader extends React.Component {
+  static defaultProps = {
+    backgroundColor: F8Colors.tangaroa,
+    textColor: F8Colors.white
+  };
+
   render() {
     var topics = Object.keys(this.props.filter);
     if (topics.length === 0) {
       return null;
     }
 
+    const { backgroundColor, textColor } = this.props;
+
     return (
-      <View style={styles.container}>
-        <Text style={styles.text} numberOfLines={1}>
-          {'Filters: '}
-          <Text style={styles.filters}>
-            {topics.join(', ')}
-          </Text>
+      <View style={[styles.container, { backgroundColor }, this.props.style]}>
+        <Text style={[styles.text, { color: textColor }]} numberOfLines={1}>
+          {`Filter${topics.length > 1 ? "s" : ""}: ${topics.join(", ")}`}
         </Text>
         <TouchableOpacity
           accessibilityLabel="Clear filter"
           accessibilityTraits="button"
           style={styles.clear}
-          onPress={this.props.onClearFilter}>
-          <Image source={require('../../common/img/x-white.png')} />
+          onPress={this.props.onClear}
+        >
+          <Image source={require("./img/filters-x.png")} />
         </TouchableOpacity>
       </View>
     );
   }
 }
 
-var styles = StyleSheet.create({
+/* StyleSheet =============================================================== */
+
+const styles = StyleSheet.create({
   container: {
-    height: 36,
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#12336B',
-    paddingLeft: 16,
+    height: CONTAINER_HEIGHT,
+    flexDirection: "row",
+    alignItems: "center",
+
+    ios: {
+      paddingLeft: 37
+    },
+    android: {
+      paddingLeft: 12
+    }
   },
   text: {
     flex: 1,
     fontSize: 12,
-    color: 'white',
+
+    ios: {
+      textAlign: "center"
+    }
   },
   clear: {
-    paddingHorizontal: 16,
-    alignSelf: 'stretch',
-    justifyContent: 'center',
-  },
-  filters: {
-    color: 'rgba(255, 255, 255, 0.65)',
+    paddingHorizontal: 12,
+    alignSelf: "stretch",
+    justifyContent: "center"
   }
 });
 
-function select(store) {
-  return {
-    filter: store.filter,
-  };
-}
-
-function actions(dispatch) {
-  return {
-    onClearFilter: () => dispatch(clearFilter()),
-  };
-}
-
-module.exports = connect(select, actions)(FilterHeader);
+/* exports ================================================================== */
+module.exports = FilterHeader;

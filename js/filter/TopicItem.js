@@ -22,68 +22,76 @@
  * @flow
  */
 
-'use strict';
+"use strict";
 
-var React = require('react');
-var {
-  StyleSheet,
-  View,
-  TouchableOpacity,
-} = require('react-native');
-var { Text } = require('F8Text');
+import React from "react";
+import { StyleSheet, TouchableOpacity, Image } from "react-native";
+import { Text } from "../common/F8Text";
+import F8Fonts from "../common/F8Fonts";
+import * as TopicIcons from "./topicIcons";
 
-class TopicItem extends React.Component {
+/**
+* ==============================================================================
+* Filter screen list items
+* ------------------------------------------------------------------------------
+* @extends React.Component
+* @param {string} topic The name of the topic
+* @param {number} icon the year to match against
+* @param {boolean} isChecked whether to show the default/active appearance
+* @param {function} onToggle handler for tap event
+* ==============================================================================
+*/
+export default class TopicItem extends React.Component {
   props: {
-    topic: string;
-    color: string;
-    isChecked: boolean;
-    onToggle: (value: boolean) => void;
+    topic: string,
+    icon: number,
+    isChecked: boolean,
+    onToggle: (value: boolean) => void
   };
 
   render() {
-    const {topic, color, isChecked, onToggle} = this.props;
-    const style = isChecked
-      ? {backgroundColor: color}
-      : {borderColor: color, borderWidth: 1};
-    const accessibilityTraits = ['button'];
+    const { topic, icon, isChecked, onToggle } = this.props;
+
+    const activeIcon = TopicIcons.get("active", icon);
+    const defaultIcon = TopicIcons.get("default", icon);
+    const accessibilityTraits = ["button"];
     if (isChecked) {
-      accessibilityTraits.push('selected');
+      accessibilityTraits.push("selected");
     }
+
     return (
       <TouchableOpacity
         accessibilityTraits={accessibilityTraits}
         activeOpacity={0.8}
         style={styles.container}
-        onPress={onToggle}>
-        <View style={[styles.checkbox, style]} />
-        <Text style={styles.title}>
-          {topic}
-        </Text>
+        onPress={onToggle}
+      >
+        <Image
+          style={styles.icon}
+          source={isChecked ? activeIcon : defaultIcon}
+        />
+        <Text style={styles.title}>{topic}</Text>
       </TouchableOpacity>
     );
   }
 }
 
-const SIZE = 24;
-
-var styles = StyleSheet.create({
+/* StyleSheet =============================================================== */
+const styles = StyleSheet.create({
   container: {
-    paddingVertical: 12,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  checkbox: {
-    width: SIZE,
-    height: SIZE,
-    borderRadius: SIZE / 2,
-    marginRight: 10,
+    paddingVertical: 17,
+    paddingHorizontal: 13,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between"
   },
   title: {
+    fontFamily: F8Fonts.fontWithWeight("basis", "offWhite"),
     fontSize: 17,
-    color: 'white',
-    flex: 1,
+    color: "white",
+    flex: 1
   },
+  icon: {
+    marginRight: 18
+  }
 });
-
-module.exports = TopicItem;

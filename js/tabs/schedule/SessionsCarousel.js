@@ -18,56 +18,51 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE
- *
- * @flow
  */
-'use strict';
+"use strict";
 
-const Parse = require('parse/react-native');
-const {AppEventsLogger} = require('react-native-fbsdk');
-const React = require('react');
-const F8SessionDetails = require('F8SessionDetails');
-const F8PageControl = require('F8PageControl');
-const F8Header = require('F8Header');
-const StyleSheet = require('F8StyleSheet');
-const Platform = require('Platform');
-const formatTime = require('./formatTime');
-const Carousel = require('../../common/Carousel');
+import F8Analytics from "../../F8Analytics";
+import React from "react";
+import { Platform, StatusBar } from "react-native";
+import F8SessionDetails from "./F8SessionDetails";
+import F8PageControl from "../../common/F8PageControl";
+import F8Header from "../../common/F8Header";
+import StyleSheet from "../../common/F8StyleSheet";
+import formatTime from "./formatTime";
+import Carousel from "../../common/Carousel";
+import { connect } from "react-redux";
+import { loadFriendsSchedules, shareSession } from "../../actions";
 
-const {connect} = require('react-redux');
-const {loadFriendsSchedules, shareSession} = require('../../actions');
+import type { Dispatch } from "../../actions/types";
 
-import type {Dispatch} from '../../actions/types';
+import F8Colors from "../../common/F8Colors";
+import F8Fonts from "../../common/F8Fonts";
 
-const {
-  Text,
-  View,
-  Navigator,
-} = require('react-native');
+import { Text, View, Navigator } from "react-native";
 
-import type {Session} from '../../reducers/sessions';
+import type { Session } from "../../reducers/sessions";
 
 type Context = {
-  rowIndex: number; // TODO: IndexWithinSection
-  sectionLength: number;
-  sectionTitle: string;
+  rowIndex: number, // TODO: IndexWithinSection
+  sectionLength: number,
+  sectionTitle: string
 };
 
 type Props = {
-  allSessions?: {[sectionID: string]: {[sessionID: string]: Session}};
-  session: Session;
-  navigator: Navigator;
-  dispatch: Dispatch;
+  allSessions?: { [sectionID: string]: { [sessionID: string]: Session } },
+  session: Session,
+  navigator: Navigator,
+  dispatch: Dispatch
 };
 
 class SessionsCarusel extends React.Component {
   props: Props;
   state: {
-    day: number;
-    count: number;
-    selectedIndex: number;
-    flatSessionsList: Array<Session>;
-    contexts: Array<Context>;
+    day: number,
+    count: number,
+    selectedIndex: number,
+    flatSessionsList: Array<Session>,
+    contexts: Array<Context>
   };
 
   constructor(props: Props) {
@@ -77,9 +72,9 @@ class SessionsCarusel extends React.Component {
     var contexts: Array<Context> = [];
     var allSessions = this.props.allSessions;
     if (!allSessions) {
-      const {session} = this.props;
+      const { session } = this.props;
       allSessions = {
-        [formatTime(session.startTime)]: {[session.id]: session}
+        [formatTime(session.startTime)]: { [session.id]: session }
       };
     }
 
@@ -93,24 +88,22 @@ class SessionsCarusel extends React.Component {
         contexts.push({
           rowIndex,
           sectionLength,
-          sectionTitle: sectionID,
+          sectionTitle: sectionID
         });
         rowIndex++;
       }
     }
 
-    const selectedIndex = flatSessionsList.findIndex((s) => s.id === this.props.session.id);
-    if (selectedIndex === -1) {
-      console.log(this.props.session);
-      console.log(flatSessionsList);
-    }
+    const selectedIndex = flatSessionsList.findIndex(
+      s => s.id === this.props.session.id
+    );
 
     this.state = {
       day: this.props.session.day,
       count: flatSessionsList.length,
       selectedIndex,
       flatSessionsList,
-      contexts,
+      contexts
     };
     (this: any).dismiss = this.dismiss.bind(this);
     (this: any).handleIndexChange = this.handleIndexChange.bind(this);
@@ -119,36 +112,38 @@ class SessionsCarusel extends React.Component {
   }
 
   render() {
-    var {rowIndex, sectionLength, sectionTitle} = this.state.contexts[this.state.selectedIndex];
-    var rightItem;
-    if (Platform.OS === 'android') {
-      rightItem = {
-        title: 'Share',
-        icon: require('./img/share.png'),
-        onPress: this.shareCurrentSession,
-      };
-    }
+    var { rowIndex, sectionLength, sectionTitle } = this.state.contexts[
+      this.state.selectedIndex
+    ];
+
+    const backItem = {
+      title: "Back",
+      layout: "icon",
+      icon: require("../../common/img/header/back.png"),
+      onPress: _ => this.props.navigator.pop()
+    };
+
+    const rightItem = {
+      title: "Share",
+      layout: "icon",
+      icon: require("../../common/img/header/share.png"),
+      onPress: this.shareCurrentSession
+    };
+
     return (
       <View style={styles.container}>
+        <StatusBar barStyle="light-content" animated={true} />
         <F8Header
-          style={styles.header}
-          leftItem={{
-            layout: 'icon',
-            title: 'Close',
-            icon: require('../../common/BackButtonIcon'),
-            onPress: this.dismiss,
-          }}
-          rightItem={rightItem}>
+          backgroundColor={F8Colors.palatinateBlue}
+          itemsColor={F8Colors.white}
+          navItem={backItem}
+          rightItem={rightItem}
+          style={Platform.OS === "ios" ? { height: 70 } : {}}
+        >
           <View style={styles.headerContent}>
-            <Text style={styles.title}>
-              <Text style={styles.day}>DAY {this.state.day}</Text>
-              {'\n'}
-              <Text style={styles.time}>{sectionTitle}</Text>
-            </Text>
-            <F8PageControl
-              count={sectionLength}
-              selectedIndex={rowIndex}
-            />
+            <Text style={styles.day}>{`DAY ${this.state.day}`}</Text>
+            <Text style={styles.time}>{sectionTitle.toLowerCase()}</Text>
+            <F8PageControl count={sectionLength} selectedIndex={rowIndex} />
           </View>
         </F8Header>
         <Carousel
@@ -162,12 +157,11 @@ class SessionsCarusel extends React.Component {
   }
 
   renderCard(index: number): ReactElement {
+    // const iOSKey = Platform.OS === 'ios' ? { key: `SCC_${this.state.flatSessionsList[index].id}`} : {};
     return (
       <F8SessionDetails
-        style={styles.card}
         navigator={this.props.navigator}
         session={this.state.flatSessionsList[index]}
-        onShare={this.shareCurrentSession}
       />
     );
   }
@@ -192,60 +186,55 @@ class SessionsCarusel extends React.Component {
   }
 
   track(index: number) {
-    const {id} = this.state.flatSessionsList[index];
-    Parse.Analytics.track('view', {id});
-    AppEventsLogger.logEvent('View Session', 1, {id});
+    const { id } = this.state.flatSessionsList[index];
+    F8Analytics.logEvent("View Session", 1, { id });
   }
 }
 
 var styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  header: {
-    android: {
-      backgroundColor: '#5597B8',
-    },
+    backgroundColor: F8Colors.white
   },
   headerContent: {
     android: {
       flex: 1,
-      alignItems: 'flex-start',
-      justifyContent: 'center',
+      alignItems: "flex-start",
+      justifyContent: "flex-end",
+      paddingBottom: 9
     },
     ios: {
-      height: 65,
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-  },
-  title: {
-    color: 'white',
-    fontSize: 12,
-    ios: {
-      textAlign: 'center',
-    },
-  },
-  day: {
-    ios: {
-      fontWeight: 'bold',
-    },
-    android: {
-      fontSize: 9,
-    },
-  },
-  time: {
-    android: {
-      fontWeight: 'bold',
-      fontSize: 17,
+      marginTop: -5,
+      alignItems: "center"
+      // justifyContent: 'center',
     }
   },
-  card: {
+  title: {
     ios: {
-      borderRadius: 2,
-      marginHorizontal: 3,
-    },
+      textAlign: "center"
+    }
   },
+  day: {
+    color: F8Colors.yellow,
+    fontFamily: F8Fonts.fontWithWeight("basis", "helveticaBold"),
+    fontSize: 13,
+
+    android: {
+      marginBottom: -4
+    }
+  },
+  time: {
+    color: F8Colors.white,
+    fontFamily: F8Fonts.fontWithWeight("helvetica", "semibold"),
+    fontSize: 15,
+
+    ios: {
+      marginVertical: 2
+    },
+    android: {
+      marginBottom: 3
+    }
+  }
 });
 
 module.exports = connect()(SessionsCarusel);

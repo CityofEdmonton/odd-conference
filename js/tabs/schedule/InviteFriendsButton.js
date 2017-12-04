@@ -21,29 +21,32 @@
  *
  * @flow
  */
-'use strict';
+"use strict";
 
-var React = require('React');
-var F8Button = require('F8Button');
-var {AppInviteDialog, AppEventsLogger} = require('react-native-fbsdk');
-var { connect } = require('react-redux');
+import React from "react";
+import F8Button from "../../common/F8Button";
+import { AppInviteDialog } from "react-native-fbsdk";
+import { connect } from "react-redux";
+import F8Analytics from "../../F8Analytics";
+import { Alert } from "react-native";
 
 class InviteFriendsButton extends React.Component {
   props: {
-    appLinkURL: string;
-    appInvitePreviewImageURL: string;
-    style: any;
+    appLinkURL: string,
+    appInvitePreviewImageURL: string,
+    style: any
   };
 
   render() {
-    const {appLinkURL, style} = this.props;
-    if (!appLinkURL) {
+    if (!this.props.appLinkURL) {
       return null;
     }
 
     return (
       <F8Button
-        style={style}
+        theme="bordered"
+        fontSize={13}
+        opacity={0.6}
         caption="Invite friends to the F8 app"
         onPress={() => this.inviteFriends()}
       />
@@ -51,13 +54,13 @@ class InviteFriendsButton extends React.Component {
   }
 
   inviteFriends() {
-    AppEventsLogger.logEvent('Invite Friends', 1);
+    F8Analytics.logEvent("Invite Friends", 1);
     AppInviteDialog.show({
       applinkUrl: this.props.appLinkURL,
-      previewImageUrl: this.props.appInvitePreviewImageURL,
-    }).catch((error) => {
+      previewImageUrl: this.props.appInvitePreviewImageURL
+    }).catch(error => {
       if (error.message) {
-        alert(error.message);
+        Alert.alert(error.message);
       }
     });
   }
@@ -66,7 +69,7 @@ class InviteFriendsButton extends React.Component {
 function select(store) {
   return {
     appLinkURL: store.config.appLinkURL,
-    appInvitePreviewImageURL: store.config.appInvitePreviewImageURL,
+    appInvitePreviewImageURL: store.config.appInvitePreviewImageURL
   };
 }
 

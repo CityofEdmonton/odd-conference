@@ -18,99 +18,107 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE
- *
- * @flow
  */
-'use strict';
+"use strict";
 
-var F8Button = require('F8Button');
-var F8Colors = require('F8Colors');
-var Image = require('Image');
-var React = require('React');
-var StyleSheet = require('StyleSheet');
-var View = require('View');
-var { Heading1, Paragraph } = require('F8Text');
+import React from "react";
+import F8Button from "../../common/F8Button";
+import F8Colors from "../../common/F8Colors";
+import { Dimensions, View, Image, StyleSheet } from "react-native";
+import { Heading2, Paragraph } from "../../common/F8Text";
+import F8BackgroundRepeat from "../../common/F8BackgroundRepeat";
+import F8Modal from "../../common/F8Modal";
+
+/* constants ================================================================ */
+
+const WINDOW_WIDTH = Dimensions.get("window").width,
+  MODAL_PADDING_H = 10,
+  MODAL_WIDTH = WINDOW_WIDTH - MODAL_PADDING_H * 2;
+
+/* <PushNUXModal />
+============================================================================= */
 
 class PushNUXModal extends React.Component {
   props: {
-    onTurnOnNotifications: () => void;
-    onSkipNotifications: () => void;
+    onTurnOnNotifications: () => void,
+    onSkipNotifications: () => void
   };
 
   render() {
+    return <F8Modal renderContent={this.renderContent} {...this.props} />;
+  }
+
+  renderContent = _ => {
     return (
-      <View style={styles.container}>
-        <View style={styles.inner}>
-          <Image
-            style={styles.image}
-            source={require('./img/push-nux.png')}
+      <View>
+        <View>
+          <F8BackgroundRepeat
+            width={MODAL_WIDTH}
+            height={124}
+            source={require("../../common/img/pattern-dots.png")}
+            style={styles.headerBackground}
           />
-          <View style={styles.content}>
-            <Heading1>
-              Don't miss out!
-            </Heading1>
-            <Paragraph style={styles.text}>
-              Turn on push notifications to see what’s happening at F8. You can
-              always see in-app updates on this tab.
-            </Paragraph>
-            <F8Button
-              style={styles.button}
-              type="primary"
-              caption="Turn on push notifications"
-              onPress={this.props.onTurnOnNotifications}
-            />
-            <F8Button
-              style={styles.button}
-              type="secondary"
-              caption="No thanks"
-              onPress={this.props.onSkipNotifications}
-            />
-          </View>
+          <Image
+            style={styles.headerIllustration}
+            source={require("./img/nux-header.png")}
+          />
+        </View>
+        <View style={styles.content}>
+          <Heading2>Dont miss out!</Heading2>
+          <Paragraph style={styles.text}>
+            Turn on push notifications to see what’s happening at F8. You can
+            always see in-app updates on this tab.
+          </Paragraph>
+          <F8Button
+            style={styles.button}
+            type="primary"
+            caption="Turn on push notifications"
+            onPress={this.props.onTurnOnNotifications}
+          />
+          <F8Button
+            style={styles.button}
+            theme="bordered"
+            opacity={0.5}
+            caption="Maybe later"
+            onPress={this.props.onSkipNotifications}
+          />
         </View>
       </View>
     );
-  }
+  };
 }
 
+/* StyleSheet =============================================================== */
 
-var styles = StyleSheet.create({
-  container: {
-    position: 'absolute',
+const styles = StyleSheet.create({
+  headerBackground: {
+    position: "absolute",
     left: 0,
-    top: 0,
-    right: 0,
-    bottom: 49,
-    backgroundColor: 'rgba(0, 0, 0, 0.66)',
-    paddingHorizontal: 20,
-    justifyContent: 'center',
+    top: 0
   },
-  inner: {
-    overflow: 'hidden',
-    backgroundColor: 'white',
-    borderRadius: 2,
-  },
-  image: {
-    alignSelf: 'center',
+  headerIllustration: {
+    alignSelf: "center"
   },
   content: {
-    padding: 20,
-    paddingBottom: 10,
-    alignItems: 'center',
+    paddingTop: 32,
+    paddingHorizontal: 20,
+    paddingBottom: 45,
+    alignItems: "center"
   },
   text: {
-    textAlign: 'center',
-    marginVertical: 20,
-  },
-  page: {
-    borderTopWidth: 1,
-    borderTopColor: F8Colors.cellBorder,
-    paddingTop: undefined,
-    paddingBottom: 0,
+    textAlign: "center",
+    paddingTop: 6,
+    paddingHorizontal: 10,
+    paddingBottom: 35,
+    fontSize: 15,
+    lineHeight: 24,
+    color: F8Colors.colorWithAlpha("tangaroa", 0.7)
   },
   button: {
-    marginTop: 10,
-    alignSelf: 'stretch',
-  },
+    marginTop: 9,
+    alignSelf: "stretch"
+  }
 });
 
+/* exports ================================================================== */
 module.exports = PushNUXModal;

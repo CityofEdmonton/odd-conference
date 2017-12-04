@@ -21,27 +21,24 @@
  *
  * @flow
  */
-'use strict';
+"use strict";
 
-var React = require('React');
-var StyleSheet = require('StyleSheet');
-var { Text } = require('F8Text');
-var View = require('View');
+import React from "react";
+import { StyleSheet, View } from "react-native";
+import { Text } from "../../common/F8Text";
 
 class Section extends React.Component {
   props: {
-    title: string;
-    children?: any;
-    style?: any;
+    title: string,
+    children?: any,
+    style?: any
   };
 
   render() {
     return (
       <View style={[styles.container, this.props.style]}>
         <View style={styles.header}>
-          <Text style={styles.title}>
-            {this.props.title}
-          </Text>
+          <Text style={styles.title}>{this.props.title}</Text>
         </View>
         {this.props.children}
       </View>
@@ -53,18 +50,18 @@ var styles = StyleSheet.create({
   container: {
     paddingTop: 60,
     paddingBottom: 0,
-    backgroundColor: 'white',
+    backgroundColor: "white"
   },
   header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 30,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 30
   },
   title: {
     fontSize: 24,
-    fontWeight: 'bold',
-  },
+    fontWeight: "bold"
+  }
 });
 
 module.exports = Section;

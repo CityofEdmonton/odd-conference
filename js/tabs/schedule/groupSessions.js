@@ -18,25 +18,25 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE
- *
- * @flow
  */
-'use strict';
+"use strict";
 
-import type {Session} from '../../reducers/sessions';
+import type { Session } from "../../reducers/sessions";
 
-const formatTime = require('./formatTime');
+import formatTime from "./formatTime";
 
 export type SessionsListData = {
   [time: string]: {
-    [sessionID: string]: Session;
-  };
+    [sessionID: string]: Session
+  }
 };
 
 function groupSessions(sessions: Array<Session>): SessionsListData {
   var data = {};
-  sessions.forEach((session) => {
-    var timeSectionKey = session.allDay ? 'All Day' : formatTime(session.startTime);
+  sessions.forEach(session => {
+    var timeSectionKey = session.allDay
+      ? "All Day"
+      : formatTime(session.startTime);
     data[timeSectionKey] = data[timeSectionKey] || {};
     data[timeSectionKey][session.id] = session;
   });

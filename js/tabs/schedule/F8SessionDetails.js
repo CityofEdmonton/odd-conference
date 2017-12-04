@@ -20,148 +20,194 @@
  * DEALINGS IN THE SOFTWARE
  *
  * @flow
- * @providesModule F8SessionDetails
  */
 
-'use strict';
+"use strict";
 
-var Animated = require('Animated');
-var F8Colors = require('F8Colors');
-var F8FriendGoing = require('F8FriendGoing');
-var F8SpeakerProfile = require('F8SpeakerProfile');
-var Image = require('Image');
-import LinearGradient from 'react-native-linear-gradient';
-var MapView = require('../../common/MapView');
-var PixelRatio = require('PixelRatio');
-var React = require('React');
-var ScrollView = require('ScrollView');
-var StyleSheet = require('StyleSheet');
-var Subscribable = require('Subscribable');
-var { Text } = require('F8Text');
-var TouchableOpacity = require('TouchableOpacity');
-var View = require('View');
-var AddToScheduleButton = require('./AddToScheduleButton');
+import F8Colors from "../../common/F8Colors";
+import F8FriendGoing from "./F8FriendGoing";
+import F8SpeakerProfile from "./F8SpeakerProfile";
+import MapView from "../../common/MapView";
+import React from "react";
+import AddToScheduleButton from "./AddToScheduleButton";
+import formatDuration from "./formatDuration";
+import { connect } from "react-redux";
+import { addToSchedule, removeFromScheduleWithPrompt } from "../../actions";
 
-var formatDuration = require('./formatDuration');
-var {connect} = require('react-redux');
-var {addToSchedule, removeFromScheduleWithPrompt} = require('../../actions');
+import { Dimensions, View, ScrollView, PixelRatio } from "react-native";
+import { Text, Heading2, Heading4, Paragraph } from "../../common/F8Text";
+import F8Fonts from "../../common/F8Fonts";
+import ActionsOverlay from "../../common/ActionsOverlay";
+import F8ScrollingHeader from "../../common/F8ScrollingHeader";
+import StyleSheet from "../../common/F8StyleSheet";
+import SharingSettingsModal from "./SharingSettingsModal";
+import LoginModal from "../../login/LoginModal";
+import Carousel from "../../common/Carousel";
+
+const WINDOW_WIDTH = Dimensions.get("window").width,
+  HORIZONTAL_BREAKPOINT = WINDOW_WIDTH <= 320,
+  CONTENT_PADDING_H = HORIZONTAL_BREAKPOINT ? 20 : 30;
 
 var F8SessionDetails = React.createClass({
-  mixins: [Subscribable.Mixin],
-
   getInitialState: function() {
     return {
-      scrollTop: new Animated.Value(0),
+      scrollTop: 0,
+      sharingModal: false,
+      loginModal: false
     };
   },
 
   render: function() {
-    var speakersProfiles = this.props.session.speakers.map(
-      (speaker) => (
-        <F8SpeakerProfile
-          key={speaker.name}
-          speaker={speaker}
-        />
-      )
-    );
-
-    var topics = null;
-    var {tags} = this.props.session;
-    if (tags && tags.length > 0) {
-      topics = (
-        <Text style={styles.topics}>
-          TOPICS: {tags.join(', ')}
-        </Text>
-      );
-    }
-
-    var friendsGoing = this.props.friendsGoing.map(
-      (friend) => (
-        <F8FriendGoing
-          key={friend.id}
-          friend={friend}
-          onPress={() => this.props.navigator.push({friend})}
-        />
-      )
-    );
-
-    var inlineMap;
-    if (this.props.map) {
-      inlineMap = <MapView map={this.props.map} />;
-    }
-
-    var locationColor = F8Colors.colorForLocation(this.props.session.location);
-    var locationTitle = this.props.session.location && this.props.session.location.toUpperCase();
-    var location = (
-      <Text style={[styles.location, {color: locationColor}]}>
-        {locationTitle}
-        <Text style={styles.time}>
-          {locationTitle && ' - '}
-          {formatDuration(this.props.session.startTime, this.props.session.endTime)}
-        </Text>
-      </Text>
-    );
-
-    var title = this.props.session.title || '';
-    var isReactTalk = title.indexOf('React') > -1;
-
     return (
       <View style={[styles.container, this.props.style]}>
         <ScrollView
           contentContainerStyle={styles.contentContainer}
-          onScroll={({nativeEvent}) => this.state.scrollTop.setValue(nativeEvent.contentOffset.y)}
+          onScroll={({ nativeEvent }) =>
+            this.setState({ scrollTop: nativeEvent.contentOffset.y })}
           scrollEventThrottle={100}
           showsVerticalScrollIndicator={false}
-          automaticallyAdjustContentInsets={false}>
-          {location}
-          <Text style={styles.title}>
-            {title}
-          </Text>
-          <Text style={styles.description}>
-            {this.props.session.description}
-          </Text>
-          <Section>
-            {topics}
-          </Section>
-          <Section>
-            {speakersProfiles}
-          </Section>
-          <Section title="Friends Going">
-            {friendsGoing}
-          </Section>
-          {inlineMap}
-          <TouchableOpacity
-            accessibilityLabel="Share this session"
-            accessibilityTraits="button"
-            onPress={this.props.onShare}
-            style={styles.shareButton}>
-            <Image source={require('./img/share.png')} />
-          </TouchableOpacity>
+          automaticallyAdjustContentInsets={false}
+        >
+          {this.renderLocation()}
+          {this.renderTitle()}
+          {this.renderDescription()}
+          {this.renderSpeakers()}
+          {this.renderFriendsGoing()}
+          {this.renderMap()}
         </ScrollView>
-        <View style={styles.actions}>
-          <AddToScheduleButton
-            addedImageSource={isReactTalk ? require('./img/added-react.png') : null}
-            isAdded={this.props.isAddedToSchedule}
-            onPress={this.toggleAdded}
-          />
-        </View>
-        <Animated.View style={[
-          styles.miniHeader,
-          {
-            opacity: this.state.scrollTop.interpolate({
-              inputRange: [0, 150, 200],
-              outputRange: [0, 0, 1],
-              extrapolate: 'clamp',
-            })
-          }
-        ]}>
-          <Text numberOfLines={1} style={styles.miniTitle}>
-            {title}
-          </Text>
-          {location}
-        </Animated.View>
+        {this.renderActions()}
+        {this.renderScrollingHeader()}
+        {this.renderModals()}
       </View>
     );
+  },
+
+  renderLocation() {
+    const { session } = this.props;
+    const locationColor = F8Colors.colorForLocation(session.location);
+    const locationTitle = session.location && session.location.toUpperCase();
+    return (
+      <Text style={[styles.location, { color: locationColor }]}>
+        {locationTitle}
+        <Text style={styles.time}>
+          {locationTitle && " - "}
+          {formatDuration(session.startTime, session.endTime).toUpperCase()}
+        </Text>
+      </Text>
+    );
+  },
+
+  renderTitle() {
+    if (this.props.session.title) {
+      return (
+        <Heading2 style={styles.title}>{this.props.session.title}</Heading2>
+      );
+    } else {
+      return null;
+    }
+  },
+
+  renderDescription() {
+    if (this.props.session.description) {
+      return <Paragraph>{this.props.session.description}</Paragraph>;
+    } else {
+      return null;
+    }
+  },
+
+  renderSpeakers() {
+    var speakersProfiles = (this.props.session.speakers || []).map(speaker => (
+      <F8SpeakerProfile
+        key={speaker.name}
+        speaker={speaker}
+        style={{ marginTop: 5 }}
+      />
+    ));
+
+    if (speakersProfiles.length) {
+      return <Section title="Hosted By">{speakersProfiles}</Section>;
+    } else {
+      return null;
+    }
+  },
+
+  renderFriendsGoing() {
+    const friendsGoing = this.props.friendsGoing.map(friend => (
+      <F8FriendGoing
+        key={friend.id}
+        friend={friend}
+        onPress={() => this.props.navigator.push({ friend })}
+      />
+    ));
+    if (friendsGoing.length) {
+      return <Section title="Friends Going">{friendsGoing}</Section>;
+    } else {
+      return null;
+    }
+  },
+
+  renderMap() {
+    if (!this.props.map) {
+      return null;
+    }
+    const mapWidth = Carousel.CardWidth - CONTENT_PADDING_H * 2;
+    return <MapView width={mapWidth} style={styles.map} map={this.props.map} />;
+  },
+
+  renderActions() {
+    const title = this.props.session.title || "";
+    const isReactTalk = title.indexOf("React") > -1;
+    return (
+      <ActionsOverlay
+        gradientColors={["rgba(255,255,255,0)", "rgba(255,255,255,1)"]}
+        buttonContainerStyles={{ paddingHorizontal: 15, paddingBottom: 12 }}
+        style={styles.actions}
+      >
+        <AddToScheduleButton
+          style={{ flex: 1 }}
+          addedImageSource={
+            isReactTalk ? require("./img/added-react.png") : null
+          }
+          isAdded={this.props.isAddedToSchedule}
+          onPress={this.toggleAdded}
+        />
+      </ActionsOverlay>
+    );
+  },
+
+  renderScrollingHeader() {
+    const { title } = this.props.session;
+    return (
+      <F8ScrollingHeader
+        contentInset={CONTENT_PADDING_H}
+        scrollTop={this.state.scrollTop}
+        text={title}
+      />
+    );
+  },
+
+  renderModals() {
+    return [
+      <SharingSettingsModal
+        key="modal_sharingsettings"
+        navigator={this.props.navigator}
+        visible={this.state.sharingModal}
+        animationType="fade"
+        transparent={true}
+        onSetSharing={_ => {
+          this.setState({ sharingModal: false });
+        }}
+      />,
+      <LoginModal
+        key="modal_login"
+        visible={this.state.loginModal}
+        animationType="fade"
+        transparent={true}
+        navigator={this.props.navigator}
+        onLogin={this.addToSchedule}
+        onClose={_ => this.setState({ loginModal: false })}
+      />
+    ];
   },
 
   toggleAdded: function() {
@@ -174,43 +220,38 @@ var F8SessionDetails = React.createClass({
 
   addToSchedule: function() {
     if (!this.props.isLoggedIn) {
-      this.props.navigator.push({
-        login: true, // TODO: Proper route
-        callback: this.addToSchedule,
-      });
+      // this.props.navigator.push({
+      //   login: true, // TODO: Proper route
+      //   callback: this.addToSchedule,
+      // });
+      this.setState({ loginModal: true });
     } else {
       this.props.addToSchedule();
       if (this.props.sharedSchedule === null) {
-        setTimeout(() => this.props.navigator.push({share: true}), 1000);
+        setTimeout(_ => this.setState({ sharingModal: true }), 1000);
+        // setTimeout(() => this.props.navigator.push({share: true}), 1000);
       }
     }
-  },
+  }
 });
 
 class Section extends React.Component {
   props: {
-    title?: string;
-    children?: any;
+    title?: string,
+    children?: any
   };
 
   render() {
-    var {children} = this.props;
+    var { children } = this.props;
     if (React.Children.count(children) === 0) {
       return null;
     }
     var header;
     if (this.props.title) {
       header = (
-        <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>
-            {this.props.title.toUpperCase()}
-          </Text>
-          <LinearGradient
-            start={[0, 0]} end={[1, 0]}
-            colors={['#E1E1E1', 'white']}
-            style={styles.line}
-          />
-        </View>
+        <Heading4 style={styles.sectionTitle}>
+          {this.props.title.toUpperCase()}
+        </Heading4>
       );
     }
     return (
@@ -222,98 +263,71 @@ class Section extends React.Component {
   }
 }
 
-var PADDING = 15;
-
 var styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: "white"
   },
   contentContainer: {
-    padding: 26,
-    paddingBottom: 60,
+    paddingTop: 23,
+    paddingHorizontal: CONTENT_PADDING_H,
+    paddingBottom: 93
   },
   miniHeader: {
-    backgroundColor: 'white',
-    flexDirection: 'row',
-    alignItems: 'center',
-    position: 'absolute',
-    left: 12,
+    backgroundColor: F8Colors.white,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    position: "absolute",
+    left: 24,
     top: 0,
-    right: 12,
+    right: 24,
     paddingVertical: 9,
     borderBottomWidth: 1 / PixelRatio.get(),
-    borderBottomColor: '#E1E1E1',
+    borderBottomColor: "rgba(153, 162, 178, 1)"
   },
   miniTitle: {
-    fontSize: 12,
-    flex: 1,
-    color: F8Colors.darkText,
+    fontSize: 13,
+    color: F8Colors.tangaroa,
+    ios: {
+      textAlign: "left"
+    }
   },
   location: {
-    fontSize: 12,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    letterSpacing: -1,
-    lineHeight: 32,
-    marginVertical: 20,
+    fontSize: 13,
+    fontFamily: F8Fonts.fontWithWeight("basis", "helveticaBold")
   },
   time: {
-    color: F8Colors.lightText,
-    marginBottom: 20,
+    color: F8Colors.tangaroa,
+    fontFamily: F8Fonts.fontWithWeight("basis", "helveticaBold")
   },
-  description: {
-    fontSize: 17,
-    lineHeight: 25,
-  },
-  topics: {
-    fontSize: 12,
-    color: F8Colors.lightText,
+  title: {
+    marginVertical: 15,
+    color: F8Colors.blue
   },
   section: {
-    marginTop: 30,
-  },
-  sectionHeader: {
-    flexDirection: 'row',
-    marginBottom: 15,
-    alignItems: 'center',
+    marginTop: 20
   },
   sectionTitle: {
-    color: F8Colors.lightText,
-    marginRight: 14,
-    fontSize: 12,
-  },
-  line: {
-    height: 1 / PixelRatio.get(),
-    backgroundColor: F8Colors.lightText,
-    flex: 1,
+    marginBottom: 6
   },
   actions: {
-    position: 'absolute',
+    position: "absolute",
     left: 0,
     right: 0,
-    bottom: 0,
-    borderTopWidth: 1,
-    margin: 10,
-    paddingVertical: 10,
-    borderTopColor: '#eeeeee',
-    backgroundColor: 'white',
+    bottom: 0
   },
-  shareButton: {
-    backgroundColor: 'transparent',
-    padding: PADDING,
-    position: 'absolute',
-    right: 0,
-    top: 0,
+  map: {
+    marginTop: 32
   }
 });
 
 function select(store, props) {
   const sessionID = props.session.id;
-  const friendsGoing = store.friendsSchedules.filter((friend) => friend.schedule[sessionID]);
-  const map = store.maps.find(({name}) => name === props.session.location);
+  const friendsGoing = store.friendsSchedules.filter(
+    friend => friend.schedule && friend.schedule[sessionID]
+  );
+  const map = store.maps.find(({ name }) => name === props.session.location);
 
   return {
     isAddedToSchedule: !!store.schedule[props.session.id],
@@ -322,7 +336,7 @@ function select(store, props) {
     sessionURLTemplate: store.config.sessionURLTemplate,
     topics: store.topics,
     friendsGoing,
-    map,
+    map
   };
 }
 
@@ -330,8 +344,8 @@ function actions(dispatch, props) {
   let id = props.session.id;
   return {
     addToSchedule: () => dispatch(addToSchedule(id)),
-    removeFromScheduleWithPrompt:
-      () => dispatch(removeFromScheduleWithPrompt(props.session)),
+    removeFromScheduleWithPrompt: () =>
+      dispatch(removeFromScheduleWithPrompt(props.session))
   };
 }
 

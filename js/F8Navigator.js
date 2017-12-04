@@ -18,45 +18,48 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE
- *
- * @providesModule F8Navigator
- * @flow
  */
 
-'use strict';
+"use strict";
 
-var React = require('React');
-var Platform = require('Platform');
-var BackAndroid = require('BackAndroid');
-var F8TabsView = require('F8TabsView');
-var FriendsScheduleView = require('./tabs/schedule/FriendsScheduleView');
-var FilterScreen = require('./filter/FilterScreen');
-var LoginModal = require('./login/LoginModal');
-var Navigator = require('Navigator');
-var SessionsCarousel = require('./tabs/schedule/SessionsCarousel');
-var SharingSettingsModal = require('./tabs/schedule/SharingSettingsModal');
-var SharingSettingsScreen = require('./tabs/schedule/SharingSettingsScreen');
-var ThirdPartyNotices = require('./tabs/info/ThirdPartyNotices');
-var RatingScreen = require('./rating/RatingScreen');
-var StyleSheet = require('StyleSheet');
-var { connect } = require('react-redux');
-var { switchTab } = require('./actions');
+import React from "react";
+import Platform from "Platform";
+import BackAndroid from "BackAndroid";
+import F8TabsView from "./tabs/F8TabsView";
+import FriendsScheduleView from "./tabs/schedule/FriendsScheduleView";
+import FilterScreen from "./filter/FilterScreen";
+import LoginModal from "./login/LoginModal";
+import { Navigator } from "react-native-deprecated-custom-components";
+import SessionsCarousel from "./tabs/schedule/SessionsCarousel";
+
+import SharingSettingsScreen from "./tabs/schedule/SharingSettingsScreen";
+
+import F8WebView from "./common/F8WebView";
+import RatingScreen from "./rating/RatingScreen";
+import { StyleSheet } from "react-native";
+import { connect } from "react-redux";
+
+import F8Colors from "./common/F8Colors";
+import F8VideoView from "./tabs/videos/F8VideoView";
+import { switchTab } from "./actions";
+import F8MapView from "./tabs/maps/F8MapView";
+import DemosCarousel from "./tabs/demos/DemosCarousel";
 
 var F8Navigator = React.createClass({
   _handlers: ([]: Array<() => boolean>),
 
   componentDidMount: function() {
-    BackAndroid.addEventListener('hardwareBackPress', this.handleBackButton);
+    BackAndroid.addEventListener("hardwareBackPress", this.handleBackButton);
   },
 
   componentWillUnmount: function() {
-    BackAndroid.removeEventListener('hardwareBackPress', this.handleBackButton);
+    BackAndroid.removeEventListener("hardwareBackPress", this.handleBackButton);
   },
 
   getChildContext() {
     return {
       addBackButtonListener: this.addBackButtonListener,
-      removeBackButtonListener: this.removeBackButtonListener,
+      removeBackButtonListener: this.removeBackButtonListener
     };
   },
 
@@ -65,7 +68,7 @@ var F8Navigator = React.createClass({
   },
 
   removeBackButtonListener: function(listener) {
-    this._handlers = this._handlers.filter((handler) => handler !== listener);
+    this._handlers = this._handlers.filter(handler => handler !== listener);
   },
 
   handleBackButton: function() {
@@ -75,14 +78,14 @@ var F8Navigator = React.createClass({
       }
     }
 
-    const {navigator} = this.refs;
+    const navigator = this._navigator;
     if (navigator && navigator.getCurrentRoutes().length > 1) {
       navigator.pop();
       return true;
     }
 
-    if (this.props.tab !== 'schedule') {
-      this.props.dispatch(switchTab('schedule'));
+    if (this.props.tab !== "schedule") {
+      this.props.dispatch(switchTab("schedule"));
       return true;
     }
     return false;
@@ -91,15 +94,23 @@ var F8Navigator = React.createClass({
   render: function() {
     return (
       <Navigator
-        ref="navigator"
+        ref={c => (this._navigator = c)}
         style={styles.container}
-        configureScene={(route) => {
-          if (Platform.OS === 'android') {
+        configureScene={route => {
+          if (Platform.OS === "android") {
             return Navigator.SceneConfigs.FloatFromBottomAndroid;
           }
           // TODO: Proper scene support
-          if (route.shareSettings || route.friend) {
-            return Navigator.SceneConfigs.FloatFromRight;
+          if (
+            route.shareSettings ||
+            route.friend ||
+            route.webview ||
+            route.video ||
+            route.session ||
+            route.allSession ||
+            route.allDemos
+          ) {
+            return Navigator.SceneConfigs.PushFromRight;
           } else {
             return Navigator.SceneConfigs.FloatFromBottom;
           }
@@ -112,76 +123,52 @@ var F8Navigator = React.createClass({
 
   renderScene: function(route, navigator) {
     if (route.allSessions) {
+      return <SessionsCarousel {...route} navigator={navigator} />;
+    } else if (route.session) {
+      return <SessionsCarousel session={route.session} navigator={navigator} />;
+    } else if (route.filter) {
+      return <FilterScreen navigator={navigator} {...route} />;
+    } else if (route.friend) {
       return (
-        <SessionsCarousel
-          {...route}
-          navigator={navigator}
-        />
+        <FriendsScheduleView friend={route.friend} navigator={navigator} />
       );
-    }
-    if (route.session) {
-      return (
-        <SessionsCarousel
-          session={route.session}
-          navigator={navigator}
-        />
-      );
-    }
-    if (route.filter) {
-      return (
-        <FilterScreen navigator={navigator} />
-      );
-    }
-    if (route.friend) {
-      return (
-        <FriendsScheduleView
-          friend={route.friend}
-          navigator={navigator}
-        />
-      );
-    }
-    if (route.login) {
-      return (
-        <LoginModal
-          navigator={navigator}
-          onLogin={route.callback}
-        />
-      );
-    }
-    if (route.share) {
-      return (
-        <SharingSettingsModal navigator={navigator} />
-      );
-    }
-    if (route.shareSettings) {
+    } else if (route.login) {
+      return <LoginModal navigator={navigator} onLogin={route.callback} />;
+    } else if (route.shareSettings) {
+      // else if (route.share){ return <SharingSettingsModal navigator={navigator} />; }
       return <SharingSettingsScreen navigator={navigator} />;
+    } else if (route.rate) {
+      return <RatingScreen navigator={navigator} survey={route.survey} />;
+    } else if (route.webview) {
+      return <F8WebView {...route} url={route.webview} navigator={navigator} />;
+    } else if (route.video) {
+      return <F8VideoView video={route.video} navigator={navigator} />;
+    } else if (route.maps) {
+      return <F8MapView directions={false} navigator={navigator} />;
+    } else if (route.allDemos) {
+      return <DemosCarousel {...route} navigator={navigator} />;
+    } else {
+      return <F8TabsView navigator={navigator} />;
     }
-    if (route.rate) {
-      return <RatingScreen navigator={navigator} surveys={route.surveys} />;
-    }
-    if (route.notices) {
-      return <ThirdPartyNotices navigator={navigator} />;
-    }
-    return <F8TabsView navigator={navigator} />;
-  },
+  }
 });
 
 F8Navigator.childContextTypes = {
   addBackButtonListener: React.PropTypes.func,
-  removeBackButtonListener: React.PropTypes.func,
+  removeBackButtonListener: React.PropTypes.func
 };
 
 var styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'black',
-  },
+    backgroundColor: F8Colors.bianca
+  }
 });
 
 function select(store) {
   return {
     tab: store.navigation.tab,
-    isLoggedIn: store.user.isLoggedIn || store.user.hasSkippedLogin,
+    isLoggedIn: store.user.isLoggedIn || store.user.hasSkippedLogin
   };
 }
 

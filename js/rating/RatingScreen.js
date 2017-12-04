@@ -18,166 +18,200 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE
- *
- * @flow
  */
-'use strict';
+"use strict";
 
-const React = require('react');
-const {
-  Text,
-  View,
-  ToastAndroid,
-  Platform,
-} = require('react-native');
-const StyleSheet = require('F8StyleSheet');
-const RatingCard = require('./RatingCard');
-const F8Header = require('F8Header');
-const Carousel = require('../common/Carousel');
-const F8PageControl = require('F8PageControl');
-const { connect } = require('react-redux');
-const { submitSurveyAnswers } = require('../actions');
+import React from "react";
+import { View, ToastAndroid, Platform } from "react-native";
+import StyleSheet from "../common/F8StyleSheet";
+import F8Header from "../common/F8Header";
+import { connect } from "react-redux";
+import { submitSurveyAnswers } from "../actions";
 
-import type {Survey} from '../reducers/surveys';
-import type {Session} from '../reducers/sessions';
-import type {Dispatch} from '../actions/types';
+import type { Survey } from "../reducers/surveys";
+import type { Session } from "../reducers/sessions";
+import type { Dispatch } from "../actions/types";
+
+import RatingQuestion from "./RatingQuestion";
+import { Heading2, Paragraph } from "../common/F8Text";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+
+import F8Colors from "../common/F8Colors";
+import F8Button from "../common/F8Button";
+import F8Toast from "../common/F8Toast";
 
 type Props = {
-  sessions: Array<Session>;
-  surveys: Array<Survey>;
-  navigator: any;
-  dispatch: Dispatch;
+  sessions: Array<Session>,
+  surveys: Array<Survey>,
+  navigator: any,
+  dispatch: Dispatch
 };
 
 class RatingScreen extends React.Component {
   props: Props;
   state: {
-    selectedIndex: number;
+    selectedIndex: number
+  };
+
+  static defaultProps = {
+    type: "Session",
+    successMessage: "Rating sent!"
   };
 
   constructor(props: Props) {
     super(props);
-    this.state = {
-      selectedIndex: 0,
-    };
 
-    (this: any).handleIndexChange = this.handleIndexChange.bind(this);
-    (this: any).renderCard = this.renderCard.bind(this);
-    (this: any).dismiss = this.dismiss.bind(this);
+    let defaultValues = {};
+    (props.survey.questions || []).map((q, idx) => {
+      if (q.optional) {
+        defaultValues[idx] = "";
+      }
+    });
+    this.state = { ...defaultValues };
   }
 
   render() {
-    const {surveys} = this.props;
+    let rightItem;
+    if (Platform.OS === "ios" && this.isValid()) {
+      rightItem = {
+        title: "Submit",
+        icon: require("../common/img/header/confirm.png"),
+        onPress: this.submit
+      };
+    }
+
     return (
       <View style={styles.container}>
         <F8Header
-          style={styles.header}
+          backgroundColor={F8Colors.salmon}
+          title={`Review ${this.props.type}`}
           leftItem={{
-            layout: 'icon',
-            title: 'Close',
-            icon: require('../common/BackButtonIcon'),
-            onPress: this.dismiss,
-          }}>
-          <View style={styles.headerContent}>
-            <Text style={styles.title}>
-              {surveys.length > 1
-                ? 'Review these sessions'
-                : 'Review this session'
-              }
-            </Text>
-            <F8PageControl
-              count={surveys.length}
-              selectedIndex={this.state.selectedIndex}
-            />
-          </View>
-        </F8Header>
-        <Carousel
-          count={surveys.length}
-          selectedIndex={this.state.selectedIndex}
-          onSelectedIndexChange={this.handleIndexChange}
-          renderCard={this.renderCard}
+            title: "Cancel",
+            icon: require("../common/img/header/x.png"),
+            onPress: _ => this.props.navigator.pop()
+          }}
+          rightItem={rightItem}
         />
+        {this.renderForm()}
       </View>
     );
   }
 
-  renderCard(index: number): ReactElement {
-    const survey = this.props.surveys[index];
-    const session = this.props.sessions.find((s) => s.id === survey.sessionId);
-    return (
-      <RatingCard
-        style={styles.card}
-        session={session}
-        questions={survey.questions}
-        onSubmit={(answers) => this.submitAnswers(index, answers)}
+  renderForm() {
+    const { sessions, survey, successMessage } = this.props;
+    const session = sessions.find(s => s.id === survey.sessionId);
+
+    const questions = survey.questions.map((question, ii) => (
+      <RatingQuestion
+        key={ii}
+        style={styles.question}
+        question={question}
+        rating={this.state[ii]}
+        onChange={rating => this.setState({ [ii]: rating })}
       />
+    ));
+
+    return (
+      <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
+        {this.renderHeader(session.title, survey.description)}
+        {questions}
+        {Platform.OS === "android" ? this.renderSubmitButton() : null}
+        {this.state.iosSuccessMessage ? (
+          <F8Toast onComplete={this.dismiss} text={successMessage} />
+        ) : null}
+      </KeyboardAwareScrollView>
     );
   }
 
-  submitAnswers(index: number, answers: Array<number>) {
-    const survey = this.props.surveys[index];
-    this.props.dispatch(submitSurveyAnswers(survey.id, answers)).then(
-      () => this.proceedToPage(index + 1)
+  renderHeader(title, description) {
+    return (
+      <View style={styles.header}>
+        {title ? <Heading2 style={styles.heading}>{title}</Heading2> : null}
+        {description ? (
+          <Paragraph style={styles.description}>{description}</Paragraph>
+        ) : null}
+      </View>
     );
   }
 
-  proceedToPage(index: number) {
-    if (index < this.props.surveys.length) {
-      this.setState({selectedIndex: index});
+  renderSubmitButton() {
+    let btn;
+    if (this.isValid()) {
+      btn = <F8Button caption="Submit Rating" onPress={this.submit} />;
     } else {
-      this.props.navigator.pop();
-      if (Platform.OS === 'android') {
-        ToastAndroid.show('Thanks for your review!', ToastAndroid.SHORT);
-      }
+      btn = <F8Button theme="disabled" caption="Submit Rating" />;
     }
+
+    return <View style={styles.footer}>{btn}</View>;
   }
 
-  handleIndexChange(selectedIndex: number) {
-    this.setState({ selectedIndex });
-  }
+  submit = () => {
+    const { survey } = this.props;
+    const answers = survey.questions.map((_, ii) => this.state[ii]);
+    this.props.dispatch(submitSurveyAnswers(survey.id, answers)).then(() => {
+      if (Platform.OS === "ios") {
+        this.setState({ iosSuccessMessage: true });
+      } else {
+        this.dismiss();
+      }
+    });
+  };
 
-  dismiss() {
+  dismiss = _ => {
     this.props.navigator.pop();
+    if (Platform.OS === "android") {
+      ToastAndroid.show(this.props.successMessage, ToastAndroid.SHORT);
+    }
+  };
+
+  isValid() {
+    const { questions } = this.props.survey;
+    return Object.keys(this.state).length === questions.length;
   }
 }
 
-var styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: F8Colors.white
   },
+
   header: {
-    android: {
-      backgroundColor: '#5597B8',
-    },
+    alignItems: "center",
+    paddingVertical: 30,
+    paddingHorizontal: 22
   },
-  headerContent: {
-    android: {
-      flex: 1,
-      alignItems: 'flex-start',
-      justifyContent: 'center',
-    },
-    ios: {
-      height: 65,
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
+  // subheading:{
+  //   fontFamily: F8Fonts.helvetica,
+  //   fontSize: 15,
+  //   color: F8Colors.blue,
+  //   marginBottom: 15
+  // },
+  heading: {
+    textAlign: "center",
+    color: F8Colors.blue
+    // marginBottom: 15,
   },
-  title: {
-    color: 'white',
-    fontSize: 14,
-    textAlign: 'center',
+
+  description: {
+    textAlign: "center",
+    marginTop: 12
   },
-  card: {
-    ios: {
-      borderRadius: 2,
-      marginHorizontal: 3,
-    },
+
+  question: {
+    paddingHorizontal: 22, // was:30
+    marginBottom: 30
   },
+
+  footer: {
+    paddingHorizontal: 22,
+    paddingBottom: 30
+  }
 });
 
 function select(store) {
   return {
-    sessions: store.sessions,
+    sessions: store.sessions
   };
 }
 

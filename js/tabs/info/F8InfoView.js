@@ -19,82 +19,117 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE
  *
- * @providesModule F8InfoView
  * @flow
  */
-'use strict';
+"use strict";
 
-var CommonQuestions = require('./CommonQuestions');
-var LinksList = require('./LinksList');
-var ListContainer = require('ListContainer');
-var PureListView = require('../../common/PureListView');
-var React = require('React');
-var Relay = require('react-relay');
-var View = require('View');
-var WiFiDetails = require('./WiFiDetails');
+import React from "react";
+import { connect } from "react-redux";
+import ListContainer from "../../common/ListContainer";
+import PureListView from "../../common/PureListView";
+import F8AboutView from "./F8AboutView";
+import F8Colors from "../../common/F8Colors";
+import F8NotificationsView from "../notifications/F8NotificationsView";
+import { Platform, ActionSheetIOS } from "react-native";
+import unseenNotificationsCount from "../notifications/unseenNotificationsCount";
+import { testMenuEnabled, version } from "../../env";
+import { TEST_MENU } from "../../actions";
 
+/* <F8InfoView />
+============================================================================= */
 
-const POLICIES_LINKS = [{
-  title: 'Terms of Service',
-  url: 'https://m.facebook.com/terms?_rdr',
-}, {
-  title: 'Data Policy',
-  url: 'https://m.facebook.com/policies?_rdr',
-}, {
-  title: 'Code of Conduct',
-  url: 'https://www.fbf8.com/code-of-conduct',
-}];
+class F8InfoView extends React.Component {
+  render() {
+    return (
+      <ListContainer
+        headerBackgroundColor={F8Colors.salmon}
+        title="Information"
+        leftItem={{
+          title: "Map",
+          layout: "icon",
+          icon: require("../../common/img/header/map.png"),
+          onPress: _ =>
+            this.props.navigator && this.props.navigator.push({ maps: true })
+        }}
+        {...this.renderTestItems()}
+      >
+        <PureListView
+          title="About"
+          renderRow={_ => {}}
+          renderEmptyList={_ => (
+            <F8AboutView
+              navigator={this.props.navigator}
+              config={this.props.config}
+              pages={this.props.pages}
+              faqs={this.props.faqs}
+              policies={this.props.policies}
+            />
+          )}
+        />
+        <F8NotificationsView
+          title="Notifications"
+          hasUpdates={this.props.notificationsBadge}
+          navigator={this.props.navigator}
+        />
+      </ListContainer>
+    );
+  }
 
-function F8InfoView() {
-  return (
-    <ListContainer
-      title="Information"
-      backgroundImage={require('./img/info-background.png')}
-      backgroundColor={'#47BFBF'}>
-      <InfoList />
-    </ListContainer>
-  );
-}
+  renderTestItems() {
+    if (!testMenuEnabled) {
+      return {};
+    }
 
-function InfoList({viewer: {config, faqs, pages}, ...props}) {
-  return (
-    <PureListView
-      renderEmptyList={() => (
-        <View>
-          <WiFiDetails
-            network={config.wifiNetwork}
-            password={config.wifiPassword}
-          />
-          <CommonQuestions faqs={faqs} />
-          <LinksList title="Facebook pages" links={pages} />
-          <LinksList title="Facebook policies" links={POLICIES_LINKS} />
-        </View>
-      )}
-      {...(props: any /* flow can't guarantee the shape of props */)}
-    />
-  );
-}
-
-InfoList = Relay.createContainer(InfoList, {
-  fragments: {
-    viewer: () => Relay.QL`
-      fragment on User {
-        config {
-          wifiNetwork
-          wifiPassword
+    if (Platform.OS === "ios") {
+      return {
+        rightItem: {
+          title: "Test",
+          onPress: () => this.showTestMenu()
         }
-        faqs {
-          question
-          answer
+      };
+    }
+
+    if (Platform.OS === "android") {
+      return {
+        extraItems: Object.keys(TEST_MENU).map(title => ({
+          title,
+          onPress: () => this.props.dispatch(TEST_MENU[title]())
+        }))
+      };
+    }
+  }
+
+  showTestMenu() {
+    const itemTitles = Object.keys(TEST_MENU);
+    ActionSheetIOS.showActionSheetWithOptions(
+      {
+        title: "Testing F8 app v" + version,
+        options: ["Cancel", ...itemTitles],
+        cancelButtonIndex: 0
+      },
+      idx => {
+        if (idx === 0) {
+          return;
         }
-        pages {
-          title
-          url
-          logo
-        }
+
+        const action: any = TEST_MENU[itemTitles[idx - 1]];
+        this.props.dispatch(action());
       }
-    `,
-  },
-});
+    );
+  }
+}
 
-module.exports = F8InfoView;
+/* redux store ============================================================== */
+
+function select(store) {
+  return {
+    config: store.config,
+    faqs: store.faqs,
+    pages: store.pages,
+    policies: store.policies,
+    notificationsBadge: unseenNotificationsCount(store) + store.surveys.length
+  };
+}
+
+/* exports ================================================================== */
+module.exports = connect(select)(F8InfoView);

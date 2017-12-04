@@ -18,24 +18,25 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE
- *
- * @flow
  */
 
-'use strict';
+"use strict";
 
-var React = require('React');
-var StyleSheet = require('StyleSheet');
-var { Text } = require('F8Text');
-const TouchableOpacity = require('TouchableOpacity');
-const View = require('View');
+import React from "react";
+import StyleSheet from "StyleSheet";
+import { Text } from "../F8Text";
+import TouchableOpacity from "TouchableOpacity";
+import View from "View";
 
 class Header extends React.Component {
   render() {
     return (
       <View style={[styles.header, this.props.style]}>
         <View style={styles.leftItem}>
-          {this.renderItem(this.props.leftItemTitle, this.props.onLeftItemPress)}
+          {this.renderItem(
+            this.props.leftItemTitle,
+            this.props.onLeftItemPress
+          )}
         </View>
         <View style={styles.centerItem}>
           <Text style={[styles.titleText, this.props.titleStyle]}>
@@ -43,7 +44,10 @@ class Header extends React.Component {
           </Text>
         </View>
         <View style={styles.rightItem}>
-          {this.renderItem(this.props.rightItemTitle, this.props.onRightItemPress)}
+          {this.renderItem(
+            this.props.rightItemTitle,
+            this.props.onRightItemPress
+          )}
         </View>
       </View>
     );
@@ -56,9 +60,7 @@ class Header extends React.Component {
 
     return (
       <TouchableOpacity onPress={onPress} style={styles.itemWrapper}>
-        <Text style={styles.itemTitle}>
-          {title.toUpperCase()}
-        </Text>
+        <Text style={styles.itemTitle}>{title.toUpperCase()}</Text>
       </TouchableOpacity>
     );
   }
@@ -69,38 +71,37 @@ var HEADER_HEIGHT = STATUS_BAR_HEIGHT + /* toolbar */ 44;
 
 var styles = StyleSheet.create({
   header: {
-    backgroundColor: 'transparent',
+    backgroundColor: "transparent",
     paddingTop: STATUS_BAR_HEIGHT,
     height: HEADER_HEIGHT,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center"
   },
   titleText: {
-    color: 'white',
-    fontSize: 17,
+    color: "white",
+    fontSize: 17
   },
   leftItem: {
     flex: 1,
-    alignItems: 'flex-start',
+    alignItems: "flex-start"
   },
   centerItem: {
     flex: 2,
-    alignItems: 'center',
+    alignItems: "center"
   },
   rightItem: {
     flex: 1,
-    alignItems: 'flex-end',
+    alignItems: "flex-end"
   },
   itemWrapper: {
-    padding: 11,
+    padding: 11
   },
   itemTitle: {
     letterSpacing: 1,
     fontSize: 12,
-    color: 'white',
-  },
+    color: "white"
+  }
 });
-
 
 module.exports = Header;

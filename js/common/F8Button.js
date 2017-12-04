@@ -18,114 +18,328 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE
- *
- * @providesModule F8Button
- * @flow
  */
 
-'use strict';
+"use strict";
 
-var F8Colors = require('F8Colors');
-var Image = require('Image');
-import LinearGradient from 'react-native-linear-gradient';
-var React = require('React');
-var StyleSheet = require('StyleSheet');
-var { Text } = require('F8Text');
-var TouchableOpacity = require('TouchableOpacity');
-var View = require('View');
+import React from "react";
+import F8Colors from "./F8Colors";
+import F8Fonts from "./F8Fonts";
+import { View, StyleSheet, TouchableOpacity, Image, Alert } from "react-native";
+import { Text } from "./F8Text";
+
+/* constants ================================================================ */
+
+const BUTTON_HEIGHT = 52,
+  BUTTON_HEIGHT_SM = 32;
+
+/* <F8Button />
+============================================================================= */
 
 class F8Button extends React.Component {
   props: {
-    type: 'primary' | 'secondary' | 'bordered';
-    icon?: number;
-    caption: string;
-    style?: any;
-    onPress: () => mixed;
+    theme:
+      | "pink"
+      | "blue"
+      | "yellow"
+      | "fb"
+      | "white"
+      | "bordered"
+      | "bordered-pink"
+      | "disabled",
+    type: "default" | "round" | "small",
+    opacity: number,
+    icon?: number,
+    caption?: string,
+    style?: any,
+    fontSize?: number,
+    // buttonColor?: string;
+    // contentColor?: string;
+    onPress: () => mixed
   };
 
   static defaultProps = {
-    type: 'primary',
+    opacity: 1,
+    theme: "pink"
   };
 
+  static height = BUTTON_HEIGHT;
+
   render() {
-    const caption = this.props.caption.toUpperCase();
-    let icon;
-    if (this.props.icon) {
-      icon = <Image source={this.props.icon} style={styles.icon} />;
+    const { icon, fontSize, opacity } = this.props;
+    const caption = this.props.caption && this.props.caption.toUpperCase();
+    const { buttonTheme, iconTheme, captionTheme } = this.getTheme();
+    const { containerType, buttonType, iconType, captionType } = this.getType();
+
+    let iconImage;
+    if (icon) {
+      iconImage = (
+        <Image source={icon} style={[styles.icon, iconTheme, iconType]} />
+      );
     }
-    let content;
-    if (this.props.type === 'primary') {
-      content = (
-        <LinearGradient
-          start={[0.5, 1]} end={[1, 1]}
-          colors={['#6A6AD5', '#6F86D9']}
-          style={[styles.button, styles.primaryButton]}>
-          {icon}
-          <Text style={[styles.caption, styles.primaryCaption]}>
-            {caption}
-          </Text>
-        </LinearGradient>
+
+    let fontSizeOverride;
+    if (fontSize) {
+      fontSizeOverride = { fontSize };
+    }
+
+    const content = (
+      <View style={[styles.button, buttonTheme, buttonType, { opacity }]}>
+        {iconImage}
+        <Text
+          style={[styles.caption, captionTheme, captionType, fontSizeOverride]}
+        >
+          {caption}
+        </Text>
+      </View>
+    );
+
+    if (this.props.onPress) {
+      return (
+        <TouchableOpacity
+          accessibilityTraits="button"
+          onPress={this.props.onPress}
+          activeOpacity={0.5}
+          style={[styles.container, containerType, this.props.style]}
+        >
+          {content}
+        </TouchableOpacity>
       );
     } else {
-      var border = this.props.type === 'bordered' && styles.border;
-      content = (
-        <View style={[styles.button, border]}>
-          {icon}
-          <Text style={[styles.caption, styles.secondaryCaption]}>
-            {caption}
-          </Text>
+      return (
+        <View style={[styles.container, containerType, this.props.style]}>
+          {content}
         </View>
       );
     }
-    return (
-      <TouchableOpacity
-        accessibilityTraits="button"
-        onPress={this.props.onPress}
-        activeOpacity={0.8}
-        style={[styles.container, this.props.style]}>
-        {content}
-      </TouchableOpacity>
-    );
+  }
+
+  getTheme() {
+    const { theme } = this.props;
+    let buttonTheme, iconTheme, captionTheme;
+    if (theme === "yellow") {
+      buttonTheme = { backgroundColor: F8Colors.yellow };
+      iconTheme = { tintColor: F8Colors.pink };
+      captionTheme = { color: F8Colors.pink };
+    } else if (theme === "blue") {
+      buttonTheme = { backgroundColor: F8Colors.blue };
+      iconTheme = { tintColor: F8Colors.white };
+      captionTheme = { color: F8Colors.white };
+    } else if (theme === "fb") {
+      buttonTheme = { backgroundColor: F8Colors.facebookBlue };
+      iconTheme = { tintColor: F8Colors.white };
+      captionTheme = { color: F8Colors.white };
+    } else if (theme === "white") {
+      buttonTheme = { backgroundColor: F8Colors.white };
+      iconTheme = { tintColor: F8Colors.pink };
+      captionTheme = { color: F8Colors.pink };
+    } else if (theme === "bordered") {
+      buttonTheme = {
+        backgroundColor: "transparent",
+        borderWidth: 1,
+        borderColor: F8Colors.tangaroa
+      };
+      iconTheme = { tintColor: F8Colors.tangaroa };
+      captionTheme = { color: F8Colors.tangaroa };
+    } else if (theme === "bordered-pink") {
+      buttonTheme = {
+        backgroundColor: "transparent",
+        borderWidth: 1,
+        borderColor: F8Colors.pink
+      };
+      iconTheme = { tintColor: F8Colors.pink };
+      captionTheme = { color: F8Colors.pink };
+    } else if (theme === "maps") {
+      buttonTheme = {
+        backgroundColor: "transparent",
+        borderWidth: 1,
+        borderColor: F8Colors.purple
+      };
+      iconTheme = { tintColor: F8Colors.tangaroa };
+      captionTheme = { color: F8Colors.tangaroa };
+    } else if (theme === "mapsInactive") {
+      buttonTheme = {
+        backgroundColor: "transparent",
+        borderWidth: 1,
+        borderColor: "transparent"
+      };
+      iconTheme = { tintColor: F8Colors.tangaroa };
+      captionTheme = { color: F8Colors.tangaroa };
+    } else if (theme === "disabled") {
+      buttonTheme = { backgroundColor: F8Colors.blueBayoux };
+      iconTheme = { tintColor: F8Colors.white, opacity: 0.5 };
+      captionTheme = { color: F8Colors.white, opacity: 0.5 };
+    } else if (theme === "transparent") {
+      buttonTheme = { backgroundColor: "transparent" };
+      iconTheme = { tintColor: F8Colors.tangaroa };
+      captionTheme = { color: F8Colors.tangaroa };
+    } else {
+      // pink/white is default
+      buttonTheme = { backgroundColor: F8Colors.pink };
+      iconTheme = { tintColor: "white" };
+      captionTheme = { color: "white" };
+    }
+
+    return { buttonTheme, iconTheme, captionTheme };
+  }
+
+  getType() {
+    const { type } = this.props;
+    let containerType, buttonType, iconType, captionType;
+
+    if (type === "round") {
+      buttonType = { width: BUTTON_HEIGHT, paddingHorizontal: 0 };
+      iconType = { marginRight: 0 };
+      captionType = { fontSize: 13 };
+    } else if (type === "small") {
+      containerType = { height: BUTTON_HEIGHT_SM };
+      buttonType = { paddingHorizontal: 15 };
+      iconType = { marginRight: 0 };
+      captionType = { fontSize: 13 };
+    } else {
+      // defaults
+    }
+
+    return { containerType, buttonType, iconType, captionType };
   }
 }
 
-const HEIGHT = 50;
+/* StyleSheet
+============================================================================= */
 
-var styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
-    height: HEIGHT,
-    // borderRadius: HEIGHT / 2,
-    // borderWidth: 1 / PixelRatio.get(),
+    height: BUTTON_HEIGHT
   },
   button: {
     flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 40,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: 30,
+    borderRadius: BUTTON_HEIGHT / 2
   },
-  border: {
-    borderWidth: 1,
-    borderColor: F8Colors.lightText,
-    borderRadius: HEIGHT / 2,
-  },
-  primaryButton: {
-    borderRadius: HEIGHT / 2,
-    backgroundColor: 'transparent',
+  buttonRound: {
+    width: BUTTON_HEIGHT,
+    paddingHorizontal: 0
   },
   icon: {
-    marginRight: 12,
+    marginRight: 12
   },
   caption: {
-    letterSpacing: 1,
-    fontSize: 12,
-  },
-  primaryCaption: {
-    color: 'white',
-  },
-  secondaryCaption: {
-    color: F8Colors.lightText,
+    fontFamily: F8Fonts.button,
+    fontSize: 15,
+    textAlign: "center"
   }
 });
 
-module.exports = F8Button;
+/* Playground Cards
+============================================================================= */
+
+const Button = F8Button;
+Button.__cards__ = define => {
+  define("default (pink)", () => (
+    <F8Button
+      caption="default (pink)"
+      onPress={_ => Alert.alert("default (pink) pressed!")}
+    />
+  ));
+
+  define("blue", () => (
+    <F8Button
+      theme="blue"
+      caption="blue"
+      onPress={_ => Alert.alert("blue pressed!")}
+    />
+  ));
+
+  define("yellow (w/ icon)", () => (
+    <F8Button
+      theme="yellow"
+      caption="yellow (icon)"
+      icon={require("./img/buttons/logo-fb.png")}
+      onPress={_ => Alert.alert("yellow (icon) pressed!")}
+    />
+  ));
+
+  define("fb", () => (
+    <F8Button
+      theme="fb"
+      caption="fb"
+      icon={require("./img/buttons/logo-fb.png")}
+      onPress={_ => Alert.alert("fb pressed!")}
+    />
+  ));
+
+  define("white", () => (
+    <F8Button
+      theme="white"
+      caption="white"
+      onPress={_ => Alert.alert("white pressed!")}
+    />
+  ));
+
+  define("bordered", () => (
+    <F8Button
+      theme="bordered"
+      caption="bordered"
+      onPress={_ => Alert.alert("bordered pressed!")}
+    />
+  ));
+
+  define("bordered-pink", () => (
+    <F8Button
+      theme="bordered-pink"
+      caption="bordered-pink"
+      onPress={_ => Alert.alert("bordered-pink pressed!")}
+    />
+  ));
+
+  define("round (caption)", () => (
+    <F8Button
+      type="round"
+      caption="My F8"
+      onPress={_ => Alert.alert("round (caption) pressed!")}
+    />
+  ));
+
+  define("round (white)", () => (
+    <F8Button
+      theme="white"
+      type="round"
+      icon={require("./img/buttons/icon-x.png")}
+      onPress={_ => Alert.alert("round (white) pressed!")}
+    />
+  ));
+
+  define("round (blue)", () => (
+    <F8Button
+      theme="blue"
+      type="round"
+      icon={require("./img/buttons/icon-check.png")}
+      onPress={_ => Alert.alert("round (blue) pressed!")}
+    />
+  ));
+
+  define("fixed width", () => (
+    <F8Button
+      theme="bordered"
+      caption="Fixed 250 width"
+      style={{ width: 250 }}
+      onPress={_ => Alert.alert("round (blue) pressed!")}
+    />
+  ));
+
+  define("small (blue)", () => (
+    <F8Button
+      theme="maps"
+      type="small"
+      caption="Small"
+      onPress={_ => Alert.alert("small (maps) pressed!")}
+    />
+  ));
+};
+
+/* Exports
+============================================================================= */
+module.exports = Button;

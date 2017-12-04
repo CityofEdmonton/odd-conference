@@ -18,24 +18,22 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE
- *
- * @flow
  */
 
-'use strict';
+"use strict";
 
-import type { Action } from './types';
+import type { Action } from "./types";
 
-type Tab = 'schedule' | 'my-schedule' | 'map' | 'notifications' | 'info';
+type Tab = "schedule" | "myF8" | "demos" | "videos" | "info";
 
 module.exports = {
   switchTab: (tab: Tab): Action => ({
-    type: 'SWITCH_TAB',
-    tab,
+    type: "SWITCH_TAB",
+    tab
   }),
 
   switchDay: (day: 1 | 2): Action => ({
-    type: 'SWITCH_DAY',
-    day,
-  }),
+    type: "SWITCH_DAY",
+    day
+  })
 };
