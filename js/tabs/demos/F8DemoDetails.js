@@ -54,7 +54,7 @@ const WINDOW_WIDTH = Dimensions.get("window").width,
 <F8DemoDetails />
 ============================================================================= */
 
-var F8DemoDetails = React.createClass({
+const F8DemoDetails = React.createClass({
   getInitialState: function() {
     return {
       scrollTop: 0
@@ -200,11 +200,11 @@ class Section extends React.Component {
   };
 
   render() {
-    var { children } = this.props;
+    const { children } = this.props;
     if (React.Children.count(children) === 0) {
       return null;
     }
-    var header;
+    let header;
     if (this.props.title) {
       header = (
         <Heading4 style={styles.sectionTitle}>
@@ -223,7 +223,7 @@ class Section extends React.Component {
 
 /* StyleSheet =============================================================== */
 
-var styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "white"

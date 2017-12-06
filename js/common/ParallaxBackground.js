@@ -148,9 +148,9 @@ class ParallaxBackground extends React.Component {
   }
 }
 
-var HEADER_HEIGHT = HEIGHT + 156;
+const HEADER_HEIGHT = HEIGHT + 156;
 
-var styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     position: "absolute",
     left: 0,

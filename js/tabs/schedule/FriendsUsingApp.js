@@ -125,7 +125,7 @@ class FriendsUsingApp extends React.Component {
   }
 }
 
-var styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     alignItems: "center"
   },

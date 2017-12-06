@@ -44,7 +44,7 @@ class FilterHeader extends React.Component {
   };
 
   render() {
-    var topics = Object.keys(this.props.filter);
+    const topics = Object.keys(this.props.filter);
     if (topics.length === 0) {
       return null;
     }

@@ -1,12 +1,12 @@
 "use strict";
 /* global Parse */
 
-var Meetups = Parse.Object.extend("Meetups");
-var Sponsors = Parse.Object.extend("MeetupSponsors");
+const Meetups = Parse.Object.extend("Meetups");
+const Sponsors = Parse.Object.extend("MeetupSponsors");
 
 Parse.Cloud.define("meetups", function(request, response) {
-  var meetupsQuery = new Parse.Query(Meetups);
-  var sponsorsQuery = new Parse.Query(Sponsors);
+  const meetupsQuery = new Parse.Query(Meetups);
+  const sponsorsQuery = new Parse.Query(Sponsors);
 
   function queryMeetups() {
     return new Promise(function(resolve, reject) {

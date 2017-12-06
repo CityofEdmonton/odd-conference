@@ -73,7 +73,7 @@ async function loginWithFacebookSDK(
   return _authResponse;
 }
 
-var FacebookSDK = {
+const FacebookSDK = {
   init() {
     // This is needed by Parse
     window.FB = FacebookSDK;

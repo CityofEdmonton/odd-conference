@@ -1,21 +1,21 @@
 "use strict";
 /* global Parse */
 
-var Video = Parse.Object.extend("Video"),
+const Video = Parse.Object.extend("Video"),
   GRAPH_BASE_URL = "https://graph.facebook.com/v2.8/",
   GRAPH_FIELDS_PARAM = "?fields=source", //,picture -> poor quality
   GRAPH_ACCESS_PARAM = "&access_token=" + process.env.FB_GRAPH_ACCESS_TOKEN;
 
 Parse.Cloud.job("updateVideoSources", function(request, status) {
-  var countTotal = "?";
-  var countUpdated = 0;
+  let countTotal = "?";
+  let countUpdated = 0;
 
   new Parse.Query(Video)
     .find({ useMasterKey: true })
     .then(function(videos) {
       return Parse.Promise.when(
         videos.map(function(video) {
-          var fbid = video.get("facebookId");
+          const fbid = video.get("facebookId");
           if (countTotal !== videos.length) {
             countTotal = videos.length;
           }
@@ -26,8 +26,8 @@ Parse.Cloud.job("updateVideoSources", function(request, status) {
             })
             .then(
               function(response) {
-                var data = response.data;
-                var changed = false;
+                const data = response.data;
+                let changed = false;
                 // update the video source, if necessary
                 if (data.source && data.source !== video.get("source")) {
                   video.set("source", data.source);

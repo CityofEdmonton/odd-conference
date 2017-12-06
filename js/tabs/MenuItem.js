@@ -41,9 +41,9 @@ class MenuItem extends React.Component {
   };
 
   render() {
-    var icon = this.props.selected ? this.props.selectedIcon : this.props.icon;
-    var selectedTitleStyle = this.props.selected && styles.selectedTitle;
-    var badge;
+    let icon = this.props.selected ? this.props.selectedIcon : this.props.icon;
+    const selectedTitleStyle = this.props.selected && styles.selectedTitle;
+    let badge;
     if (this.props.badge) {
       badge = (
         <View style={styles.badge}>
@@ -65,7 +65,7 @@ class MenuItem extends React.Component {
   }
 }
 
-var styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     height: 50,

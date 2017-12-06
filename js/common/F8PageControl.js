@@ -26,9 +26,9 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
 
-var PropTypes = React.PropTypes;
+const PropTypes = React.PropTypes;
 
-var F8PageControl = React.createClass({
+const F8PageControl = React.createClass({
   propTypes: {
     style: View.propTypes.style,
     count: PropTypes.number.isRequired,
@@ -36,9 +36,9 @@ var F8PageControl = React.createClass({
   },
 
   render: function() {
-    var images = [];
-    for (var i = 0; i < this.props.count; i++) {
-      var isSelected = this.props.selectedIndex === i;
+    const images = [];
+    for (let i = 0; i < this.props.count; i++) {
+      const isSelected = this.props.selectedIndex === i;
       images.push(<Circle key={i} isSelected={isSelected} />);
     }
     return (
@@ -49,16 +49,16 @@ var F8PageControl = React.createClass({
   }
 });
 
-var Circle = React.createClass({
+const Circle = React.createClass({
   render: function() {
-    var extraStyle = this.props.isSelected ? styles.full : styles.empty;
+    const extraStyle = this.props.isSelected ? styles.full : styles.empty;
     return <View style={[styles.circle, extraStyle]} />;
   }
 });
 
-var CIRCLE_SIZE = 4;
+const CIRCLE_SIZE = 4;
 
-var styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     alignItems: "center",
     justifyContent: "center"

@@ -53,7 +53,7 @@ export type Session = {
 };
 
 function fromParseSpeaker(speaker: Object): Speaker {
-  var pic = speaker.get("speakerPic");
+  const pic = speaker.get("speakerPic");
   return {
     id: speaker.id,
     bio: speaker.get("speakerBio"),

@@ -96,7 +96,7 @@ class LoginButton extends React.Component {
   }
 }
 
-var styles = StyleSheet.create({
+const styles = StyleSheet.create({
   button: {
     alignSelf: "center",
     width: 284

@@ -104,7 +104,7 @@ class MessengerModal extends React.Component {
 
 /* StyleSheet =============================================================== */
 
-var styles = StyleSheet.create({
+const styles = StyleSheet.create({
   content: {
     alignItems: "center",
     paddingVertical: 45,

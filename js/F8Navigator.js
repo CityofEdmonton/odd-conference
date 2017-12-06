@@ -45,7 +45,7 @@ import { switchTab } from "./actions";
 import F8MapView from "./tabs/maps/F8MapView";
 import DemosCarousel from "./tabs/demos/DemosCarousel";
 
-var F8Navigator = React.createClass({
+const F8Navigator = React.createClass({
   _handlers: ([]: Array<() => boolean>),
 
   componentDidMount: function() {
@@ -158,7 +158,7 @@ F8Navigator.childContextTypes = {
   removeBackButtonListener: React.PropTypes.func
 };
 
-var styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: F8Colors.bianca

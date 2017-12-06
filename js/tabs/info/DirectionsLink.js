@@ -67,19 +67,19 @@ class DirectionsLink extends React.Component {
   };
 
   openMaps = option => {
-    var address = encodeURIComponent(this.props.address);
+    const address = encodeURIComponent(this.props.address);
     switch (option) {
       case 0:
         F8Linking.openURL("https://maps.apple.com/?q=" + address);
         break;
 
       case 1:
-        var nativeGoogleUrl =
+        const nativeGoogleUrl =
           "comgooglemaps-x-callback://?q=" +
           address +
           "&x-success=f8://&x-source=F8";
         F8Linking.canOpenURL(nativeGoogleUrl).then(supported => {
-          var url = supported
+          const url = supported
             ? nativeGoogleUrl
             : "https://maps.google.com/?q=" + address;
           F8Linking.openURL(url);

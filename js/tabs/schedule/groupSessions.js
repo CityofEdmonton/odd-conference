@@ -32,9 +32,9 @@ export type SessionsListData = {
 };
 
 function groupSessions(sessions: Array<Session>): SessionsListData {
-  var data = {};
+  const data = {};
   sessions.forEach(session => {
-    var timeSectionKey = session.allDay
+    const timeSectionKey = session.allDay
       ? "All Day"
       : formatTime(session.startTime);
     data[timeSectionKey] = data[timeSectionKey] || {};

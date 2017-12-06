@@ -48,7 +48,7 @@ const WINDOW_WIDTH = Dimensions.get("window").width,
   HORIZONTAL_BREAKPOINT = WINDOW_WIDTH <= 320,
   CONTENT_PADDING_H = HORIZONTAL_BREAKPOINT ? 20 : 30;
 
-var F8SessionDetails = React.createClass({
+const F8SessionDetails = React.createClass({
   getInitialState: function() {
     return {
       scrollTop: 0,
@@ -116,7 +116,8 @@ var F8SessionDetails = React.createClass({
   },
 
   renderSpeakers() {
-    var speakersProfiles = (this.props.session.speakers || []).map(speaker => (
+    const speakersProfiles = (this.props.session.speakers || []
+    ).map(speaker => (
       <F8SpeakerProfile
         key={speaker.name}
         speaker={speaker}
@@ -242,11 +243,11 @@ class Section extends React.Component {
   };
 
   render() {
-    var { children } = this.props;
+    const { children } = this.props;
     if (React.Children.count(children) === 0) {
       return null;
     }
-    var header;
+    let header;
     if (this.props.title) {
       header = (
         <Heading4 style={styles.sectionTitle}>
@@ -263,7 +264,7 @@ class Section extends React.Component {
   }
 }
 
-var styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "white"

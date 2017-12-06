@@ -66,10 +66,10 @@ class Header extends React.Component {
   }
 }
 
-var STATUS_BAR_HEIGHT = 20;
-var HEADER_HEIGHT = STATUS_BAR_HEIGHT + /* toolbar */ 44;
+const STATUS_BAR_HEIGHT = 20;
+const HEADER_HEIGHT = STATUS_BAR_HEIGHT + /* toolbar */ 44;
 
-var styles = StyleSheet.create({
+const styles = StyleSheet.create({
   header: {
     backgroundColor: "transparent",
     paddingTop: STATUS_BAR_HEIGHT,

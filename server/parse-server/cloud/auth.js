@@ -1,4 +1,4 @@
-var tokenTypes = {
+const tokenTypes = {
   PushConsole: 1,
   MessengerBot: 2,
   SurveyExports: 3

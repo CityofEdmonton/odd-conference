@@ -25,7 +25,7 @@
 "use strict";
 
 import React from "react-native";
-var { Image, StyleSheet, Text, TouchableOpacity, View } = React;
+const { Image, StyleSheet, Text, TouchableOpacity, View } = React;
 
 type Friend = {
   id: string,
@@ -69,8 +69,8 @@ class UserPog extends React.Component {
   };
 
   render() {
-    var { id, name } = this.props.user;
-    var firstName = name.split(" ")[0]; // TODO: problems with i18n
+    const { id, name } = this.props.user;
+    const firstName = name.split(" ")[0]; // TODO: problems with i18n
     return (
       <TouchableOpacity style={styles.pog} onPress={this.props.onPress}>
         <Image
@@ -85,7 +85,7 @@ class UserPog extends React.Component {
 
 const SIZE = 50;
 
-var styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     alignItems: "center",

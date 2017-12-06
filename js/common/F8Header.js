@@ -305,7 +305,7 @@ class ItemWrapperIOS extends React.Component {
 /* StyleSheet
 ============================================================================= */
 
-var styles = StyleSheet.create({
+const styles = StyleSheet.create({
   toolbar: {
     android: {
       // backgroundColor: F8Colors.background,

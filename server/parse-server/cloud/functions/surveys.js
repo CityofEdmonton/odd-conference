@@ -1,10 +1,10 @@
 "use strict";
 /* global Parse */
 
-var Agenda = Parse.Object.extend("Agenda");
-var Attendance = Parse.Object.extend("Attendance");
-var Survey = Parse.Object.extend("Survey");
-var SurveyResult = Parse.Object.extend("SurveyResult");
+const Agenda = Parse.Object.extend("Agenda");
+const Attendance = Parse.Object.extend("Attendance");
+const Survey = Parse.Object.extend("Survey");
+const SurveyResult = Parse.Object.extend("SurveyResult");
 
 import CloudAuth from "../auth";
 
@@ -13,18 +13,18 @@ Parse.Cloud.define("send_surveys", function(request, response) {
     return response.error("CloudAuth: Permission denied (push)");
   }
 
-  var sessionId = request.params.sessionId;
+  const sessionId = request.params.sessionId;
   if (!sessionId) {
     return response.error("Need sessionId");
   }
 
   console.log("Fetching attendees for " + sessionId);
-  var agenda = new Agenda({ id: sessionId });
-  var attendees = new Parse.Query(Attendance)
+  const agenda = new Agenda({ id: sessionId });
+  const attendees = new Parse.Query(Attendance)
     .equalTo("agenda", agenda)
     .notEqualTo("sent", true)
     .find({ useMasterKey: true });
-  var survey = new Parse.Query(Survey)
+  const survey = new Parse.Query(Survey)
     .equalTo("session", agenda)
     .first({ useMasterKey: true });
 
@@ -44,7 +44,7 @@ Parse.Cloud.define("send_surveys", function(request, response) {
 Parse.Cloud.define("surveys", function(request, response) {
   // Parse.Cloud.useMasterKey();
 
-  var user = request.user;
+  const user = request.user;
   if (!user) {
     return response.success([]);
   }
@@ -70,12 +70,12 @@ Parse.Cloud.define("surveys", function(request, response) {
 Parse.Cloud.define("submit_survey", function(request, response) {
   // Parse.Cloud.useMasterKey();
 
-  var user = request.user;
+  const user = request.user;
   if (!user) {
     return response.error({ message: "Not logged in" });
   }
 
-  var params = request.params;
+  const params = request.params;
   if (!params.id || !params.answers) {
     return response.error({ message: "Need id and answers" });
   }
@@ -116,7 +116,7 @@ function sendSurveys(attendees, survey, session) {
   return Parse.Promise
     .when(
       attendees.map(function(record) {
-        var user = record.get("user");
+        const user = record.get("user");
         return new SurveyResult()
           .save(
             {
@@ -154,7 +154,7 @@ function sendSurveys(attendees, survey, session) {
 
 function toSurveys(emptyResults) {
   return emptyResults.map(function(emptyResult) {
-    var survey = emptyResult.get("survey");
+    const survey = emptyResult.get("survey");
     return {
       id: emptyResult.id,
       sessionId: survey.get("session").id,

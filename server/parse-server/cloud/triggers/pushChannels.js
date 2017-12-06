@@ -3,10 +3,10 @@
 
 Parse.Cloud.afterSave(Parse.User, function(request) {
   //   Parse.Cloud.useMasterKey();
-  var installationsQ = new Parse.Query(Parse.Installation)
+  const installationsQ = new Parse.Query(Parse.Installation)
     .equalTo("user", request.object)
     .find({ useMasterKey: true });
-  var scheduleQ = request.object
+  const scheduleQ = request.object
     .relation("mySchedule")
     .query()
     .select(["id"])
@@ -21,7 +21,7 @@ Parse.Cloud.afterSave(Parse.User, function(request) {
           schedule.length +
           " sessions in schedule"
       );
-      var sessionIds = schedule.map(function(s) {
+      const sessionIds = schedule.map(function(s) {
         return "session_" + s.id;
       });
       console.log(sessionIds);
@@ -38,7 +38,7 @@ Parse.Cloud.afterSave(Parse.User, function(request) {
       },
       function(errors) {
         if (Array.isArray(errors)) {
-          for (var i = 0; i < errors.length; i++) {
+          for (let i = 0; i < errors.length; i++) {
             console.error(
               "Error! #" + i + " " + errors[i].message || errors[i]
             );
@@ -51,8 +51,8 @@ Parse.Cloud.afterSave(Parse.User, function(request) {
 });
 
 Parse.Cloud.beforeSave(Parse.Installation, function(request, response) {
-  var installation = request.object;
-  var user = installation.get("user");
+  const installation = request.object;
+  const user = installation.get("user");
   if (installation.dirtyKeys().indexOf("user") === -1) {
     response.success();
     return;
@@ -66,7 +66,7 @@ Parse.Cloud.beforeSave(Parse.Installation, function(request, response) {
       .select(["id"])
       .find({ useMasterKey: true })
       .then(function(schedule) {
-        var sessionIds = schedule.map(function(s) {
+        const sessionIds = schedule.map(function(s) {
           return "session_" + s.id;
         });
         installation.set("channels", sessionIds);

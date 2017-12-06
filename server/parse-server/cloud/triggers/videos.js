@@ -1,7 +1,7 @@
 "use strict";
 /* global Parse */
 
-var Video = Parse.Object.extend("Video");
+const Video = Parse.Object.extend("Video");
 
 Parse.Cloud.afterSave(Video, function(request) {
   if (request.object.existed()) {

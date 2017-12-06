@@ -1,11 +1,11 @@
 "use strict";
 /* global Parse */
 
-var Demo = Parse.Object.extend("Demo"),
+const Demo = Parse.Object.extend("Demo"),
   UnmaskedDemo = Parse.Object.extend("UnmaskedDemo");
 
 Parse.Cloud.job("unmaskDemo", function(request, status) {
-  var countTotal = 0,
+  let countTotal = 0,
     countUpdated = 0; // for job status feedback
 
   new Parse.Query(UnmaskedDemo)
@@ -28,7 +28,7 @@ Parse.Cloud.job("unmaskDemo", function(request, status) {
                 throw new Error("No matching Demo item to update!");
               }
               // ...or proceed to updating the fields
-              var updates = {};
+              const updates = {};
               if (unmasked.get("title")) {
                 updates.title = unmasked.get("title");
               }
@@ -42,7 +42,7 @@ Parse.Cloud.job("unmaskDemo", function(request, status) {
                 updates.location = unmasked.get("location");
               }
               // update the Demo item with unmasked data, or throw if it there's nothing
-              var updatedFields = Object.keys(updates);
+              const updatedFields = Object.keys(updates);
               if (updatedFields.length) {
                 return masked.save(updates, { useMasterKey: true });
               } else {

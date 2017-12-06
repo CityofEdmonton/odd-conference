@@ -71,7 +71,7 @@ class FriendCell extends React.Component {
   }
 }
 
-var styles = StyleSheet.create({
+const styles = StyleSheet.create({
   cell: {
     height: 68,
     paddingLeft: 11,

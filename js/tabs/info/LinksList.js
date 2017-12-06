@@ -92,8 +92,8 @@ class Row extends React.Component {
   };
 
   render() {
-    var { logo, title } = this.props.link;
-    var image = logo && (
+    const { logo, title } = this.props.link;
+    const image = logo && (
       <Image
         resizeMode="contain"
         style={styles.rowIcon}

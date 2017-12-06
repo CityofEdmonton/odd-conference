@@ -34,8 +34,8 @@ class ItemsWithSeparator extends React.Component {
   };
 
   render() {
-    var children = [];
-    var length = React.Children.count(this.props.children);
+    const children = [];
+    const length = React.Children.count(this.props.children);
     React.Children.forEach(this.props.children, (child, ii) => {
       children.push(child);
       if (ii !== length - 1) {
@@ -51,7 +51,7 @@ class ItemsWithSeparator extends React.Component {
   }
 }
 
-var styles = StyleSheet.create({
+const styles = StyleSheet.create({
   separator: {
     backgroundColor: "#0322500A",
     height: 1 / PixelRatio.get()

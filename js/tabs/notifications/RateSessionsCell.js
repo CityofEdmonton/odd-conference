@@ -55,7 +55,7 @@ function RateSessionsCell({ numberOfSessions, onPress }: Props) {
 /* StyleSheet
 ============================================================================= */
 
-var styles = StyleSheet.create({
+const styles = StyleSheet.create({
   cell: {
     alignItems: "center",
     justifyContent: "center",

@@ -68,9 +68,9 @@ class SessionsCarusel extends React.Component {
   constructor(props: Props) {
     super(props);
 
-    var flatSessionsList = [];
-    var contexts: Array<Context> = [];
-    var allSessions = this.props.allSessions;
+    const flatSessionsList = [];
+    const contexts: Array<Context> = [];
+    let allSessions = this.props.allSessions;
     if (!allSessions) {
       const { session } = this.props;
       allSessions = {
@@ -112,7 +112,7 @@ class SessionsCarusel extends React.Component {
   }
 
   render() {
-    var { rowIndex, sectionLength, sectionTitle } = this.state.contexts[
+    const { rowIndex, sectionLength, sectionTitle } = this.state.contexts[
       this.state.selectedIndex
     ];
 
@@ -191,7 +191,7 @@ class SessionsCarusel extends React.Component {
   }
 }
 
-var styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: F8Colors.white

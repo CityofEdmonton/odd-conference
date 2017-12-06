@@ -33,14 +33,14 @@ function mergeAndSortByTime(
   server: Array<Notification>,
   push: Array<Notification>
 ): Array<Notification> {
-  var uniquePush = push.filter(pushNotification => {
-    var existsOnServer = server.find(
+  const uniquePush = push.filter(pushNotification => {
+    const existsOnServer = server.find(
       serverNotification => serverNotification.text === pushNotification.text
     );
     return !existsOnServer;
   });
 
-  var all = [].concat(server, uniquePush);
+  const all = [].concat(server, uniquePush);
   return all.sort((a, b) => b.time - a.time);
 }
 

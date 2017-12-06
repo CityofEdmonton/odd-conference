@@ -71,10 +71,10 @@ class ZoomableImage extends React.Component {
   }
 
   toggleZoom(e: any) {
-    var timestamp = new Date().getTime();
+    const timestamp = new Date().getTime();
     if (timestamp - this.state.lastTapTimestamp <= 500) {
-      var { locationX, locationY } = e.nativeEvent;
-      var size = this.state.isZoomed
+      const { locationX, locationY } = e.nativeEvent;
+      const size = this.state.isZoomed
         ? { width: 10000, height: 10000 }
         : { width: 0, height: 0 };
       this._zoomableScroll.scrollResponderZoomTo({
@@ -91,7 +91,7 @@ class ZoomableImage extends React.Component {
   }
 }
 
-var styles = StyleSheet.create({
+const styles = StyleSheet.create({
   image: {
     flex: 1,
     resizeMode: Image.resizeMode.contain

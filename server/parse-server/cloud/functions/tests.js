@@ -1,22 +1,22 @@
 "use strict";
 /* global Parse */
 
-var Survey = Parse.Object.extend("Survey");
-var SurveyResult = Parse.Object.extend("SurveyResult");
+const Survey = Parse.Object.extend("Survey");
+const SurveyResult = Parse.Object.extend("SurveyResult");
 
 Parse.Cloud.define("test_push", function(request, response) {
   // Parse.Cloud.useMasterKey();
 
-  var user = request.user;
+  const user = request.user;
   if (!user) {
     return response.error({ message: "Not logged in" });
   }
 
-  var query = new Parse.Query(Parse.Installation);
+  const query = new Parse.Query(Parse.Installation);
   query.equalTo("user", user);
 
-  var userName = user.get("name").split(" ")[0];
-  var data;
+  const userName = user.get("name").split(" ")[0];
+  let data;
   if (request.params.url === "link") {
     data = {
       alert: "Hey " + userName + ", check out this great website",
@@ -75,7 +75,7 @@ Parse.Cloud.define("test_push", function(request, response) {
 Parse.Cloud.define("test_survey", function(request, response) {
   // Parse.Cloud.useMasterKey();
 
-  var user = request.user;
+  const user = request.user;
   if (!user) {
     return response.error({ message: "Not logged in" });
   }
@@ -86,7 +86,7 @@ Parse.Cloud.define("test_survey", function(request, response) {
     .then(pickRandom)
     .then(function(survey) {
       console.log(survey);
-      var sessionTitle = survey.get("session").get("sessionTitle");
+      const sessionTitle = survey.get("session").get("sessionTitle");
       return new SurveyResult()
         .save({ user: user, survey: survey }, { useMasterKey: true })
         .then(function() {
@@ -118,12 +118,12 @@ function pickRandom(list) {
   if (list.length === 0) {
     throw new Error("Can not pick random item from empty list");
   }
-  var index = Math.floor(Math.random() * list.length);
+  const index = Math.floor(Math.random() * list.length);
   return list[index];
 }
 
 Parse.Cloud.define("test_attendance", function(request, response) {
-  var Agenda = Parse.Object.extend("Agenda");
+  const Agenda = Parse.Object.extend("Agenda");
   new Parse.Query(Agenda)
     .select(["id", "sessionTitle"])
     .find({ useMasterKey: true })

@@ -77,7 +77,7 @@ class F8Modal extends React.Component {
 
 /* StyleSheet
 ============================================================================= */
-var styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: F8Colors.colorWithAlpha("tangaroa", 0.8),

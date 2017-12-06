@@ -85,7 +85,7 @@ class MessengerChatHead extends React.Component {
 /* StyleSheet
 ============================================================================= */
 
-var styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     width: CONTAINER_WIDTH,
     height: CONTAINER_HEIGHT

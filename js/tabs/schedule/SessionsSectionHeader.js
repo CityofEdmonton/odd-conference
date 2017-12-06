@@ -43,7 +43,7 @@ class SessionsSectionHeader extends React.Component {
   }
 }
 
-var styles = StyleSheet.create({
+const styles = StyleSheet.create({
   header: {
     // position:'relative',
     left: 0,

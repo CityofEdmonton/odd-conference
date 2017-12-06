@@ -83,7 +83,7 @@ class Column extends React.Component {
 /* Styles
 ============================================================================= */
 
-var styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     paddingTop: 0,
     flexDirection: "row"
