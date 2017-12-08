@@ -33,15 +33,15 @@ import { persistStore, autoRehydrate } from "redux-persist";
 import { AsyncStorage } from "react-native";
 import { ensureCompatibility } from "./compatibility";
 
-var isDebuggingInChrome = false;
+const isDebuggingInChrome = false;
 
-var logger = createLogger({
+const logger = createLogger({
   predicate: (getState, action) => isDebuggingInChrome,
   collapsed: true,
   duration: true
 });
 
-var createF8Store = applyMiddleware(thunk, promise, array, analytics, logger)(
+const createF8Store = applyMiddleware(thunk, promise, array, analytics, logger)(
   createStore
 );
 

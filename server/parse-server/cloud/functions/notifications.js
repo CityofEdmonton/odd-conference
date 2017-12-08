@@ -4,8 +4,8 @@
 
 import CloudAuth from "../auth";
 
-var Notification = Parse.Object.extend("Notification"); // Done: make real
-var PendingNotifications = Parse.Object.extend("PendingNotifications");
+const Notification = Parse.Object.extend("Notification"); // Done: make real
+const PendingNotifications = Parse.Object.extend("PendingNotifications");
 
 Parse.Cloud.define("send_push_by_channel", function(request, response) {
   // gate request by cc push token
@@ -18,7 +18,7 @@ Parse.Cloud.define("send_push_by_channel", function(request, response) {
     return response.error("Error: missing required params");
   }
 
-  var pushData = request.params.data;
+  const pushData = request.params.data;
   pushData.badge = "Increment";
   pushData.sound = "default";
 

@@ -29,9 +29,9 @@ import React from "react";
 import { Heading3, Text } from "../../common/F8Text";
 import { StyleSheet, View } from "react-native";
 
-var F8SpeakerProfile = React.createClass({
+const F8SpeakerProfile = React.createClass({
   render: function() {
-    var speaker = this.props.speaker;
+    const speaker = this.props.speaker;
     return (
       <View style={[styles.row, this.props.style]}>
         <Heading3 style={styles.name}>{speaker.name}</Heading3>
@@ -43,7 +43,7 @@ var F8SpeakerProfile = React.createClass({
   }
 });
 
-var styles = StyleSheet.create({
+const styles = StyleSheet.create({
   row: {
     paddingBottom: 14
   },

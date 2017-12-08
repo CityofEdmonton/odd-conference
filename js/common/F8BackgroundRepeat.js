@@ -44,7 +44,7 @@ class F8BackgroundRepeat extends React.Component {
     const numHorizontal = Math.ceil(width / img.width);
     const numVertical = Math.ceil(height / img.height);
 
-    for (var i = 0; i < numVertical; i++) {
+    for (let i = 0; i < numVertical; i++) {
       content.push(this.renderRow(numHorizontal, i));
     }
 
@@ -62,7 +62,7 @@ class F8BackgroundRepeat extends React.Component {
 
   renderRow(colsInRow, idx) {
     const cols = [];
-    for (var i = 0; i < colsInRow; i++) {
+    for (let i = 0; i < colsInRow; i++) {
       cols.push(this.renderImage(i));
     }
     return (

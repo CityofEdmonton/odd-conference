@@ -1,7 +1,7 @@
 "use strict";
 /* global Parse */
 
-var Agenda = Parse.Object.extend("Agenda");
+const Agenda = Parse.Object.extend("Agenda");
 
 import CloudAuth from "../auth";
 
@@ -16,7 +16,7 @@ Parse.Cloud.define("mbot_get_schedule", function(request, response) {
   }
 
   // just in case passed as number
-  var fbid = String(request.params.facebook_user_id);
+  const fbid = String(request.params.facebook_user_id);
 
   // do query
   new Parse.Query(Parse.User)
@@ -46,7 +46,7 @@ function fetchSchedule(user) {
     .query()
     .find({ useMasterKey: true })
     .then(function(sessions) {
-      var schedule = {};
+      const schedule = {};
       sessions.forEach(function(session) {
         schedule[session.id] = true;
       });
@@ -69,8 +69,8 @@ Parse.Cloud.define("mbot_add_to_schedule", function(request, response) {
   }
 
   // just in case passed as number
-  var fbid = String(request.params.facebook_user_id);
-  var sid = String(request.params.session_id);
+  const fbid = String(request.params.facebook_user_id);
+  const sid = String(request.params.session_id);
 
   // do query
   new Parse.Query(Parse.User)
@@ -108,8 +108,8 @@ Parse.Cloud.define("mbot_remove_from_schedule", function(request, response) {
   }
 
   // just in case passed as number
-  var fbid = String(request.params.facebook_user_id);
-  var sid = String(request.params.session_id);
+  const fbid = String(request.params.facebook_user_id);
+  const sid = String(request.params.session_id);
 
   // do query
   new Parse.Query(Parse.User)
@@ -147,7 +147,7 @@ Parse.Cloud.define("mbot_users_by_session", function(request, response) {
   }
 
   // just in case passed as number
-  var sid = String(request.params.session_id);
+  const sid = String(request.params.session_id);
 
   // do many queries
   new Parse.Query(Parse.User)
@@ -162,7 +162,7 @@ Parse.Cloud.define("mbot_users_by_session", function(request, response) {
     })
     .then(
       function(value) {
-        var filtered = [];
+        const filtered = [];
         value.forEach(function(u) {
           if (u !== null) {
             filtered.push({
@@ -189,7 +189,7 @@ function hasSavedSession(user, sid) {
     .query()
     .find({ useMasterKey: true })
     .then(function(sessions) {
-      var userSavedSession = false;
+      let userSavedSession = false;
       sessions.forEach(function(session) {
         if (session.id === sid) {
           userSavedSession = true;

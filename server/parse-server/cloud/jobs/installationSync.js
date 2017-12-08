@@ -3,7 +3,7 @@
 
 Parse.Cloud.job("installationSync", function(request, status) {
   // Parse.Cloud.useMasterKey();
-  var counter = 0;
+  let counter = 0;
 
   new Parse.Query(Parse.Installation)
     .get({ useMasterKey: true })

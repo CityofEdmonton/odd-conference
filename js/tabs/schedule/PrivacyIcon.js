@@ -109,7 +109,7 @@ class PrivacyIcon extends React.Component {
 /* Styles
 ============================================================================= */
 
-var styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     alignItems: "center",
     justifyContent: "center"

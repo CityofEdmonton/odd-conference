@@ -54,7 +54,7 @@ class F8SegmentedControl extends React.Component {
   render() {
     const { backgroundColor, borderColor, textColor } = this.props;
 
-    var segments = this.props.values.map((value, index) => (
+    const segments = this.props.values.map((value, index) => (
       <Segment
         key={value.title}
         value={value.title}
@@ -121,7 +121,7 @@ class Segment extends React.Component {
 
 /* StyleSheet =============================================================== */
 
-var styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     paddingBottom: CONTAINER_PADDING_B,

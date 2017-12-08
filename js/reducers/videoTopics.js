@@ -29,9 +29,9 @@ type Action = { type: string, list: Array<any> };
 
 function topics(state: State = [], action: Action): State {
   if (action.type === "LOADED_VIDEOS") {
-    var topicsMap = Object.create(null);
+    const topicsMap = Object.create(null);
     action.list.forEach(video => {
-      var tags = video.get("tags") || [];
+      const tags = video.get("tags") || [];
       tags.forEach(tag => {
         topicsMap[tag] = true;
       });

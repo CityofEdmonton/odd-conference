@@ -163,7 +163,7 @@ class F8SessionCell extends React.Component {
 /* StyleSheet
 ============================================================================= */
 
-var styles = StyleSheet.create({
+const styles = StyleSheet.create({
   cell: {
     paddingTop: CELL_PADDING_TOP,
     paddingBottom: CELL_PADDING_BOTTOM,

@@ -2,7 +2,7 @@
 /* global Parse */
 
 Parse.Cloud.define("friends", function(request, response) {
-  var user = request.user;
+  const user = request.user;
   if (!user) {
     return response.success([]);
   }
@@ -10,8 +10,8 @@ Parse.Cloud.define("friends", function(request, response) {
     return response.error("Current user is not linked to Facebook");
   }
 
-  var authData = user.get("authData");
-  var token = authData.facebook.access_token;
+  const authData = user.get("authData");
+  const token = authData.facebook.access_token;
   // TODO: Fetch all friends using paging
   Parse.Cloud
     .httpRequest({
@@ -19,11 +19,11 @@ Parse.Cloud.define("friends", function(request, response) {
         "https://graph.facebook.com/me/friends?fields=id&access_token=" + token
     })
     .then(function(res) {
-      var friendIds = res.data.data.map(function(friend) {
+      const friendIds = res.data.data.map(function(friend) {
         return friend.id;
       });
 
-      var query = new Parse.Query(Parse.User)
+      const query = new Parse.Query(Parse.User)
         .containedIn("facebook_id", friendIds)
         .ascending("name");
 
@@ -58,7 +58,7 @@ function fetchSchedule(user) {
     .query()
     .find({ useMasterKey: true })
     .then(function(sessions) {
-      var schedule = {};
+      const schedule = {};
       sessions.forEach(function(session) {
         schedule[session.id] = true;
       });

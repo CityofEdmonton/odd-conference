@@ -157,8 +157,8 @@ class FilterScreen extends React.Component {
   }
 
   toggleTopic(topic: string, value: boolean) {
-    var selectedTopics = { ...this.state.selectedTopics };
-    var value = !selectedTopics[topic];
+    const selectedTopics = { ...this.state.selectedTopics };
+    const value = !selectedTopics[topic];
     if (value) {
       selectedTopics[topic] = true;
     } else {
@@ -191,7 +191,7 @@ class FilterScreen extends React.Component {
   }
 }
 
-var styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: F8Colors.tangaroa

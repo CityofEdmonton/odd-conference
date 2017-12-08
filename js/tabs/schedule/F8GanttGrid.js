@@ -51,7 +51,7 @@ export default class F8GanttGrid extends React.Component {
   renderColumns(momentStart, count) {
     let cols = [];
     let previousLabelAMPM = null;
-    for (var i = 0; i < count + 1; i++) {
+    for (let i = 0; i < count + 1; i++) {
       const left = this.props.containerWidth / count * i - LABELS_WIDTH / 2;
       let label = null;
       if (i % 2 === 0) {

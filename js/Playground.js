@@ -36,10 +36,10 @@ class Playground extends React.Component {
     const define = (name: string, render: Function) => {
       content.push(<Example key={name} render={render} />);
     };
-    // var Module = require('F8PageControl');
-    var Module = require("F8Header");
-    // var Module = require('./tabs/schedule/AddToScheduleButton');
-    // var Module = require('./rating/Header');
+    // const Module = require('F8PageControl');
+    const Module = require("F8Header");
+    // const Module = require('./tabs/schedule/AddToScheduleButton');
+    // const Module = require('./rating/Header');
     // $FlowFixMe: doesn't understand static
     Module.__cards__(define);
     this.state = { content };

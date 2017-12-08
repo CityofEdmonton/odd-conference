@@ -122,7 +122,7 @@ function urlForMap(map) {
 /* StyleSheet
 ============================================================================= */
 
-var styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     backgroundColor: F8Colors.bianca
   }

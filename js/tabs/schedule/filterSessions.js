@@ -36,7 +36,7 @@ function byTopics(sessions: Array<Session>, topics: StringMap): Array<Session> {
     return sessions;
   }
   return sessions.filter(session => {
-    var hasMatchingTag = false;
+    let hasMatchingTag = false;
     session.tags.forEach(tag => {
       hasMatchingTag = hasMatchingTag || topics[tag];
     });

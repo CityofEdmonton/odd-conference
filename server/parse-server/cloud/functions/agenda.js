@@ -7,15 +7,15 @@ import _ from "lodash";
 import moment from "moment";
 
 Parse.Cloud.define("agenda", function(request, response) {
-  var Agenda = Parse.Object.extend("Agenda");
-  var query = new Parse.Query(Agenda);
+  const Agenda = Parse.Object.extend("Agenda");
+  const query = new Parse.Query(Agenda);
 
   function queryAgenda() {
     return new Promise(function(resolve, reject) {
       query.include("speakers");
       query.exists("day");
       query.find({ useMasterKey: true }).then(function(results) {
-        var json = results.map(function(result) {
+        const json = results.map(function(result) {
           return result.toJSON();
         });
         buildSchedule(json).then(function(formattedSchedule) {
@@ -26,8 +26,8 @@ Parse.Cloud.define("agenda", function(request, response) {
   }
 
   function buildSchedule(schedule) {
-    var dayArrayLookup;
-    var sortedSchedule = [{}, {}];
+    let dayArrayLookup;
+    const sortedSchedule = [{}, {}];
 
     return new Promise(function(resolve, reject) {
       _.forEach(schedule, function(session) {

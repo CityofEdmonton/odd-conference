@@ -199,7 +199,7 @@ function urlForMap(map: ?Map): string {
 /* StyleSheet
 ============================================================================= */
 
-var styles = StyleSheet.create({
+const styles = StyleSheet.create({
   defaultMap: {
     resizeMode: "contain"
   }

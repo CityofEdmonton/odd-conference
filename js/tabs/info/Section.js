@@ -46,7 +46,7 @@ class Section extends React.Component {
   }
 }
 
-var styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     paddingTop: 60,
     paddingBottom: 0,

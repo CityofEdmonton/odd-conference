@@ -76,7 +76,7 @@ class Row extends React.Component {
   }
 }
 
-var styles = StyleSheet.create({
+const styles = StyleSheet.create({
   row: {
     marginVertical: 15
   },
