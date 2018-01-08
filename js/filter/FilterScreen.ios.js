@@ -156,7 +156,7 @@ class FilterScreen extends React.Component {
     );
   }
 
-  toggleTopic(topic: string, value: boolean) {
+  toggleTopic(topic) {
     const selectedTopics = { ...this.state.selectedTopics };
     const value = !selectedTopics[topic];
     if (value) {
