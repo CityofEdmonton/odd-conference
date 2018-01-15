@@ -19,6 +19,7 @@ jobs:
       - run: yarn lint
       - run: yarn flow
       - run: yarn test
+
   android:
     working_directory: ~/f8app
     docker:
