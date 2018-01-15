@@ -19,4 +19,14 @@ jobs:
       - run: yarn lint
       - run: yarn flow
       - run: yarn test
+  android:
+    working_directory: ~/f8app
+    docker:
+      - image: circleci/android:api-27-node8-alpha
+    environment:
+      JVM_OPTS: -Xmx3200m
+    steps:
+      - checkout
+      - run: yarn install
+      - run: cd android && ./gradlew assembleRelease
 
