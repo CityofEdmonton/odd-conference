@@ -20,3 +20,18 @@ jobs:
       - run: yarn flow
       - run: yarn test
 
+  android:
+    working_directory: ~/f8app
+    docker:
+      - image: circleci/android:api-27-node8-alpha
+    steps:
+      - checkout
+      - run: yarn install
+      - run: cd android && ./gradlew assembleDebug
+
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - build
+      - android
