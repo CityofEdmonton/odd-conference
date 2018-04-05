@@ -18,6 +18,7 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE
+ * @flow
  */
 
 "use strict";
@@ -27,11 +28,15 @@ import { Platform, Dimensions } from "react-native";
 const DEVICE_SCALE = Dimensions.get("window").width / 375;
 
 const DEFAULT_FONT = "helvetica";
+const SECONDARY_FONT = Platform.OS === "android" ? "basis" : "helvetica";
 
 /* utils ==================================================================== */
 
 // get font name and weight
-function fontWithWeight(family = DEFAULT_FONT, weight = "regular") {
+function fontWithWeight(
+  family: string = DEFAULT_FONT,
+  weight: string = "regular"
+): string {
   return family;
 }
 
@@ -40,7 +45,11 @@ function normalize(size: number): number {
 }
 
 // attempt to normalize x-platform line heights
-function lineHeight(val = 1, scale = 1, normalized = true) {
+function lineHeight(
+  val: number = 1,
+  scale: number = 1,
+  normalized: boolean = true
+): number {
   let adjusted = normalized ? normalize(val) : val;
   return Math.round(Platform.OS === "android" ? adjusted * scale : adjusted);
 }
@@ -50,6 +59,7 @@ function lineHeight(val = 1, scale = 1, normalized = true) {
 export default {
   default: DEFAULT_FONT,
   helvetica: DEFAULT_FONT,
+  basis: SECONDARY_FONT,
   h1: DEFAULT_FONT,
   h2: DEFAULT_FONT,
   h3: DEFAULT_FONT,
