@@ -42,7 +42,7 @@ class F8InfoView extends React.Component {
   render() {
     return (
       <ListContainer
-        headerBackgroundColor={F8Colors.tangaroa}
+        // headerBackgroundColor={F8Colors.tangaroa}
         title="Information"
         leftItem={{
           title: "Map",

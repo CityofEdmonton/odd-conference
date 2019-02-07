@@ -35,7 +35,8 @@ function unseenNotificationsCount(
   notifications: Array<Notification>,
   seen: SeenNotifications
 ): number {
-  return notifications.filter(notification => !seen[notification.id]).length;
+  // return notifications.filter(notification => !seen[notification.id]).length;
+  return 0;
 }
 
 module.exports = createSelector(
