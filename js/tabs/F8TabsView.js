@@ -153,7 +153,7 @@ class F8TabsView extends React.Component {
           />
         </TabNavigator.Item>
 
-        <TabNavigator.Item
+        {/* <TabNavigator.Item
           title="My F8"
           titleStyle={styles.tabTitle}
           selectedTitleStyle={styles.tabTitleActive}
@@ -172,9 +172,9 @@ class F8TabsView extends React.Component {
             now={this.state.now}
             navigator={this.props.navigator}
           />
-        </TabNavigator.Item>
+        </TabNavigator.Item> */}
 
-        <TabNavigator.Item
+        {/* <TabNavigator.Item
           title="Demos"
           titleStyle={styles.tabTitle}
           selectedTitleStyle={styles.tabTitleActive}
@@ -186,7 +186,7 @@ class F8TabsView extends React.Component {
             this.renderTabIcon(require("./demos/img/tab-icon/active.png"))}
         >
           <F8DemosView navigator={this.props.navigator} />
-        </TabNavigator.Item>
+        </TabNavigator.Item> */}
 
         <TabNavigator.Item
           title="Videos"

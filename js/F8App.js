@@ -87,9 +87,9 @@ class F8App extends React.Component {
   };
 
   render() {
-    if (!this.props.skipWelcomeScreen) {
-      return <LoginScreen />;
-    }
+    // if (!this.props.skipWelcomeScreen) {
+    //   return <LoginScreen />;
+    // }
     return (
       <View style={styles.container}>
         <StatusBar

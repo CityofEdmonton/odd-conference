@@ -42,7 +42,7 @@ class F8InfoView extends React.Component {
   render() {
     return (
       <ListContainer
-        headerBackgroundColor={F8Colors.salmon}
+        headerBackgroundColor={F8Colors.tangaroa}
         title="Information"
         leftItem={{
           title: "Map",
@@ -66,11 +66,11 @@ class F8InfoView extends React.Component {
             />
           )}
         />
-        <F8NotificationsView
+        {/* <F8NotificationsView
           title="Notifications"
           hasUpdates={this.props.notificationsBadge}
           navigator={this.props.navigator}
-        />
+        /> */}
       </ListContainer>
     );
   }
