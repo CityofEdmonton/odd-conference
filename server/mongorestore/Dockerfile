@@ -2,10 +2,11 @@ FROM mongo:latest
 
 ADD data data
 
+ENV MONGORESTORE_DATABASE "dev"
+ENV MONGORESTORE_HOST "mongo"
+ENV MONGORESTORE_SOURCE "/data"
+
 ENTRYPOINT [ \
-  "mongorestore", \
-  "--drop", \
-  "--db", "dev", \
-  "--host", "mongo", \
-  "data" \
+  "sh", "-c", \
+  "mongorestore --drop --db $MONGORESTORE_DATABASE --host $MONGORESTORE_HOST $MONGORESTORE_SOURCE" \
 ]
