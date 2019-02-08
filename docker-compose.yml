@@ -7,20 +7,24 @@ services:
         aliases:
           - mongo
   mongorestore:
+    image: cityofedmonton/odd-mongorestore
     build: ./server/mongorestore
     depends_on:
       - mongo
   parse:
+    image: cityofedmonton/odd-parse-server
     build: ./server/parse-server
     ports:
       - "1337:1337"
     depends_on:
       - mongo
   parse_dashboard:
+    image: cityofedmonton/odd-parse-dashboard
     build: ./server/parse-dashboard
     ports:
       - "4040:4040"
   graphql:
+    image: cityofedmonton/odd-graphql
     build: ./server/graphql
     environment:
       - PARSE_URL=http://parse:1337/parse
