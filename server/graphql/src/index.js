@@ -29,9 +29,9 @@ import Parse from "parse/node";
 
 import schema from "./schema";
 
-Parse.initialize("oss-f8-app-2017");
-Parse.serverURL = process.env.PARSE_URL;
-Parse.masterKey = "oss-f8-app-2017-mk";
+Parse.initialize(process.env.GRAPHQL_APPID);
+Parse.serverURL = process.env.GRAPHQL_PARSE_URL;
+Parse.masterKey = process.env.GRAPHQL_MASTER_KEY;
 Parse.Cloud.useMasterKey();
 
 const app = express();

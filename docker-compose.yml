@@ -27,6 +27,6 @@ services:
     image: cityofedmonton/odd-graphql
     build: ./server/graphql
     environment:
-      - PARSE_URL=http://parse:1337/parse
+      - GRAPHQL_PARSE_URL=http://parse:1337/parse
     ports:
       - "4000:4000"
