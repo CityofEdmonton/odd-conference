@@ -128,7 +128,7 @@ class FilterScreen extends React.Component {
 
     return (
       <View style={styles.header}>
-        <HeaderTitle style={{ color: F8Colors.pink, flex: 1 }}>
+        <HeaderTitle style={{ color: F8Colors.yellow, flex: 1 }}>
           Filter
         </HeaderTitle>
         {clearButton}

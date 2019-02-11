@@ -44,13 +44,14 @@ class F8InfoView extends React.Component {
       <ListContainer
         // headerBackgroundColor={F8Colors.tangaroa}
         title="Information"
-        leftItem={{
-          title: "Map",
-          layout: "icon",
-          icon: require("../../common/img/header/map.png"),
-          onPress: _ =>
-            this.props.navigator && this.props.navigator.push({ maps: true })
-        }}
+        headerTitleColor={F8Colors.white}
+        // leftItem={{
+        //   title: "Map",
+        //   layout: "icon",
+        //   icon: require("../../common/img/header/map.png"),
+        //   onPress: _ =>
+        //     this.props.navigator && this.props.navigator.push({ maps: true })
+        // }}
         {...this.renderTestItems()}
       >
         <PureListView
