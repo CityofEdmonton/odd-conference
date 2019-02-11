@@ -55,8 +55,8 @@ import { currentTimeOnConferenceDay } from "../common/convertTimes";
 
 const SCHEDULE_ICONS = {
   day1: {
-    default: require("./schedule/img/tab-icon/1/default.png"),
-    active: require("./schedule/img/tab-icon/1/active.png")
+    default: require("./schedule/img/tab-icon/general/default.png"),
+    active: require("./schedule/img/tab-icon/general/active.png")
   },
   day2: {
     default: require("./schedule/img/tab-icon/2/default.png"),
