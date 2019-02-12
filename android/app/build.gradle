@@ -96,14 +96,6 @@ android {
             abiFilters "armeabi-v7a", "x86"
         }
     }
-    signingConfigs {
-        release {
-            storeFile file(F8_RELEASE_STORE_FILE)
-            storePassword F8_RELEASE_STORE_PASSWORD
-            keyAlias F8_RELEASE_KEY_ALIAS
-            keyPassword F8_RELEASE_KEY_PASSWORD
-        }
-    }
     splits {
         abi {
             reset()
