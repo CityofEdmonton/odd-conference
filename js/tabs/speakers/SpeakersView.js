@@ -56,9 +56,8 @@ class SpeakersView extends React.Component {
 
         const content = (
             <View>
-                <Text>WTFFFF</Text>
-                <Text>{this.props.speakers}???</Text>
-                <Text>{this.props.lol}</Text>
+                <Text>Pls send help</Text>
+                <Text>IDK how to use Redux</Text>
             </View>
         )
         return content;
@@ -112,7 +111,6 @@ class SpeakersView extends React.Component {
 function select(store) {
     return {
       speakers: store.speakers,
-      lol: store.lol
     //   pages: store.pages,
     //   policies: store.policies,
     //   notificationsBadge: unseenNotificationsCount(store) + store.surveys.length

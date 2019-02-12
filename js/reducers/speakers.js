@@ -53,7 +53,6 @@ function fromParseSpeaker(speaker: Object): Speaker {
 function fromParseSessions(session: Object): SpeakerList {
   return {
     speakers: (session.get("speakers") || []).map(fromParseSpeaker),
-    lol: "IDFK"
   };
 }
 
