@@ -18,22 +18,43 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE
+ *
+ * @flow
  */
 
 "use strict";
 
-import type { Action } from "./types";
+import { parseTimeToUTC } from "../common/convertTimes";
+import createParseReducer from "./createParseReducer";
 
-type Tab = "schedule" | "speakers" | "info";
-
-module.exports = {
-  switchTab: (tab: Tab): Action => ({
-    type: "SWITCH_TAB",
-    tab
-  }),
-
-  switchDay: (day: 1 | 2): Action => ({
-    type: "SWITCH_DAY",
-    day
-  })
+export type Speaker = {
+  id: string,
+  bio: string,
+  name: string,
+  pic: string,
+  title: string
 };
+
+export type SpeakerList = {
+  speakers: Array<Speaker>,
+};
+
+function fromParseSpeaker(speaker: Object): Speaker {
+  const pic = speaker.get("speakerPic");
+  return {
+    id: speaker.id,
+    bio: speaker.get("speakerBio"),
+    name: speaker.get("speakerName"),
+    pic: pic && pic.url(),
+    title: speaker.get("speakerTitle")
+  };
+}
+
+function fromParseSessions(session: Object): SpeakerList {
+  return {
+    speakers: (session.get("speakers") || []).map(fromParseSpeaker),
+    lol: "IDFK"
+  };
+}
+
+module.exports = createParseReducer("LOADED_SPEAKERS", fromParseSessions);

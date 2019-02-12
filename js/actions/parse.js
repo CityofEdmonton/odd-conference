@@ -35,6 +35,7 @@ const FAQ = Parse.Object.extend("FAQ");
 const Page = Parse.Object.extend("Page");
 const Video = Parse.Object.extend("Video");
 const Policy = Parse.Object.extend("Policy");
+const Speakers = Parse.Object.extend("Speakers"); // Added a constant value for Speakers
 
 function loadParseQuery(type: string, query: Parse.Query): ThunkAction {
   return dispatch => {
@@ -94,6 +95,14 @@ function loadPolicies(): ThunkAction {
   );
 }
 
+// For loading speakers
+function loadSpeakers(): ThunkAction {
+  return loadParseQuery(
+    "LOADED_SPEAKERS",
+    new Parse.Query(Speakers).ascending("speakerName")
+  );
+}
+
 export {
   loadSessions,
   loadMaps,
@@ -101,5 +110,6 @@ export {
   loadFAQs,
   loadPages,
   loadVideos,
-  loadPolicies
+  loadPolicies,
+  loadSpeakers
 };

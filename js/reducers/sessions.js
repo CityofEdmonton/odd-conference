@@ -59,7 +59,8 @@ function fromParseSpeaker(speaker: Object): Speaker {
     bio: speaker.get("speakerBio"),
     name: speaker.get("speakerName"),
     pic: pic && pic.url(),
-    title: speaker.get("speakerTitle")
+    title: speaker.get("speakerTitle"),
+    placeholder: "Random"
   };
 }
 

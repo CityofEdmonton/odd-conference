@@ -36,7 +36,7 @@ const F8SpeakerProfile = React.createClass({
       <View style={[styles.row, this.props.style]}>
         <Heading3 style={styles.name}>{speaker.name}</Heading3>
         {speaker.title ? (
-          <Text style={styles.title}>{speaker.title}</Text>
+          <Text style={styles.title}>{speaker.title}{speaker.id}</Text>
         ) : null}
       </View>
     );
