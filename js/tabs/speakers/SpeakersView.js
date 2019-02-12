@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import ListContainer from "../../common/ListContainer";
 import PureListView from "../../common/PureListView";
 import F8Colors from "../../common/F8Colors";
-import { Text, View } from "react-native";
+import { Text, View, StyleSheet } from "react-native";
 
 import { createSelector } from "reselect";
 import type { Session } from "../../reducers/speakers";
@@ -55,14 +55,25 @@ class SpeakersView extends React.Component {
         // }
 
         const content = (
-            <View>
-                <Text>Pls send help</Text>
-                <Text>IDK how to use Redux</Text>
-            </View>
+            <ListContainer
+                title="Speakers"
+                headerTitleColor={F8Colors.white}
+            >
+                <View>
+                    <Text style={styles.help}>Speakers...</Text>
+                </View>
+            </ListContainer>
         )
         return content;
     }
 }
+
+const styles = StyleSheet.create({
+    help: {
+        textAlign: 'center',
+        marginTop: 100
+    }
+})
 
 // function select(store) {
 //     return {
