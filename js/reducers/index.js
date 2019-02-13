@@ -44,6 +44,7 @@ module.exports = combineReducers({
   videoTopics: require("./videoTopics"),
   videoFilter: require("./videoFilter"),
   policies: require("./policies"),
+  speakers: require("./speakers"), // add speakers to load
 
   testEventDates: require("./testEventDates")
 });

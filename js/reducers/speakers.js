@@ -24,7 +24,6 @@
 
 "use strict";
 
-import { parseTimeToUTC } from "../common/convertTimes";
 import createParseReducer from "./createParseReducer";
 
 export type Speaker = {
@@ -33,10 +32,6 @@ export type Speaker = {
   name: string,
   pic: string,
   title: string
-};
-
-export type SpeakerList = {
-  speakers: Array<Speaker>,
 };
 
 function fromParseSpeaker(speaker: Object): Speaker {
@@ -50,10 +45,4 @@ function fromParseSpeaker(speaker: Object): Speaker {
   };
 }
 
-function fromParseSessions(session: Object): SpeakerList {
-  return {
-    speakers: (session.get("speakers") || []).map(fromParseSpeaker),
-  };
-}
-
-module.exports = createParseReducer("LOADED_SPEAKERS", fromParseSessions);
+module.exports = createParseReducer("LOADED_SPEAKERS", fromParseSpeaker);
