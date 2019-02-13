@@ -12,6 +12,8 @@ import F8Fonts from "../../common/F8Fonts";
 import { Text, View, Navigator, Image } from "react-native";
 
 import type { Speaker } from "../../reducers/speaker";
+import * as F8Text from "../../common/F8Text";
+
 
 type Props = {
   speaker: Speaker,
@@ -42,13 +44,13 @@ class SpeakerInfo extends React.Component {
           navItem={backItem}
           style={Platform.OS === "ios" ? { height: 70 } : {}}
         />
-        <Text>{this.props.speaker.name}</Text>
         <Image
-          style={{width: 100, height: 100}}
+          style={styles.picture}
           source={{uri: this.props.speaker.pic}}
         />
-        <Text>{this.props.speaker.title}</Text>
-        <Text>{this.props.speaker.bio}</Text>
+        <F8Text.Heading1 style={styles.name}>{this.props.speaker.name}</F8Text.Heading1>
+        <F8Text.Heading3 style={styles.title}>{this.props.speaker.title.toUpperCase()}</F8Text.Heading3>
+        <F8Text.Paragraph style={styles.bio}>{this.props.speaker.bio}</F8Text.Paragraph>
         {/* <Text>{this.props.speaker.id}</Text> */}
       </View>
     );
@@ -68,44 +70,22 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: F8Colors.white
   },
-  headerContent: {
-    android: {
-      flex: 1,
-      alignItems: "flex-start",
-      justifyContent: "flex-end",
-      paddingBottom: 9
-    },
-    ios: {
-      marginTop: -5,
-      alignItems: "center"
-      // justifyContent: 'center',
-    }
+  picture: {
+    width: 250,
+    height: 250,
+    marginVertical: 20,
+    alignSelf: 'center'
+  },
+  name: {
+    paddingHorizontal: 20,
+    color: F8Colors.tangaroa
   },
   title: {
-    ios: {
-      textAlign: "center"
-    }
+      paddingHorizontal: 20,
   },
-  day: {
-    color: F8Colors.yellow,
-    fontFamily: F8Fonts.fontWithWeight(F8Fonts.basis, "helveticaBold"),
-    fontSize: 13,
-
-    android: {
-      marginBottom: -4
-    }
-  },
-  time: {
-    color: F8Colors.white,
-    fontFamily: F8Fonts.fontWithWeight("helvetica", "semibold"),
-    fontSize: 15,
-
-    ios: {
-      marginVertical: 2
-    },
-    android: {
-      marginBottom: 3
-    }
+  bio: {
+      paddingHorizontal: 20,
+      marginVertical: 15
   }
 });
 
