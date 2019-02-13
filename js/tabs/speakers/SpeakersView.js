@@ -5,14 +5,17 @@ import { connect } from "react-redux";
 import ListContainer from "../../common/ListContainer";
 import PureListView from "../../common/PureListView";
 import F8Colors from "../../common/F8Colors";
-import { TouchableOpacity, View, StyleSheet, FlatList } from "react-native";
+import { TouchableOpacity, View, StyleSheet, FlatList, Text } from "react-native";
 
 import { createSelector } from "reselect";
 import type { Speaker } from "../../reducers/speakers";
 import SpeakerTab from "./SpeakerTab";
+import SpeakerInfo from "./SpeakerInfo";
+import { Navigator } from "react-native-deprecated-custom-components";
 
 type Props = {
-    speakers: Array<Speaker>
+    speakers: Array<Speaker>,
+    navigator: Navigator
 }
 
 class SpeakersView extends React.Component {
@@ -35,8 +38,6 @@ class SpeakersView extends React.Component {
         for (let i = 1; i < this.props.speakers.length; i++) {
             var current = this.props.speakers[i].name.replace(/\s+/g,'').replace(/-/g,'');
             var previous = this.props.speakers[i-1].name.replace(/\s+/g,'').replace(/-/g,'');
-            // console.log(current);
-            // console.log(previous)
             if (current !== previous ) {
                 filtered_speakers.push(this.props.speakers[i]);
                 count++;
@@ -54,9 +55,8 @@ class SpeakersView extends React.Component {
                   data={filtered_speakers}
                   renderItem={({item}) => 
                     <TouchableOpacity
-                      onPress={() => {
-                          console.log(item.id)
-                      }}
+                      onPress={_ => this.showDescription(item)}
+                      activeOpacity={0.5}
                     >
                       <SpeakerTab
                         name={item.name}
@@ -71,6 +71,14 @@ class SpeakersView extends React.Component {
             </ListContainer>
         )
         return content;
+    }
+
+    showDescription(speaker: Speaker) {
+        let allSpeakers = {...this.props.speakers};
+        this.props.navigator.push({ // This is caught in F8Navigator.js (** Have to specify "speaker" prop ** -> this is what it catches)
+            speaker,
+            allSpeakers
+        });
     }
 }
 
