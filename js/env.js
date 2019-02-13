@@ -34,7 +34,7 @@ module.exports = {
   gcmSenderId: "336769939688",
   timezone: "America/Edmonton",
   dayLabel(num) {
-    const days = { 1: "Tue 4/18", 2: "Wed 4/19" };
+    const days = { 1: "Tue 4/18", 2: "Wed 4/19" }; // Change to relevant days ("Sat 3/02")
     return days[num] || `Day ${num}`;
   }
 };

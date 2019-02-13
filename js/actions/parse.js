@@ -99,7 +99,7 @@ function loadPolicies(): ThunkAction {
 function loadSpeakers(): ThunkAction {
   return loadParseQuery(
     "LOADED_SPEAKERS",
-    new Parse.Query(Speakers).ascending("speakerName")
+    new Parse.Query(Speakers).ascending("speakerName").limit(500) // Default limit is 100
   );
 }
 

@@ -10,7 +10,7 @@ type Props = {
 };
 
 
-export default class SpeakerData extends React.Component {
+export default class SpeakerTab extends React.Component {
     props: Props;
 
     render() {
