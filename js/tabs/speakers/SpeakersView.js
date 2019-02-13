@@ -30,20 +30,24 @@ class SpeakersView extends React.Component {
     }
     
     render() {
-        var filtered_speakers = [];
-        filtered_speakers.push(
-            this.props.speakers[0]
-        );
-        var count = 1;
-        for (let i = 1; i < this.props.speakers.length; i++) {
-            var current = this.props.speakers[i].name.replace(/\s+/g,'').replace(/-/g,'');
-            var previous = this.props.speakers[i-1].name.replace(/\s+/g,'').replace(/-/g,'');
-            if (current !== previous ) {
-                filtered_speakers.push(this.props.speakers[i]);
-                count++;
+        if (this.props.speakers.length) {
+            var filtered_speakers = [];
+            filtered_speakers.push(
+                this.props.speakers[0]
+            );
+            var count = 1;
+            for (let i = 1; i < this.props.speakers.length; i++) {
+                var current = this.props.speakers[i].name.replace(/\s+/g,'').replace(/-/g,'');
+                var previous = this.props.speakers[i-1].name.replace(/\s+/g,'').replace(/-/g,'');
+                if (current !== previous ) {
+                    filtered_speakers.push(this.props.speakers[i]);
+                    count++;
+                }
             }
+            console.log(`Number of speakers: ${count}`);
+        } else {
+            console.log(`No speakers present`)
         }
-        console.log(`Number of speakers: ${count}`);
 
         const content = (
             <ListContainer
@@ -70,7 +74,23 @@ class SpeakersView extends React.Component {
               </View>
             </ListContainer>
         )
-        return content;
+
+        const emptyContent = (
+            <ListContainer
+              title="Speakers"
+              headerTitleColor={F8Colors.white}
+            >
+              <View>
+                <Text>Nothing to display</Text>
+              </View>
+            </ListContainer>
+        )
+
+        if (this.props.speakers.length) {
+            return content;
+        } else {
+            return emptyContent;
+        }
     }
 
     showDescription(speaker: Speaker) {
