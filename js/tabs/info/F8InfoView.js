@@ -42,15 +42,16 @@ class F8InfoView extends React.Component {
   render() {
     return (
       <ListContainer
-        headerBackgroundColor={F8Colors.salmon}
+        // headerBackgroundColor={F8Colors.tangaroa}
         title="Information"
-        leftItem={{
-          title: "Map",
-          layout: "icon",
-          icon: require("../../common/img/header/map.png"),
-          onPress: _ =>
-            this.props.navigator && this.props.navigator.push({ maps: true })
-        }}
+        headerTitleColor={F8Colors.white}
+        // leftItem={{
+        //   title: "Map",
+        //   layout: "icon",
+        //   icon: require("../../common/img/header/map.png"),
+        //   onPress: _ =>
+        //     this.props.navigator && this.props.navigator.push({ maps: true })
+        // }}
         {...this.renderTestItems()}
       >
         <PureListView
@@ -66,11 +67,11 @@ class F8InfoView extends React.Component {
             />
           )}
         />
-        <F8NotificationsView
+        {/* <F8NotificationsView
           title="Notifications"
           hasUpdates={this.props.notificationsBadge}
           navigator={this.props.navigator}
-        />
+        /> */}
       </ListContainer>
     );
   }

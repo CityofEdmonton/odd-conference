@@ -111,16 +111,17 @@ class GeneralScheduleView extends React.Component {
     const content = (
       <ListContainer
         title="Schedule"
+        headerTitleColor={F8Colors.white}
         selectedSegment={this.props.day - 1}
         onSegmentChange={this.switchDay}
         stickyHeader={this.renderStickyHeader()}
-        leftItem={{
-          title: "Map",
-          layout: "icon",
-          icon: require("../../common/img/header/map.png"),
-          onPress: _ =>
-            this.props.navigator && this.props.navigator.push({ maps: true })
-        }}
+        // leftItem={{
+        //   title: "Map",
+        //   layout: "icon",
+        //   icon: require("../../common/img/header/map.png"),
+        //   onPress: _ =>
+        //     this.props.navigator && this.props.navigator.push({ maps: true })
+        // }}
         rightItem={{
           icon: require("../../common/img/header/filter.png"),
           title: "Filter",
@@ -136,7 +137,7 @@ class GeneralScheduleView extends React.Component {
           renderFooter={_ => <F8TimelineBackground height={80} />}
           navigator={this.props.navigator}
         />
-        <ScheduleListView
+        {/* <ScheduleListView
           title="Day 2"
           day={2}
           sessions={sessions}
@@ -144,7 +145,7 @@ class GeneralScheduleView extends React.Component {
           renderHeader={_ => this.renderGanttChart(2, sessions)}
           renderFooter={_ => <F8TimelineBackground height={80} />}
           navigator={this.props.navigator}
-        />
+        /> */}
       </ListContainer>
     );
 
@@ -236,9 +237,10 @@ class GeneralScheduleView extends React.Component {
     return (
       <EmptySchedule
         style={{ height: containerHeight }}
-        title={`No Day ${day} matches`}
-        titleStyles={{ marginBottom: 5 }}
-        text={`Swipe ${dayDir} for Day ${otherDay}`.toUpperCase()}
+        // title={`No Day ${day} matches`}
+        title={'No schedule to display'}
+        // titleStyles={{ marginBottom: 5 }}
+        // text={`Swipe ${dayDir} for Day ${otherDay}`.toUpperCase()}
         textStyles={{
           fontFamily: F8Fonts.fontWithWeight(F8Fonts.basis, "helvetica"),
           color: F8Colors.colorWithAlpha("tangaroa", 0.5),

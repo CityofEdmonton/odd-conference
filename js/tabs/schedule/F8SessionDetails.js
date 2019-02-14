@@ -164,14 +164,14 @@ const F8SessionDetails = React.createClass({
         buttonContainerStyles={{ paddingHorizontal: 15, paddingBottom: 12 }}
         style={styles.actions}
       >
-        <AddToScheduleButton
+        {/* <AddToScheduleButton
           style={{ flex: 1 }}
           addedImageSource={
             isReactTalk ? require("./img/added-react.png") : null
           }
           isAdded={this.props.isAddedToSchedule}
           onPress={this.toggleAdded}
-        />
+        /> */}
       </ActionsOverlay>
     );
   },

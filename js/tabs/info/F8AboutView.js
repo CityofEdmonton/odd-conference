@@ -55,7 +55,7 @@ class F8AboutView extends React.Component {
 
     return (
       <View style={{ paddingBottom: 80 }}>
-        <Image
+        {/* <Image
           key={"AV_HeaderImage"}
           source={require("./img/hello-world.png")}
           style={{
@@ -66,22 +66,25 @@ class F8AboutView extends React.Component {
             marginHorizontal: PADDING_HORIZONTAL,
             resizeMode: "contain"
           }}
-        />
+        /> */}
 
         <AboutLocation
           key={"AV_AboutLocation"}
-          style={{ paddingHorizontal: PADDING_HORIZONTAL }}
-          title="Facebook Developer Conference"
-          date="April 18 + 19, 2017"
-          venue="San Jose Convention Center"
-          address={"150 West San Carlos Street\nSan Jose, CA 95113"}
+          style={{
+            marginVertical: 30,
+            paddingHorizontal: PADDING_HORIZONTAL
+          }}
+          title="Open Data Day"
+          date="March 2, 2019"
+          venue="MacEwan University - Allard Hall"
+          address={"11110 104 Ave NW\nEdmonton, AB T5K 1M9"}
         />
 
-        {this.renderWiFiDetailsSection()}
-        {this.renderFAQSection()}
-        {this.renderPagesSection()}
-        {this.renderPoliciesSection()}
-        {this.renderThirdPartyNoticesSection()}
+        {/* {this.renderWiFiDetailsSection()} */}
+        {/* {this.renderFAQSection()} */}
+        {/* {this.renderPagesSection()} */}
+        {/* {this.renderPoliciesSection()} */}
+        {/* {this.renderThirdPartyNoticesSection()} */}
       </View>
     );
   }

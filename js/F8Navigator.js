@@ -45,6 +45,8 @@ import { switchTab } from "./actions";
 import F8MapView from "./tabs/maps/F8MapView";
 import DemosCarousel from "./tabs/demos/DemosCarousel";
 
+import SpeakerInfo from "./tabs/speakers/SpeakerInfo";
+
 const F8Navigator = React.createClass({
   _handlers: ([]: Array<() => boolean>),
 
@@ -108,7 +110,8 @@ const F8Navigator = React.createClass({
             route.video ||
             route.session ||
             route.allSession ||
-            route.allDemos
+            route.allDemos ||
+            route.speaker // check if there is "speaker" property in the route
           ) {
             return Navigator.SceneConfigs.PushFromRight;
           } else {
@@ -126,6 +129,8 @@ const F8Navigator = React.createClass({
       return <SessionsCarousel {...route} navigator={navigator} />;
     } else if (route.session) {
       return <SessionsCarousel session={route.session} navigator={navigator} />;
+    } else if (route.speaker) { // Open the speaker info view to display speaker info
+      return <SpeakerInfo speaker={route.speaker} navigator={navigator} />
     } else if (route.filter) {
       return <FilterScreen navigator={navigator} {...route} />;
     } else if (route.friend) {

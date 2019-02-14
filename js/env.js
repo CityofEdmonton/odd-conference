@@ -24,15 +24,18 @@
 
 module.exports = {
   version: 410,
-  testMenuEnabled: false,
+  testMenuEnabled: true,
   parseAppID: "oss-f8-app-2017",
-  serverURL: "http://localhost:1337",
+  serverURL: "http://35.247.62.130:1337",
+  // serverURL: "http://162.106.109.3:1337", // Desktop
+  // serverURL: "http://localhost:1337",
+  // graphqlURL: "http://162.106.109.3:4000/graphql",
   graphqlURL: "http://localhost:4000/graphql",
   compatibleStoreVersion: "0.10",
   gcmSenderId: "336769939688",
-  timezone: "America/Los_Angeles",
+  timezone: "America/Edmonton",
   dayLabel(num) {
-    const days = { 1: "Tue 4/18", 2: "Wed 4/19" };
+    const days = { 1: "Tue 4/18", 2: "Wed 4/19" }; // Change to relevant days ("Sat 3/02")
     return days[num] || `Day ${num}`;
   }
 };
