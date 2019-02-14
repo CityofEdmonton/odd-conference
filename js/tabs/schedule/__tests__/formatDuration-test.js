@@ -31,6 +31,6 @@ describe("formatDuration", () => {
     expect(formatDuration(0, 7200000)).toEqual("2 hours");
     expect(formatDuration(0, 1800000)).toEqual("30 min");
     expect(formatDuration(0, 3601000)).toEqual("1 hour 1 min");
-    expect(formatDuration(0, 1427371200000)).toEqual("Until 6:00am");
+    expect(formatDuration(0, 1427371200000)).toEqual("Until 5:00am");
   });
 });
