@@ -75,7 +75,7 @@ class F8VideosView extends React.Component {
     const content = (
       <ListContainer
         headerBackgroundColor={F8Colors.tangaroa}
-        headerTitleColor={F8Colors.pink}
+        headerTitleColor={F8Colors.white}
         title="Videos"
         stickyHeader={this.renderStickyHeader()}
         leftItem={{

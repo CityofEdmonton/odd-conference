@@ -6,7 +6,7 @@ import type { Session } from "../reducers/sessions";
 const CONFERENCE_DATES = [1492473600000, 1492560000000];
 
 export function parseTimeToUTC(unix: number): number {
-  const offset = moment.tz.zone(timezone).offset(unix);
+  const offset = moment.tz.zone(timezone).utcOffset(unix);
   const utc = moment.utc(unix);
   const fixed = utc.clone().add(offset, "minutes");
   return fixed.valueOf();

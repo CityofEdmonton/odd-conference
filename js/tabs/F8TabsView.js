@@ -44,7 +44,8 @@ import { Navigator } from "react-native-deprecated-custom-components";
 import F8InfoView from "./info/F8InfoView";
 import MyScheduleView from "./schedule/MyScheduleView";
 import GeneralScheduleView from "./schedule/GeneralScheduleView";
-import F8VideosView from "./videos/F8VideosView";
+// import F8VideosView from "./videos/F8VideosView";
+import SpeakersView from "./speakers/SpeakersView";
 import TabNavigator from "react-native-tab-navigator";
 import F8DemosView from "./demos/F8DemosView";
 
@@ -55,8 +56,8 @@ import { currentTimeOnConferenceDay } from "../common/convertTimes";
 
 const SCHEDULE_ICONS = {
   day1: {
-    default: require("./schedule/img/tab-icon/1/default.png"),
-    active: require("./schedule/img/tab-icon/1/active.png")
+    default: require("./schedule/img/tab-icon/general/default.png"),
+    active: require("./schedule/img/tab-icon/general/active.png")
   },
   day2: {
     default: require("./schedule/img/tab-icon/2/default.png"),
@@ -153,7 +154,7 @@ class F8TabsView extends React.Component {
           />
         </TabNavigator.Item>
 
-        <TabNavigator.Item
+        {/* <TabNavigator.Item
           title="My F8"
           titleStyle={styles.tabTitle}
           selectedTitleStyle={styles.tabTitleActive}
@@ -172,9 +173,9 @@ class F8TabsView extends React.Component {
             now={this.state.now}
             navigator={this.props.navigator}
           />
-        </TabNavigator.Item>
+        </TabNavigator.Item> */}
 
-        <TabNavigator.Item
+        {/* <TabNavigator.Item
           title="Demos"
           titleStyle={styles.tabTitle}
           selectedTitleStyle={styles.tabTitleActive}
@@ -186,20 +187,20 @@ class F8TabsView extends React.Component {
             this.renderTabIcon(require("./demos/img/tab-icon/active.png"))}
         >
           <F8DemosView navigator={this.props.navigator} />
-        </TabNavigator.Item>
+        </TabNavigator.Item> */}
 
         <TabNavigator.Item
-          title="Videos"
+          title="Speakers"
           titleStyle={styles.tabTitle}
           selectedTitleStyle={styles.tabTitleActive}
-          selected={this.props.tab === "videos"}
-          onPress={this.onTabSelect.bind(this, "videos")}
+          selected={this.props.tab === "speakers"}
+          onPress={this.onTabSelect.bind(this, "speakers")}
           renderIcon={_ =>
-            this.renderTabIcon(require("./videos/img/tab-icon/default.png"))}
+            this.renderTabIcon(require("./speakers/img/tab-icon/default.png"))}
           renderSelectedIcon={_ =>
-            this.renderTabIcon(require("./videos/img/tab-icon/active.png"))}
+            this.renderTabIcon(require("./speakers/img/tab-icon/active.png"))}
         >
-          <F8VideosView navigator={this.props.navigator} />
+          <SpeakersView navigator={this.props.navigator} />
         </TabNavigator.Item>
 
         <TabNavigator.Item
