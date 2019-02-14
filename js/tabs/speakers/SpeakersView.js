@@ -3,15 +3,13 @@
 import React from "react";
 import { connect } from "react-redux";
 import ListContainer from "../../common/ListContainer";
-import PureListView from "../../common/PureListView";
 import F8Colors from "../../common/F8Colors";
 import { TouchableOpacity, View, StyleSheet, FlatList, Text } from "react-native";
 
-import { createSelector } from "reselect";
 import type { Speaker } from "../../reducers/speakers";
 import SpeakerTab from "./SpeakerTab";
-import SpeakerInfo from "./SpeakerInfo";
 import { Navigator } from "react-native-deprecated-custom-components";
+import { Heading3 } from "../../common/F8Text";
 
 type Props = {
     speakers: Array<Speaker>,
@@ -80,8 +78,10 @@ class SpeakersView extends React.Component {
               title="Speakers"
               headerTitleColor={F8Colors.white}
             >
-              <View>
-                <Text>Nothing to display</Text>
+              <View style={styles.container}>
+                <View style={styles.content}>
+                  <Heading3 style={styles.title}>No speakers to display</Heading3>
+                </View> 
               </View>
             </ListContainer>
         )
@@ -89,7 +89,7 @@ class SpeakersView extends React.Component {
         if (this.props.speakers.length) {
             return content;
         } else {
-            return emptyContent;
+            return emptyContent
         }
     }
 
@@ -103,9 +103,16 @@ class SpeakersView extends React.Component {
 }
 
 const styles = StyleSheet.create({
-    help: {
-        textAlign: 'center',
-        marginTop: 10
+    container: {
+        justifyContent: 'center'
+    },
+    content: {
+      padding: 30,
+      alignItems: "center"
+    },
+    title: {
+      color: F8Colors.blue,
+      textAlign: "center",
     }
 })
 
