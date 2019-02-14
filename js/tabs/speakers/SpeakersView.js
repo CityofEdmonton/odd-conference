@@ -78,10 +78,15 @@ class SpeakersView extends React.Component {
               title="Speakers"
               headerTitleColor={F8Colors.white}
             >
+<<<<<<< HEAD
               <View style={styles.container}>
                 <View style={styles.content}>
                   <Heading3 style={styles.title}>No speakers to display</Heading3>
                 </View> 
+=======
+              <View>
+                <Text>Nothing to display</Text>
+>>>>>>> upstream/dev
               </View>
             </ListContainer>
         )
@@ -89,7 +94,11 @@ class SpeakersView extends React.Component {
         if (this.props.speakers.length) {
             return content;
         } else {
+<<<<<<< HEAD
             return emptyContent
+=======
+            return emptyContent;
+>>>>>>> upstream/dev
         }
     }
 
@@ -103,6 +112,7 @@ class SpeakersView extends React.Component {
 }
 
 const styles = StyleSheet.create({
+<<<<<<< HEAD
     container: {
         justifyContent: 'center'
     },
@@ -113,6 +123,11 @@ const styles = StyleSheet.create({
     title: {
       color: F8Colors.blue,
       textAlign: "center",
+=======
+    help: {
+        textAlign: 'center',
+        marginTop: 10
+>>>>>>> upstream/dev
     }
 })
 

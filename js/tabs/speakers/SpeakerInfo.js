@@ -35,6 +35,7 @@ class SpeakerInfo extends React.Component {
       onPress: _ => this.props.navigator.pop()
     };
 
+<<<<<<< HEAD
     // If an image does not exist, reference the placeholder
     const speakerImageSource = (this.props.speaker.pic) ? {uri: this.props.speaker.pic} : require("./img/tab-icon/active.png");
 
@@ -53,6 +54,8 @@ class SpeakerInfo extends React.Component {
 
     const speakerBio = (this.props.speaker.bio) ? this.props.speaker.bio : lorem;
 
+=======
+>>>>>>> upstream/dev
     return (
       <View style={styles.container}>
         <StatusBar barStyle="light-content" animated={true} />
@@ -62,6 +65,7 @@ class SpeakerInfo extends React.Component {
           navItem={backItem}
           style={Platform.OS === "ios" ? { height: 70 } : {}}
         />
+<<<<<<< HEAD
         <ScrollView>
             <Image
             style={styles.picture}
@@ -73,6 +77,16 @@ class SpeakerInfo extends React.Component {
             <F8Text.Paragraph style={styles.bio}>{speakerBio}</F8Text.Paragraph>
             {/* <Text>{this.props.speaker.id}</Text> */}
         </ScrollView>
+=======
+        <Image
+          style={styles.picture}
+          source={{uri: this.props.speaker.pic}}
+        />
+        <F8Text.Heading1 style={styles.name}>{this.props.speaker.name}</F8Text.Heading1>
+        <F8Text.Heading3 style={styles.title}>{this.props.speaker.title.toUpperCase()}</F8Text.Heading3>
+        <F8Text.Paragraph style={styles.bio}>{this.props.speaker.bio}</F8Text.Paragraph>
+        {/* <Text>{this.props.speaker.id}</Text> */}
+>>>>>>> upstream/dev
       </View>
     );
   }
