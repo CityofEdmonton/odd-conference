@@ -27,7 +27,7 @@ import formatTime from "../formatTime";
 
 describe("formatTime", () => {
   it("formats time", () => {
-    expect(formatTime(1427371200000)).toEqual("5:00am");
-    expect(formatTime(1427373900000)).toEqual("5:45am");
+    expect(formatTime(1427371200000)).toEqual("6:00am");
+    expect(formatTime(1427373900000)).toEqual("6:45am");
   });
 });
