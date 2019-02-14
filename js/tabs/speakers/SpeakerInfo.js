@@ -9,7 +9,7 @@ import { connect } from "react-redux";
 import F8Colors from "../../common/F8Colors";
 import F8Fonts from "../../common/F8Fonts";
 
-import { Text, View, Navigator, Image } from "react-native";
+import { ScrollView, View, Navigator, Image } from "react-native";
 
 import type { Speaker } from "../../reducers/speaker";
 import * as F8Text from "../../common/F8Text";
@@ -35,6 +35,24 @@ class SpeakerInfo extends React.Component {
       onPress: _ => this.props.navigator.pop()
     };
 
+    // If an image does not exist, reference the placeholder
+    const speakerImageSource = (this.props.speaker.pic) ? {uri: this.props.speaker.pic} : require("./img/tab-icon/active.png");
+
+    const lorem = "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod\
+    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,\
+    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo\
+    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse\
+    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non\
+    proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod\
+    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,\
+    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo\
+    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse\
+    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non\
+    proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+
+    const speakerBio = (this.props.speaker.bio) ? this.props.speaker.bio : lorem;
+
     return (
       <View style={styles.container}>
         <StatusBar barStyle="light-content" animated={true} />
@@ -44,14 +62,17 @@ class SpeakerInfo extends React.Component {
           navItem={backItem}
           style={Platform.OS === "ios" ? { height: 70 } : {}}
         />
-        <Image
-          style={styles.picture}
-          source={{uri: this.props.speaker.pic}}
-        />
-        <F8Text.Heading1 style={styles.name}>{this.props.speaker.name}</F8Text.Heading1>
-        <F8Text.Heading3 style={styles.title}>{this.props.speaker.title.toUpperCase()}</F8Text.Heading3>
-        <F8Text.Paragraph style={styles.bio}>{this.props.speaker.bio}</F8Text.Paragraph>
-        {/* <Text>{this.props.speaker.id}</Text> */}
+        <ScrollView>
+            <Image
+            style={styles.picture}
+            source={speakerImageSource}
+            />
+            <F8Text.Heading1 style={styles.name}>{this.props.speaker.name}</F8Text.Heading1>
+            <F8Text.Heading3 style={styles.title}>{this.props.speaker.title.toUpperCase()}</F8Text.Heading3>
+            {/* <F8Text.Paragraph style={styles.bio}>{this.props.speaker.bio}</F8Text.Paragraph> */}
+            <F8Text.Paragraph style={styles.bio}>{speakerBio}</F8Text.Paragraph>
+            {/* <Text>{this.props.speaker.id}</Text> */}
+        </ScrollView>
       </View>
     );
   }
