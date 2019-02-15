@@ -24,7 +24,7 @@ export default class SpeakerTab extends React.Component {
     }
 
     renderSpeakerName() {
-        if (this.props.title) {
+        if (this.props.name) {
           return <Heading3>{this.props.name}</Heading3>;
         } else {
           return null;

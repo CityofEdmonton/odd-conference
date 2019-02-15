@@ -106,7 +106,8 @@ const styles = StyleSheet.create({
   },
   bio: {
       paddingHorizontal: 20,
-      marginVertical: 15
+      marginVertical: 15,
+      marginBottom: 80
   }
 });
 
