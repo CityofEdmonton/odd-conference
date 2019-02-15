@@ -3,7 +3,10 @@ import { timezone } from "../env.js";
 
 import type { Session } from "../reducers/sessions";
 
-const CONFERENCE_DATES = [1492473600000, 1492560000000];
+// const CONFERENCE_DATES = [1492473600000, 1492560000000];
+// const CONFERENCE_DATES = [1550188800000, 1550275200000]; // today 
+const CONFERENCE_DATES = [1551484800000, 1551571200000]; // Actual day (and next day)
+
 
 export function parseTimeToUTC(unix: number): number {
   const offset = moment.tz.zone(timezone).offset(unix);
@@ -46,8 +49,8 @@ export function sessionsHappeningNow(
 
 export function sessionsHappeningToday(now: number): boolean {
   const day1Start = new Date(
-    "Tue Apr 18 2017 00:00:00 GMT-0700 (PDT)"
+    "Fri Mar 02 2019 00:00:00 GMT-0700 (PDT)"
   ).getTime();
-  const day2End = new Date("Wed Apr 19 2017 23:59:59 GMT-0700 (PDT)").getTime();
+  const day2End = new Date("Sat Mar 03 2019 23:59:59 GMT-0700 (PDT)").getTime();
   return now >= day1Start && now <= day2End;
 }
