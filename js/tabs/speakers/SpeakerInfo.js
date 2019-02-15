@@ -52,6 +52,7 @@ class SpeakerInfo extends React.Component {
     proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
 
     const speakerBio = (this.props.speaker.bio) ? this.props.speaker.bio : lorem;
+    const speakerTitle = (this.props.speaker.title) ? this.props.speaker.title.toUpperCase() : "";
 
     return (
       <View style={styles.container}>
@@ -68,7 +69,7 @@ class SpeakerInfo extends React.Component {
             source={speakerImageSource}
             />
             <F8Text.Heading1 style={styles.name}>{this.props.speaker.name}</F8Text.Heading1>
-            <F8Text.Heading3 style={styles.title}>{this.props.speaker.title.toUpperCase()}</F8Text.Heading3>
+            <F8Text.Heading3 style={styles.title}>{speakerTitle}</F8Text.Heading3>
             {/* <F8Text.Paragraph style={styles.bio}>{this.props.speaker.bio}</F8Text.Paragraph> */}
             <F8Text.Paragraph style={styles.bio}>{speakerBio}</F8Text.Paragraph>
             {/* <Text>{this.props.speaker.id}</Text> */}
