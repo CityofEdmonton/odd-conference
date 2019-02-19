@@ -1,4 +1,4 @@
-package com.facebook.f8;
+package ca.edmonton.oddconf;
 
 import com.facebook.react.ReactActivity;
 import android.content.Intent;
