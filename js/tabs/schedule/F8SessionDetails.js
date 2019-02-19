@@ -126,7 +126,7 @@ const F8SessionDetails = React.createClass({
     ));
 
     if (speakersProfiles.length) {
-      return <Section title="Hosted By">{speakersProfiles}</Section>;
+      return <Section title="Presented By">{speakersProfiles}</Section>;
     } else {
       return null;
     }

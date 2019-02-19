@@ -91,7 +91,11 @@ const LOCATION_COLORS = {
   C: NAMED_COLORS.blue,
   F: NAMED_COLORS.turquoise,
   G: NAMED_COLORS.turquoise,
-  LL: NAMED_COLORS.green
+  LL: NAMED_COLORS.green,
+
+  ALLARDHALL: NAMED_COLORS.orange,
+  "ALLARDHALL(TBC)": NAMED_COLORS.pink,
+  FEIGELCONFERENCECENTRE: NAMED_COLORS.blue
 };
 
 /* Exports
