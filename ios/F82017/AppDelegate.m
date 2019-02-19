@@ -31,7 +31,7 @@
 #endif
 
   RCTRootView *rootView = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation
-                                                      moduleName:@"F82017"
+                                                      moduleName:@"ODD2019"
                                                initialProperties:nil
                                                    launchOptions:launchOptions];
   rootView.backgroundColor = [[UIColor alloc] initWithRed:0.98f green:0.98f blue:0.94f alpha:1];

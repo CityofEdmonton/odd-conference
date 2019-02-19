@@ -13,7 +13,7 @@ public class MainActivity extends ReactActivity {
      */
     @Override
     protected String getMainComponentName() {
-        return "F82017";
+        return "ODD2019";
     }
 
     @Override
