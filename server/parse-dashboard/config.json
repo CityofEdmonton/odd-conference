@@ -2,8 +2,8 @@
   "apps": [
     {
         "serverURL": "http://localhost:1337/parse",
-        "appId": "oss-f8-app-2017",
-        "masterKey": "oss-f8-app-2017-mk",
+        "appId": "odd-app-2019",
+        "masterKey": "odd-app-2019-mk",
         "appName": "F8"
     }
   ],

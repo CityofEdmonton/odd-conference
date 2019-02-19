@@ -25,7 +25,7 @@
 module.exports = {
   version: 410,
   testMenuEnabled: true,
-  parseAppID: "oss-f8-app-2017",
+  parseAppID: "odd-app-2019",
   serverURL: "http://35.247.62.130:1337",
   // serverURL: "http://162.106.109.3:1337", // Desktop
   // serverURL: "http://localhost:1337",

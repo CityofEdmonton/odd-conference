@@ -29,9 +29,9 @@ import Parse from "parse/node";
 
 import schema from "./schema";
 
-Parse.initialize("oss-f8-app-2017");
+Parse.initialize("odd-app-2019");
 Parse.serverURL = process.env.PARSE_URL;
-Parse.masterKey = "oss-f8-app-2017-mk";
+Parse.masterKey = "odd-app-2019-mk";
 Parse.Cloud.useMasterKey();
 
 const app = express();
