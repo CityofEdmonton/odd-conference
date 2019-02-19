@@ -49,8 +49,8 @@ export function sessionsHappeningNow(
 
 export function sessionsHappeningToday(now: number): boolean {
   const day1Start = new Date(
-    "Fri Mar 02 2019 00:00:00 GMT-0700 (PDT)"
+    "Sat Mar 02 2019 00:00:00 GMT-0700 (PDT)"
   ).getTime();
-  const day2End = new Date("Sat Mar 03 2019 23:59:59 GMT-0700 (PDT)").getTime();
+  const day2End = new Date("Sun Mar 03 2019 23:59:59 GMT-0700 (PDT)").getTime();
   return now >= day1Start && now <= day2End;
 }
