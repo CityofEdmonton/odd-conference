@@ -115,13 +115,13 @@ class GeneralScheduleView extends React.Component {
         selectedSegment={this.props.day - 1}
         onSegmentChange={this.switchDay}
         stickyHeader={this.renderStickyHeader()}
-        // leftItem={{
-        //   title: "Map",
-        //   layout: "icon",
-        //   icon: require("../../common/img/header/map.png"),
-        //   onPress: _ =>
-        //     this.props.navigator && this.props.navigator.push({ maps: true })
-        // }}
+        leftItem={{
+          title: "Map",
+          layout: "icon",
+          icon: require("../../common/img/header/map.png"),
+          onPress: _ =>
+            this.props.navigator && this.props.navigator.push({ maps: true })
+        }}
         rightItem={{
           icon: require("../../common/img/header/filter.png"),
           title: "Filter",

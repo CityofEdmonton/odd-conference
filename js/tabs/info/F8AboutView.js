@@ -71,7 +71,7 @@ class F8AboutView extends React.Component {
         <AboutLocation
           key={"AV_AboutLocation"}
           style={{
-            marginVertical: 30,
+            marginVertical: 10,
             paddingHorizontal: PADDING_HORIZONTAL
           }}
           title="Open Data Day"
