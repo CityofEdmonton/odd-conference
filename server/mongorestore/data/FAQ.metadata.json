@@ -1,1 +1,1 @@
-{"options":{},"indexes":[{"v":2,"key":{"_id":1},"name":"_id_","ns":"odd.FAQ"},{"v":2,"key":{"_created_at":-1},"name":"_created_at_-1","ns":"odd.FAQ","background":true},{"v":2,"key":{"_rperm":1},"name":"_rperm_1","ns":"odd.FAQ","background":true}],"uuid":"bab5b1fa743c449683a78645834ada22"}
+{"options":{},"indexes":[{"v":2,"key":{"_id":1},"name":"_id_","ns":"odd.FAQ"},{"v":2,"key":{"_created_at":-1},"name":"_created_at_-1","ns":"odd.FAQ","background":true},{"v":2,"key":{"_rperm":1},"name":"_rperm_1","ns":"odd.FAQ","background":true}],"uuid":"c9489b8628c649019642aaa76d1be645"}
