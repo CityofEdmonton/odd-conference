@@ -1,1 +1,1 @@
-{"options":{},"indexes":[{"v":2,"key":{"_id":1},"name":"_id_","ns":"f8app_initial._JobStatus"}]}
+{"options":{},"indexes":[{"v":2,"key":{"_id":1},"name":"_id_","ns":"odd._JobStatus"}],"uuid":"b76cc8d3ad7b42069b4647c4580f6889"}
