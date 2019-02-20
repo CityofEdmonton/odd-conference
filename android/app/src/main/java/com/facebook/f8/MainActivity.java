@@ -1,4 +1,4 @@
-package com.facebook.f8;
+package ca.edmonton.oddconf;
 
 import com.facebook.react.ReactActivity;
 import android.content.Intent;
@@ -13,7 +13,7 @@ public class MainActivity extends ReactActivity {
      */
     @Override
     protected String getMainComponentName() {
-        return "F82017";
+        return "ODD2019";
     }
 
     @Override

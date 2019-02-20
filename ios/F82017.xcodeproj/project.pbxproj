@@ -1245,8 +1245,8 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.parse.f8;
-				PRODUCT_NAME = F82017;
+				PRODUCT_BUNDLE_IDENTIFIER = ca.edmonton.oddconf;
+				PRODUCT_NAME = ODD2019;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -1271,8 +1271,8 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.parse.f8;
-				PRODUCT_NAME = F82017;
+				PRODUCT_BUNDLE_IDENTIFIER = ca.edmonton.oddconf;
+				PRODUCT_NAME = ODD2019;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;

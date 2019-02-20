@@ -1,4 +1,4 @@
-package com.facebook.f8;
+package ca.edmonton.oddconf;
 
 import android.app.Application;
 
