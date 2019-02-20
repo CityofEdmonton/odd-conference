@@ -1,0 +1,13 @@
+diff --git a/node_modules/react-native-native-video-player/android/src/main/java/com/wog/videoplayer/VideoPlayerPackage.java b/node_modules/react-native-native-video-player/android/src/main/java/com/wog/videoplayer/VideoPlayerPackage.java
+index e742d90..771abb5 100644
+--- a/node_modules/react-native-native-video-player/android/src/main/java/com/wog/videoplayer/VideoPlayerPackage.java
++++ b/node_modules/react-native-native-video-player/android/src/main/java/com/wog/videoplayer/VideoPlayerPackage.java
+@@ -20,7 +20,7 @@ public class VideoPlayerPackage implements ReactPackage {
+         return Arrays.<NativeModule>asList(new VideoPlayerModule(reactContext));
+     }
+ 
+-    @Override
++    // @Override // remove this if RN > 0.45.0
+     public List<Class<? extends JavaScriptModule>> createJSModules() {
+         return Collections.emptyList();
+     }
