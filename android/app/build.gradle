@@ -131,7 +131,7 @@ dependencies {
     compile project(':react-native-native-video-player')
     compile project(':react-native-push-notification')
     compile project(':react-native-photo-view')
-    compile ('com.google.android.gms:play-services-gcm:10.0.1')
+    compile ('com.google.android.gms:play-services-gcm:10.2.1')
     // See https://stackoverflow.com/questions/44190829/facebook-sdk-android-error-building/44190896#44190896
     compile(project(':react-native-fbsdk')){
       exclude(group: 'com.facebook.android', module: 'facebook-android-sdk')
