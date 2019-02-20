@@ -44,6 +44,8 @@ import F8ScrollingHeader from "../../common/F8ScrollingHeader";
 import MapView from "../../common/MapView";
 import Carousel from "../../common/Carousel";
 
+var createReactClass = require("create-react-class");
+
 /* constants ================================================================ */
 
 const WINDOW_WIDTH = Dimensions.get("window").width,
@@ -54,7 +56,7 @@ const WINDOW_WIDTH = Dimensions.get("window").width,
 <F8DemoDetails />
 ============================================================================= */
 
-const F8DemoDetails = React.createClass({
+const F8DemoDetails = createReactClass({
   getInitialState: function() {
     return {
       scrollTop: 0

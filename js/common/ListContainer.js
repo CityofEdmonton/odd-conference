@@ -35,6 +35,7 @@ import F8Colors from "./F8Colors";
 import ActionsOverlay from "./ActionsOverlay";
 
 import type { Item as HeaderItem } from "./F8Header";
+import PropTypes from "prop-types";
 
 type Props = {
   title: string,
@@ -68,8 +69,8 @@ class ListContainer extends React.Component {
   };
 
   static contextTypes = {
-    openDrawer: React.PropTypes.func,
-    hasUnreadNotifications: React.PropTypes.number
+    openDrawer: PropTypes.func,
+    hasUnreadNotifications: PropTypes.number
   };
 
   constructor(props: Props) {
