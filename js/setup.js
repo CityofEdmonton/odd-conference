@@ -47,7 +47,8 @@ function setup(): ReactClass<{}> {
   Parse.FacebookUtils.init();
 
   // TODO: Don't prevent fontScaling on iOS (currently breaks UI)
-  Text.defaultProps.allowFontScaling = false;
+  // Text.defaultProps.allowFontScaling = false;
+  Text.allowFontScaling = false;
 
   class Root extends React.Component {
     state: {
