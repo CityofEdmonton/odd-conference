@@ -42,6 +42,7 @@
     "reselect": "^2.5.4"
   },
   "devDependencies": {
+    "@babel/core": "^7.3.3",
     "babel-cli": "^6.24.1",
     "babel-eslint": "^7.2.0",
     "babel-jest": "17.0.2",
