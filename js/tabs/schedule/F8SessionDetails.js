@@ -269,7 +269,7 @@ class Section extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "white"
+    backgroundColor: F8Colors.bianca
   },
   contentContainer: {
     paddingTop: 23,
