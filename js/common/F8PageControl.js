@@ -24,13 +24,14 @@
 "use strict";
 
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, ViewPropTypes } from "react-native";
+import PropTypes from "prop-types";
 
-const PropTypes = React.PropTypes;
+var createReactClass = require("create-react-class");
 
-const F8PageControl = React.createClass({
+const F8PageControl = createReactClass({
   propTypes: {
-    style: View.propTypes.style,
+    style: ViewPropTypes.style,
     count: PropTypes.number.isRequired,
     selectedIndex: PropTypes.number.isRequired
   },
@@ -49,7 +50,7 @@ const F8PageControl = React.createClass({
   }
 });
 
-const Circle = React.createClass({
+const Circle = createReactClass({
   render: function() {
     const extraStyle = this.props.isSelected ? styles.full : styles.empty;
     return <View style={[styles.circle, extraStyle]} />;

@@ -25,6 +25,7 @@
 
 import React from "react";
 import { DrawerLayoutAndroid } from "react-native";
+import PropTypes from "prop-types";
 
 class F8DrawerLayout extends React.Component {
   _drawer: ?DrawerLayoutAndroid;
@@ -85,8 +86,8 @@ class F8DrawerLayout extends React.Component {
 }
 
 F8DrawerLayout.contextTypes = {
-  addBackButtonListener: React.PropTypes.func,
-  removeBackButtonListener: React.PropTypes.func
+  addBackButtonListener: PropTypes.func,
+  removeBackButtonListener: PropTypes.func
 };
 
 module.exports = F8DrawerLayout;

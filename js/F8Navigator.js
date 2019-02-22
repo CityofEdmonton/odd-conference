@@ -46,8 +46,11 @@ import F8MapView from "./tabs/maps/F8MapView";
 import DemosCarousel from "./tabs/demos/DemosCarousel";
 
 import SpeakerInfo from "./tabs/speakers/SpeakerInfo";
+import PropTypes from "prop-types";
 
-const F8Navigator = React.createClass({
+var createReactClass = require("create-react-class");
+
+const F8Navigator = createReactClass({
   _handlers: ([]: Array<() => boolean>),
 
   componentDidMount: function() {
@@ -159,8 +162,8 @@ const F8Navigator = React.createClass({
 });
 
 F8Navigator.childContextTypes = {
-  addBackButtonListener: React.PropTypes.func,
-  removeBackButtonListener: React.PropTypes.func
+  addBackButtonListener: PropTypes.func,
+  removeBackButtonListener: PropTypes.func
 };
 
 const styles = StyleSheet.create({

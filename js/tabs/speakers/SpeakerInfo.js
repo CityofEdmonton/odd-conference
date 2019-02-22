@@ -90,7 +90,7 @@ class SpeakerInfo extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: F8Colors.white
+    backgroundColor: F8Colors.bianca
   },
   picture: {
     width: 250,

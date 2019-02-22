@@ -104,7 +104,8 @@ class SpeakersView extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
-        justifyContent: 'center'
+        justifyContent: 'center',
+        backgroundColor: F8Colors.bianca
     },
     content: {
       paddingVertical: 220,

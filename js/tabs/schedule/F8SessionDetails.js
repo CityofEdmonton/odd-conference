@@ -44,11 +44,13 @@ import SharingSettingsModal from "./SharingSettingsModal";
 import LoginModal from "../../login/LoginModal";
 import Carousel from "../../common/Carousel";
 
+var createReactClass = require("create-react-class");
+
 const WINDOW_WIDTH = Dimensions.get("window").width,
   HORIZONTAL_BREAKPOINT = WINDOW_WIDTH <= 320,
   CONTENT_PADDING_H = HORIZONTAL_BREAKPOINT ? 20 : 30;
 
-const F8SessionDetails = React.createClass({
+const F8SessionDetails = createReactClass({
   getInitialState: function() {
     return {
       scrollTop: 0,
@@ -267,7 +269,7 @@ class Section extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "white"
+    backgroundColor: F8Colors.bianca
   },
   contentContainer: {
     paddingTop: 23,
