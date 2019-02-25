@@ -137,7 +137,7 @@ class SessionsCarusel extends React.Component {
           backgroundColor={F8Colors.palatinateBlue}
           itemsColor={F8Colors.white}
           navItem={backItem}
-          rightItem={rightItem}
+          // rightItem={rightItem}
           style={Platform.OS === "ios" ? { height: 70 } : {}}
         >
           <View style={styles.headerContent}>

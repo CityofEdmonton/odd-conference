@@ -24,7 +24,7 @@
 
 import React from "react";
 import Platform from "Platform";
-import BackAndroid from "BackAndroid";
+// import BackAndroid from "BackAndroid"; // Deprecated
 import F8TabsView from "./tabs/F8TabsView";
 import FriendsScheduleView from "./tabs/schedule/FriendsScheduleView";
 import FilterScreen from "./filter/FilterScreen";
@@ -36,7 +36,7 @@ import SharingSettingsScreen from "./tabs/schedule/SharingSettingsScreen";
 
 import F8WebView from "./common/F8WebView";
 import RatingScreen from "./rating/RatingScreen";
-import { StyleSheet } from "react-native";
+import { BackHandler, StyleSheet } from "react-native";
 import { connect } from "react-redux";
 
 import F8Colors from "./common/F8Colors";
@@ -54,11 +54,11 @@ const F8Navigator = createReactClass({
   _handlers: ([]: Array<() => boolean>),
 
   componentDidMount: function() {
-    BackAndroid.addEventListener("hardwareBackPress", this.handleBackButton);
+    BackHandler.addEventListener("hardwareBackPress", this.handleBackButton);
   },
 
   componentWillUnmount: function() {
-    BackAndroid.removeEventListener("hardwareBackPress", this.handleBackButton);
+    BackHandler.removeEventListener("hardwareBackPress", this.handleBackButton);
   },
 
   getChildContext() {
