@@ -67,7 +67,7 @@ export default class F8GanttRow extends React.Component {
     const { left, width } = this.calculateSize();
     let tintColor = location
       ? F8Colors.colorForLocation(location.toUpperCase())
-      : F8Colors.blue;
+      : F8Colors.orange; // set default colour of marker to orange
     if (location.toUpperCase().indexOf("REGISTRATION") > -1) {
       tintColor = F8Colors.yellow;
     }

@@ -111,15 +111,7 @@ class F8SessionCell extends React.Component {
   renderTitle() {
     const { session } = this.props;
     const embedded = this.props.embedded ? styles.titleEmbedded : null;
-    if (session.location) {
-      return (
-        <View key={`${session.id}_title`} style={styles.titleSection}>
-          <Text numberOfLines={3} style={[styles.titleText, embedded]}>
-            {session.title}
-          </Text>
-        </View>
-      );
-    } else {
+    if (!session.location) {
       return (
         <View key={`${session.id}_title`} style={styles.titleSection}>
           <Text numberOfLines={3} style={[styles.titleText, embedded]}>
@@ -132,6 +124,14 @@ class F8SessionCell extends React.Component {
               {" - "}
               {this.getFormattedTime()}
             </Text>
+          </Text>
+        </View>
+      );
+    } else {
+      return (
+        <View key={`${session.id}_title`} style={styles.titleSection}>
+          <Text numberOfLines={3} style={[styles.titleText, embedded]}>
+            {session.title}
           </Text>
         </View>
       );
