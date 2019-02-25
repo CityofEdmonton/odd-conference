@@ -30,6 +30,7 @@ import F8Button from "../../common/F8Button";
 import ListContainer from "../../common/ListContainer";
 import MapView from "../../common/MapView";
 import ActionsOverlay from "../../common/ActionsOverlay";
+import { Heading3 } from "../../common/F8Text";
 
 // static height calculations
 import F8Header from "../../common/F8Header";
@@ -55,46 +56,74 @@ class F8MapView extends React.Component {
     const { map } = this.state;
     const { map1, map2 } = this.props;
 
-    return (
-      <ListContainer title="Map" headerBackgroundColor={F8Colors.purple}>
-        <View style={styles.container}>
-          <MapView
-            width={WINDOW_WIDTH}
-            height={MAP_HEIGHT}
-            zoomable={true}
-            map={map}
+    const emptyContent = (
+      <ListContainer
+        title="Map"
+        headerTitleColor={F8Colors.white}
+        style={styles.emptyContainer}
+      >
+        <View style={styles.emptyContainer}>
+          <View style={styles.content}>
+            <Heading3 style={styles.title}>No maps to display</Heading3>
+          </View>
+          <F8Button
+            style={{ position: "absolute", right: 15, bottom: 15 }}
+            theme="blue"
+            type="round"
+            icon={require("../../common/img/buttons/icon-x.png")}
+            onPress={_ => this.props.navigator && this.props.navigator.pop()}
           />
-          <ActionsOverlay
-            gradientColors={[
-              F8Colors.colorWithAlpha("bianca", 0),
-              F8Colors.bianca
-            ]}
-            style={styles.nav}
-            buttonContainerStyles={styles.navBtnContainer}
-          >
-            <F8Button
-              theme={map.name === map1.name ? "maps" : "mapsInactive"}
-              type="small"
-              caption={map1.name}
-              onPress={_ => this.switchMap(map1.name)}
-            />
-            <F8Button
-              theme={map.name === map2.name ? "maps" : "mapsInactive"}
-              type="small"
-              caption={map2.name}
-              onPress={_ => this.switchMap(map2.name)}
-            />
-            <F8Button
-              style={{ position: "absolute", right: 14, top: 0 }}
-              theme="blue"
-              type="round"
-              icon={require("../../common/img/buttons/icon-x.png")}
-              onPress={_ => this.props.navigator && this.props.navigator.pop()}
-            />
-          </ActionsOverlay>
         </View>
       </ListContainer>
-    );
+    )
+
+    if (map) {
+      return (
+        <ListContainer title="Map">
+          <View style={styles.container}>
+            <MapView
+              width={WINDOW_WIDTH}
+              height={MAP_HEIGHT}
+              zoomable={true}
+              map={map}
+            />
+            <ActionsOverlay
+              gradientColors={[
+                F8Colors.colorWithAlpha("bianca", 0),
+                F8Colors.bianca
+              ]}
+              style={styles.nav}
+              buttonContainerStyles={styles.navBtnContainer}
+            >
+              <F8Button
+                theme={map.name === map1.name ? "maps" : "mapsInactive"}
+                type="small"
+                caption={map1.name}
+                onPress={_ => this.switchMap(map1.name)}
+              />
+              <F8Button
+                theme={map.name === map2.name ? "maps" : "mapsInactive"}
+                type="small"
+                caption={map2.name}
+                onPress={_ => this.switchMap(map2.name)}
+              />
+              <F8Button
+                style={{ position: "absolute", right: 14, top: 0 }}
+                theme="blue"
+                type="round"
+                icon={require("../../common/img/buttons/icon-x.png")}
+                onPress={_ => this.props.navigator && this.props.navigator.pop()}
+              />
+            </ActionsOverlay>
+          </View>
+        </ListContainer>
+      );
+    } else {
+      return (
+        emptyContent
+      );
+    }
+
   }
 
   switchMap(mapName) {
@@ -126,13 +155,26 @@ const styles = StyleSheet.create({
     paddingLeft: 14,
     paddingRight: 52 + 14,
     justifyContent: "center"
+  },
+  emptyContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: F8Colors.bianca
+  },
+  content: {
+    paddingVertical: 220,
+    alignItems: "center"
+  },
+  title: {
+    color: F8Colors.blue,
+    textAlign: "center",
   }
 });
 
 function select(store) {
   return {
-    map1: store.maps.find(map => map.name === "Street Level"),
-    map2: store.maps.find(map => map.name === "Upper Level")
+    map1: store.maps.find(map => map.name === "2nd Floor"),
+    map2: store.maps.find(map => map.name === "4th Floor")
   };
 }
 

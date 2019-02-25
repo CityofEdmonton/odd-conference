@@ -141,7 +141,8 @@ class SessionsCarusel extends React.Component {
           style={Platform.OS === "ios" ? { height: 70 } : {}}
         >
           <View style={styles.headerContent}>
-            <Text style={styles.day}>{`DAY ${this.state.day}`}</Text>
+            {/* <Text style={styles.day}>{`DAY ${this.state.day}`}</Text> */}
+            <Text style={styles.day}>{'MARCH 2'}</Text>
             <Text style={styles.time}>{sectionTitle.toLowerCase()}</Text>
             <F8PageControl count={sectionLength} selectedIndex={rowIndex} />
           </View>
