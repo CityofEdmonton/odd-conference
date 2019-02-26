@@ -28,6 +28,7 @@ import LinksList from "./LinksList";
 import CommonQuestions from "./CommonQuestions";
 import WiFiDetails from "./WiFiDetails";
 import AboutLocation from "./AboutLocation";
+import { filter } from "rsvp";
 
 /* constants ================================================================ */
 
@@ -52,6 +53,17 @@ class F8AboutView extends React.Component {
   render() {
     const imageW = WINDOW_WIDTH - PADDING_HORIZONTAL * 2;
     const imageH = imageW / (375 / 115);
+
+    const { pages } = this.props;
+    var feedbackPage = [];
+    var informationPages = [];
+    for (let i = 0; i < pages.length; i++) {
+      if (pages[i]['alias'] === "feedback") {
+        feedbackPage.push(pages[i]);
+      } else {
+        informationPages.push(pages[i])
+      }
+    }
 
     return (
       <View style={{ paddingBottom: 80 }}>
@@ -82,16 +94,16 @@ class F8AboutView extends React.Component {
 
         {/* {this.renderWiFiDetailsSection()} */}
         {/* {this.renderFAQSection()} */}
-        {this.renderPagesSection()}
-        {this.renderFeedbackSection()}
+        {this.renderPagesSection(informationPages)}
+        {this.renderFeedbackSection(feedbackPage)}
         {/* {this.renderPoliciesSection()} */}
         {/* {this.renderThirdPartyNoticesSection()} */}
       </View>
     );
   }
 
-  renderPagesSection() {
-    const { pages } = this.props;
+  renderPagesSection(pages) {
+    // const { pages } = this.props;
 
     if (pages && pages.length) {
       return [
@@ -106,7 +118,7 @@ class F8AboutView extends React.Component {
           key={"AV_Pages"}
           // title="Facebook pages"
           title="Additional Information"
-          links={this.props.pages} // FILTER THIS FOR GOOGLE FORM -> include/exclude!
+          links={pages}
           onSelect={this.webview}
         />
       ];
@@ -115,7 +127,7 @@ class F8AboutView extends React.Component {
     }
   }
 
-  renderFeedbackSection() {
+  renderFeedbackSection(feedbackPage) {
     return [
       <HorizontalRule
         key={"AV_HR_Pages"}
@@ -126,8 +138,8 @@ class F8AboutView extends React.Component {
       />,
       <LinksList
         key={"AV_Pages"}
-        title="Feedback is much appreciated!"
-        links={this.props.pages}
+        title="Feedback on this app is much appreciated!"
+        links={feedbackPage}
         onSelect={this.webview}
       />
     ];
