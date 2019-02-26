@@ -141,6 +141,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     // paddingVertical: 8,
     paddingRight: 16,
+    paddingLeft: 16,
     marginLeft: 12,
     height: 54
   },
