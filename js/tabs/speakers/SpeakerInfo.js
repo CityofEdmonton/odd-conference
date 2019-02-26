@@ -44,7 +44,7 @@ class SpeakerInfo extends React.Component {
     const speakerBio = (this.props.speaker.bio) ? this.props.speaker.bio : bioPlaceholder;
     const speakerTitle = (this.props.speaker.title) ? this.props.speaker.title.toUpperCase() : "";
 
-    const gradientColors = [F8Colors.colorWithAlpha("white", 0), F8Colors.white];
+    const gradientColors = [F8Colors.colorWithAlpha("bianca", 0), F8Colors.bianca];
     const gradientStart = { x: 0.5, y: 0.9 };
     const gradientEnd = { x: 0.5, y: 1 };
 
