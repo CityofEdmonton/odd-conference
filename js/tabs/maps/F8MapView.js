@@ -79,7 +79,7 @@ class F8MapView extends React.Component {
 
     if (map) {
       return (
-        <ListContainer title="Map">
+        <ListContainer title="Map" headerTitleColor={F8Colors.white}>
           <View style={styles.container}>
             <MapView
               width={WINDOW_WIDTH}

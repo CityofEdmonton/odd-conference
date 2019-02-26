@@ -109,7 +109,7 @@ class Row extends React.Component {
           <Text style={styles.rowTitle} numberOfLines={2}>
             {title}
           </Text>
-          <Image source={require("../../common/img/pointer-right.png")} />
+          {/* <Image source={require("../../common/img/pointer-right.png")} /> */}
         </View>
       </F8Touchable>
     );
@@ -119,11 +119,12 @@ class Row extends React.Component {
     const { onSelect, link } = this.props;
     const { url, title } = link;
     // open in embedded web view
-    if (onSelect) {
-      onSelect(url, title);
-    } else if (url) {
-      F8Linking.openURL(url);
-    }
+    // if (onSelect) {
+    //   onSelect(url, title);
+    // } else if (url) {
+    //   F8Linking.openURL(url);
+    // }
+    F8Linking.openURL(url);
   }
 }
 

@@ -44,6 +44,9 @@ import SharingSettingsModal from "./SharingSettingsModal";
 import LoginModal from "../../login/LoginModal";
 import Carousel from "../../common/Carousel";
 
+import F8Linking from "../../common/F8Linking";
+import Hyperlink from "react-native-hyperlink";
+
 var createReactClass = require("create-react-class");
 
 const WINDOW_WIDTH = Dimensions.get("window").width,
@@ -111,7 +114,19 @@ const F8SessionDetails = createReactClass({
 
   renderDescription() {
     if (this.props.session.description) {
-      return <Paragraph>{this.props.session.description}</Paragraph>;
+      return (
+        <Hyperlink
+          linkStyle={styles.hyperlink}
+          onPress={url =>
+            F8Linking.canOpenURL(url).then(supported => {
+              if (supported) {
+                F8Linking.openURL(url);
+              }
+            })}
+        >
+          <Paragraph>{this.props.session.description}</Paragraph>
+        </Hyperlink>
+      );
     } else {
       return null;
     }
@@ -322,6 +337,11 @@ const styles = StyleSheet.create({
   },
   map: {
     marginTop: 32
+  },
+  hyperlink: {
+    color: F8Colors.blue,
+    textDecorationLine: "underline",
+    textDecorationColor: F8Colors.blue
   }
 });
 

@@ -71,7 +71,7 @@ class F8AboutView extends React.Component {
         <AboutLocation
           key={"AV_AboutLocation"}
           style={{
-            marginVertical: 10,
+            marginTop: 25,
             paddingHorizontal: PADDING_HORIZONTAL
           }}
           title="Open Data Day"
@@ -82,11 +82,55 @@ class F8AboutView extends React.Component {
 
         {/* {this.renderWiFiDetailsSection()} */}
         {/* {this.renderFAQSection()} */}
-        {/* {this.renderPagesSection()} */}
+        {this.renderPagesSection()}
+        {this.renderFeedbackSection()}
         {/* {this.renderPoliciesSection()} */}
         {/* {this.renderThirdPartyNoticesSection()} */}
       </View>
     );
+  }
+
+  renderPagesSection() {
+    const { pages } = this.props;
+
+    if (pages && pages.length) {
+      return [
+        <HorizontalRule
+          key={"AV_HR_Pages"}
+          style={{
+            marginVertical: 30,
+            marginHorizontal: PADDING_HORIZONTAL
+          }}
+        />,
+        <LinksList
+          key={"AV_Pages"}
+          // title="Facebook pages"
+          title="Additional Information"
+          links={this.props.pages} // FILTER THIS FOR GOOGLE FORM -> include/exclude!
+          onSelect={this.webview}
+        />
+      ];
+    } else {
+      return null;
+    }
+  }
+
+  renderFeedbackSection() {
+    return [
+      <HorizontalRule
+        key={"AV_HR_Pages"}
+        style={{
+          marginVertical: 30,
+          marginHorizontal: PADDING_HORIZONTAL
+        }}
+      />,
+      <LinksList
+        key={"AV_Pages"}
+        title="Feedback is much appreciated!"
+        links={this.props.pages}
+        onSelect={this.webview}
+      />
+    ];
   }
 
   renderWiFiDetailsSection() {
@@ -130,30 +174,6 @@ class F8AboutView extends React.Component {
           style={{
             paddingHorizontal: PADDING_HORIZONTAL
           }}
-        />
-      ];
-    } else {
-      return null;
-    }
-  }
-
-  renderPagesSection() {
-    const { pages } = this.props;
-
-    if (pages && pages.length) {
-      return [
-        <HorizontalRule
-          key={"AV_HR_Pages"}
-          style={{
-            marginVertical: 30,
-            marginHorizontal: PADDING_HORIZONTAL
-          }}
-        />,
-        <LinksList
-          key={"AV_Pages"}
-          title="Facebook pages"
-          links={this.props.pages}
-          onSelect={this.webview}
         />
       ];
     } else {
