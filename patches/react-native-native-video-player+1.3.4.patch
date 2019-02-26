@@ -39,3 +39,25 @@ index e742d90..771abb5 100644
      public List<Class<? extends JavaScriptModule>> createJSModules() {
          return Collections.emptyList();
      }
+diff --git a/node_modules/react-native-native-video-player/ios/RNVideoPlayer.xcodeproj/project.pbxproj b/node_modules/react-native-native-video-player/ios/RNVideoPlayer.xcodeproj/project.pbxproj
+index 9bc9a99..475b603 100644
+--- a/node_modules/react-native-native-video-player/ios/RNVideoPlayer.xcodeproj/project.pbxproj
++++ b/node_modules/react-native-native-video-player/ios/RNVideoPlayer.xcodeproj/project.pbxproj
+@@ -224,7 +224,7 @@
+ 				HEADER_SEARCH_PATHS = (
+ 					"$(inherited)",
+ 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+-					"$(SRCROOT)/../../../ios/HuntersLog/**",
++					"$(SRCROOT)/../../../ios/F82017/**",
+ 					"$(SRCROOT)/../../react-native/React/**",
+ 				);
+ 				OTHER_LDFLAGS = "-ObjC";
+@@ -239,7 +239,7 @@
+ 				HEADER_SEARCH_PATHS = (
+ 					"$(inherited)",
+ 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+-					"$(SRCROOT)/../../../ios/HuntersLog/**",
++					"$(SRCROOT)/../../../ios/F82017/**",
+ 					"$(SRCROOT)/../../react-native/React/**",
+ 				);
+ 				OTHER_LDFLAGS = "-ObjC";
