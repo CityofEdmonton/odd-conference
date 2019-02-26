@@ -10,6 +10,7 @@ import F8Colors from "../../common/F8Colors";
 import F8Fonts from "../../common/F8Fonts";
 
 import { ScrollView, View, Navigator, Image } from "react-native";
+import LinearGradient from "react-native-linear-gradient";
 
 import type { Speaker } from "../../reducers/speaker";
 import * as F8Text from "../../common/F8Text";
@@ -36,23 +37,16 @@ class SpeakerInfo extends React.Component {
     };
 
     // If an image does not exist, reference the placeholder
-    const speakerImageSource = (this.props.speaker.pic) ? {uri: this.props.speaker.pic} : require("./img/tab-icon/active.png");
+    const speakerImageSource = (this.props.speaker.pic) ? {uri: this.props.speaker.pic} : require("./img/speaker_placeholder.png");
 
-    const lorem = "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod\
-    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,\
-    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo\
-    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse\
-    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non\
-    proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\
-    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod\
-    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,\
-    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo\
-    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse\
-    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non\
-    proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+    const bioPlaceholder = "Speaker bio is unavailable."
 
-    const speakerBio = (this.props.speaker.bio) ? this.props.speaker.bio : lorem;
+    const speakerBio = (this.props.speaker.bio) ? this.props.speaker.bio : bioPlaceholder;
     const speakerTitle = (this.props.speaker.title) ? this.props.speaker.title.toUpperCase() : "";
+
+    const gradientColors = [F8Colors.colorWithAlpha("white", 0), F8Colors.white];
+    const gradientStart = { x: 0.5, y: 0.9 };
+    const gradientEnd = { x: 0.5, y: 1 };
 
     return (
       <View style={styles.container}>
@@ -65,8 +59,8 @@ class SpeakerInfo extends React.Component {
         />
         <ScrollView>
             <Image
-            style={styles.picture}
-            source={speakerImageSource}
+              style={styles.picture}
+              source={speakerImageSource}
             />
             <F8Text.Heading1 style={styles.name}>{this.props.speaker.name}</F8Text.Heading1>
             <F8Text.Heading3 style={styles.title}>{speakerTitle}</F8Text.Heading3>
@@ -74,6 +68,13 @@ class SpeakerInfo extends React.Component {
             <F8Text.Paragraph style={styles.bio}>{speakerBio}</F8Text.Paragraph>
             {/* <Text>{this.props.speaker.id}</Text> */}
         </ScrollView>
+        <LinearGradient
+          pointerEvents="none"
+          start={gradientStart}
+          end={gradientEnd}
+          style={styles.gradient}
+          colors={gradientColors}
+        />
       </View>
     );
   }
@@ -109,6 +110,13 @@ const styles = StyleSheet.create({
       paddingHorizontal: 20,
       marginVertical: 15,
       marginBottom: 80
+  },
+  gradient: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0
   }
 });
 
