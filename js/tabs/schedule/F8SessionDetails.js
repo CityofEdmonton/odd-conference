@@ -139,6 +139,8 @@ const F8SessionDetails = createReactClass({
         key={speaker.name}
         speaker={speaker}
         style={{ marginTop: 5 }}
+        allSpeakers={this.props.speakers}
+        navigator={this.props.navigator}
       />
     ));
 
@@ -359,7 +361,8 @@ function select(store, props) {
     sessionURLTemplate: store.config.sessionURLTemplate,
     topics: store.topics,
     friendsGoing,
-    map
+    map,
+    speakers: store.speakers
   };
 }
 
