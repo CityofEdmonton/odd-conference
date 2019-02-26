@@ -56,10 +56,13 @@ class F8AboutView extends React.Component {
 
     const { pages } = this.props;
     var feedbackPage = [];
+    var f8Page = [];
     var informationPages = [];
     for (let i = 0; i < pages.length; i++) {
-      if (pages[i]['alias'] === "feedback") {
+      if (pages[i]['alias'] === "feedback" || pages[i]['alias'] === "f8_info") {
         feedbackPage.push(pages[i]);
+      } else if (pages[i]['alias'] === "f8") {
+        f8Page.push(pages[i]);
       } else {
         informationPages.push(pages[i])
       }
@@ -95,6 +98,7 @@ class F8AboutView extends React.Component {
         {/* {this.renderWiFiDetailsSection()} */}
         {/* {this.renderFAQSection()} */}
         {this.renderPagesSection(informationPages)}
+        {/* {this.renderF8Section(f8Page)} */}
         {this.renderFeedbackSection(feedbackPage)}
         {/* {this.renderPoliciesSection()} */}
         {/* {this.renderThirdPartyNoticesSection()} */}
@@ -140,6 +144,24 @@ class F8AboutView extends React.Component {
         key={"AV_Pages"}
         title="Feedback on this app is much appreciated!"
         links={feedbackPage}
+        onSelect={this.webview}
+      />
+    ];
+  }
+
+  renderF8Section(f8Page) {
+    return [
+      <HorizontalRule
+        key={"AV_HR_Pages"}
+        style={{
+          marginVertical: 30,
+          marginHorizontal: PADDING_HORIZONTAL
+        }}
+      />,
+      <LinksList
+        key={"AV_Pages"}
+        title="This app was made using code from Facebook's F8 Conference App"
+        links={f8Page}
         onSelect={this.webview}
       />
     ];
