@@ -27,19 +27,32 @@
 import F8Colors from "../../common/F8Colors";
 import React from "react";
 import { Heading3, Text } from "../../common/F8Text";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, TouchableOpacity } from "react-native";
 
 var createReactClass = require("create-react-class");
+
 const F8SpeakerProfile = createReactClass({
+  showDescription: function(speaker: Speaker) {
+    let allSpeakers = {...this.props.allSpeakers};
+    this.props.navigator.push({ // This is caught in F8Navigator.js (** Have to specify "speaker" prop ** -> this is what it catches)
+        speaker,
+        allSpeakers
+    });
+  },
+
   render: function() {
     const speaker = this.props.speaker;
     return (
-      <View style={[styles.row, this.props.style]}>
+      <TouchableOpacity
+        style={[styles.row, this.props.style]}
+        activeOpacity={0.5}
+        onPress={_ => this.showDescription(speaker)}
+      >
         <Heading3 style={styles.name}>{speaker.name}</Heading3>
         {speaker.title ? (
           <Text style={styles.title}>{speaker.title}</Text>
         ) : null}
-      </View>
+      </TouchableOpacity>
     );
   }
 });

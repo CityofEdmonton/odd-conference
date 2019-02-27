@@ -24,7 +24,7 @@
 
 module.exports = {
   version: 410,
-  testMenuEnabled: true,
+  testMenuEnabled: false,
   parseAppID: "oss-f8-app-2017", // F8 ID
   // parseAppID: "odd-app-2019", // New ID
   serverURL: "http://35.247.62.130:1337",
@@ -36,7 +36,7 @@ module.exports = {
   gcmSenderId: "336769939688",
   timezone: "America/Edmonton",
   dayLabel(num) {
-    const days = { 1: "Tue 4/18", 2: "Wed 4/19" }; // Change to relevant days ("Sat 3/02")
+    const days = { 1: "Sat 3/02", 2: "Wed 4/19" }; // Change to relevant days ("Sat 3/02")
     return days[num] || `Day ${num}`;
   }
 };

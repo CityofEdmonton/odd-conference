@@ -111,30 +111,50 @@ class F8SessionCell extends React.Component {
   renderTitle() {
     const { session } = this.props;
     const embedded = this.props.embedded ? styles.titleEmbedded : null;
-    return (
-      <View key={`${session.id}_title`} style={styles.titleSection}>
-        <Text numberOfLines={3} style={[styles.titleText, embedded]}>
-          {session.title}
-        </Text>
-      </View>
-    );
+    if (!session.location) {
+      return (
+        <View key={`${session.id}_title`} style={styles.titleSection}>
+          <Text numberOfLines={3} style={[styles.titleText, embedded]}>
+            {session.title}
+            <Text
+              key={`${session.id}_meta`}
+              numberOfLines={1}
+              style={styles.duration}
+            >
+              {" - "}
+              {this.getFormattedTime()}
+            </Text>
+          </Text>
+        </View>
+      );
+    } else {
+      return (
+        <View key={`${session.id}_title`} style={styles.titleSection}>
+          <Text numberOfLines={3} style={[styles.titleText, embedded]}>
+            {session.title}
+          </Text>
+        </View>
+      );
+    }
   }
 
   renderMeta() {
     const { session } = this.props;
-    return (
-      <Text
-        key={`${session.id}_meta`}
-        numberOfLines={1}
-        style={styles.duration}
-      >
-        <Text style={{ color: F8Colors.colorForLocation(session.location) }}>
-          {session.location.toUpperCase()}
+    if (session.location) {
+      return (
+        <Text
+          key={`${session.id}_meta`}
+          numberOfLines={1}
+          style={styles.duration}
+        >
+          <Text style={{ color: F8Colors.colorForLocation(session.location) }}>
+            {session.location.toUpperCase()}
+          </Text>
+          {" - "}
+          {this.getFormattedTime()}
         </Text>
-        {" - "}
-        {this.getFormattedTime()}
-      </Text>
-    );
+      );
+    }
   }
 
   renderFavoritesIcon() {

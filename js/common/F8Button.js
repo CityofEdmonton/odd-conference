@@ -153,7 +153,7 @@ class F8Button extends React.Component {
       buttonTheme = {
         backgroundColor: "transparent",
         borderWidth: 1,
-        borderColor: F8Colors.purple
+        borderColor: F8Colors.blue // Changed to blue
       };
       iconTheme = { tintColor: F8Colors.tangaroa };
       captionTheme = { color: F8Colors.tangaroa };

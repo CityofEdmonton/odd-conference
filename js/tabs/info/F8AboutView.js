@@ -28,6 +28,7 @@ import LinksList from "./LinksList";
 import CommonQuestions from "./CommonQuestions";
 import WiFiDetails from "./WiFiDetails";
 import AboutLocation from "./AboutLocation";
+import { filter } from "rsvp";
 
 /* constants ================================================================ */
 
@@ -53,6 +54,20 @@ class F8AboutView extends React.Component {
     const imageW = WINDOW_WIDTH - PADDING_HORIZONTAL * 2;
     const imageH = imageW / (375 / 115);
 
+    const { pages } = this.props;
+    var feedbackPage = [];
+    var f8Page = [];
+    var informationPages = [];
+    for (let i = 0; i < pages.length; i++) {
+      if (pages[i]['alias'] === "feedback" || pages[i]['alias'] === "f8_info") {
+        feedbackPage.push(pages[i]);
+      } else if (pages[i]['alias'] === "f8") {
+        f8Page.push(pages[i]);
+      } else {
+        informationPages.push(pages[i])
+      }
+    }
+
     return (
       <View style={{ paddingBottom: 80 }}>
         {/* <Image
@@ -71,7 +86,7 @@ class F8AboutView extends React.Component {
         <AboutLocation
           key={"AV_AboutLocation"}
           style={{
-            marginVertical: 10,
+            marginTop: 25,
             paddingHorizontal: PADDING_HORIZONTAL
           }}
           title="Open Data Day"
@@ -82,11 +97,74 @@ class F8AboutView extends React.Component {
 
         {/* {this.renderWiFiDetailsSection()} */}
         {/* {this.renderFAQSection()} */}
-        {/* {this.renderPagesSection()} */}
+        {this.renderPagesSection(informationPages)}
+        {/* {this.renderF8Section(f8Page)} */}
+        {this.renderFeedbackSection(feedbackPage)}
         {/* {this.renderPoliciesSection()} */}
         {/* {this.renderThirdPartyNoticesSection()} */}
       </View>
     );
+  }
+
+  renderPagesSection(pages) {
+    // const { pages } = this.props;
+
+    if (pages && pages.length) {
+      return [
+        <HorizontalRule
+          key={"AV_HR_Pages"}
+          style={{
+            marginVertical: 30,
+            marginHorizontal: PADDING_HORIZONTAL
+          }}
+        />,
+        <LinksList
+          key={"AV_Pages"}
+          // title="Facebook pages"
+          title="Additional Information"
+          links={pages}
+          onSelect={this.webview}
+        />
+      ];
+    } else {
+      return null;
+    }
+  }
+
+  renderFeedbackSection(feedbackPage) {
+    return [
+      <HorizontalRule
+        key={"AV_HR_Pages"}
+        style={{
+          marginVertical: 30,
+          marginHorizontal: PADDING_HORIZONTAL
+        }}
+      />,
+      <LinksList
+        key={"AV_Pages"}
+        title="Feedback on this app is much appreciated!"
+        links={feedbackPage}
+        onSelect={this.webview}
+      />
+    ];
+  }
+
+  renderF8Section(f8Page) {
+    return [
+      <HorizontalRule
+        key={"AV_HR_Pages"}
+        style={{
+          marginVertical: 30,
+          marginHorizontal: PADDING_HORIZONTAL
+        }}
+      />,
+      <LinksList
+        key={"AV_Pages"}
+        title="This app was made using code from Facebook's F8 Conference App"
+        links={f8Page}
+        onSelect={this.webview}
+      />
+    ];
   }
 
   renderWiFiDetailsSection() {
@@ -130,30 +208,6 @@ class F8AboutView extends React.Component {
           style={{
             paddingHorizontal: PADDING_HORIZONTAL
           }}
-        />
-      ];
-    } else {
-      return null;
-    }
-  }
-
-  renderPagesSection() {
-    const { pages } = this.props;
-
-    if (pages && pages.length) {
-      return [
-        <HorizontalRule
-          key={"AV_HR_Pages"}
-          style={{
-            marginVertical: 30,
-            marginHorizontal: PADDING_HORIZONTAL
-          }}
-        />,
-        <LinksList
-          key={"AV_Pages"}
-          title="Facebook pages"
-          links={this.props.pages}
-          onSelect={this.webview}
         />
       ];
     } else {
