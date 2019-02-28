@@ -132,39 +132,43 @@ class F8AboutView extends React.Component {
   }
 
   renderFeedbackSection(feedbackPage) {
-    return [
-      <HorizontalRule
-        key={"AV_HR_Pages"}
-        style={{
-          marginVertical: 30,
-          marginHorizontal: PADDING_HORIZONTAL
-        }}
-      />,
-      <LinksList
-        key={"AV_Pages"}
-        title="Feedback on this app is much appreciated!"
-        links={feedbackPage}
-        onSelect={this.webview}
-      />
-    ];
+    if (feedbackPage && feedbackPage.length) {
+      return [
+        <HorizontalRule
+          key={"AV_HR_Pages"}
+          style={{
+            marginVertical: 30,
+            marginHorizontal: PADDING_HORIZONTAL
+          }}
+        />,
+        <LinksList
+          key={"AV_Pages"}
+          title="Feedback on this app is much appreciated!"
+          links={feedbackPage}
+          onSelect={this.webview}
+        />
+      ];
+    }
   }
 
   renderF8Section(f8Page) {
-    return [
-      <HorizontalRule
-        key={"AV_HR_Pages"}
-        style={{
-          marginVertical: 30,
-          marginHorizontal: PADDING_HORIZONTAL
-        }}
-      />,
-      <LinksList
-        key={"AV_Pages"}
-        title="This app was made using code from Facebook's F8 Conference App"
-        links={f8Page}
-        onSelect={this.webview}
-      />
-    ];
+    if (f8Page && f8Page.length) {
+      return [
+        <HorizontalRule
+          key={"AV_HR_Pages"}
+          style={{
+            marginVertical: 30,
+            marginHorizontal: PADDING_HORIZONTAL
+          }}
+        />,
+        <LinksList
+          key={"AV_Pages"}
+          title="This app was made using code from Facebook's F8 Conference App"
+          links={f8Page}
+          onSelect={this.webview}
+        />
+      ];
+    }
   }
 
   renderWiFiDetailsSection() {
