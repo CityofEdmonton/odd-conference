@@ -131,7 +131,7 @@ Zoomable display of 1-3x map images
 
 class MapViewZoomable extends React.Component {
   static defaultProps = {
-    maximumZoomScale: 2
+    maximumZoomScale: 5
   };
 
   render() {
