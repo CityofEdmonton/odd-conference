@@ -1,1 +1,1 @@
-{"options":{},"indexes":[{"v":2,"key":{"_id":1},"name":"_id_","ns":"odd.fs.chunks"},{"v":2,"unique":true,"key":{"files_id":1,"n":1},"name":"files_id_1_n_1","ns":"odd.fs.chunks","background":false}],"uuid":"4df7e458b37641fda62f7c2423629aeb"}
+{"options":{},"indexes":[{"v":2,"key":{"_id":1},"name":"_id_","ns":"odd.fs.chunks"},{"v":2,"unique":true,"key":{"files_id":1,"n":1},"name":"files_id_1_n_1","ns":"odd.fs.chunks","background":false}],"uuid":"60ebc1306a8241309cfe0c91d846e455"}
